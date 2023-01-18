@@ -1,17 +1,21 @@
-#'------------------------------------------------------------------------------
-#' @description Print the upper leftmost corner of the data set (typically an
-#'              expression matrix) also showing its full dimensions and
-#'              controlling for out-of-bounds exceptions.
+
+#' Show a snippet of the dataset
 #'
-#' @param dataset Matrix or data frame to print.
-#' @param rows Maximum number of rows to display.
-#' @param cols Maximum number of columns to display.
+#' This function is superseeded by the `print` implementation of a `tibble`.
+#' It is included here as an example function.
 #'
-#' @returns A vector containing <dataset> dimensions.
+#' @param dataset A `data.frame` to show
+#' @param name The name of the dataset, used to enrich the output.
+#' @param rows The number of rows to show.
+#' @param cols The number of cols to show.
 #'
-#' @author //FeAR//
-#'------------------------------------------------------------------------------
-show.data = function(dataset, name = NULL, rows = 10, cols = 5)
+#' @return A dimesion vector of the form `c(rows, cols)`.
+#' @export
+#'
+#' @examples
+#' x <- data.frame(var1 = c(1, 2, 3, 4, 5), var2 = c(6, 7, 8, 9, 10))
+#' show.data(x, "an example dataset", rows = 3)
+show.data <- function(dataset, name = NULL, rows = 10, cols = 5)
 {
   d = dim(dataset)
   cat("\nDataset", name, "dimensions:", d[1], "x", d[2], "\n\n", sep = " ")

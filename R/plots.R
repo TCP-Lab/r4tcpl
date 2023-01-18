@@ -1,14 +1,4 @@
-#'------------------------------------------------------------------------------
-#' @description Save a graphical output to '<folderPrefix> Figures' sub-directory.
-#'
-#' @param figureName Name of the output file (without extension).
-#' @param folderPrefix Prefix for naming the saving subfolder (default to the
-#'                     name of the parent script sourcing this function).
-#' @param PNG Boolean: T to print the currently displayed figure in PNG format.
-#' @param PDF Boolean: T to print the currently displayed figure in PDF format.
-#'
-#' @author //FeAR//
-#'------------------------------------------------------------------------------
+
 printPlots = function(figureName, folderPrefix = getOption("scriptName"),
                       PNG = getOption("save.PNG.plot"),
                       PDF = getOption("save.PDF.plot"))
