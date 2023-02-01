@@ -1,6 +1,6 @@
-test_that("show.data returns actual dimensions", {
+test_that("show_data returns actual dimensions", {
   expect_equal(
-    show.data(data.frame(
+    show_data(data.frame(
     var1 = rep(1, 10),
     var2 = rep(1, 10),
     var3 = rep(1, 10)
