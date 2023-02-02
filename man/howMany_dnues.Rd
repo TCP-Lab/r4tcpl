@@ -20,6 +20,5 @@ detects duplicated entries \emph{after} their first occurrence, this
 function looks at \emph{all} non-unique values.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

@@ -20,7 +20,10 @@ detected column-wise. In particular, it searches for \code{NA},
 slashes (\code{/}), including empty fields and a possible
 user-defined sequence.
 }
-\author{
-\subsection{//--FeA.R--//}{
+\examples{
+\dontrun{
+array_platform_selector() |> array_create_annot() |> missing_report()}
 }
+\author{
+FeA.R
 }

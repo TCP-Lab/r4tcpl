@@ -18,10 +18,12 @@ A character vector containing the rows from the help page. Use
 \description{
 A function that extracts the text from the help pages of a R
 package or function. Adapted from MrFlick's \code{help_text()}
-function, originally posted on stackoverflow (13 Jul 2018).
+function, originally posted on stackoverflow (13 Jul 2018; see
+References section).
+}
+\references{
 https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r
 }
 \author{
-\subsection{MrFlick, //--FeA.R--//}{
-}
+MrFlick, FeA.R
 }

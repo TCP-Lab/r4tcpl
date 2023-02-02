@@ -1,10 +1,9 @@
 # Header Info ------------------------------------------------------------------
-# cmatools
+# 
+# cmatools - A collection of utility functions used in our R projects
 #
-# A collection of utility functions used in our R projects
-#
-# a //-FeAR-// R-script - 24-Jan-2023
-#
+# by //--FeA.R--//
+# ------------------------------------------------------------------------------
 
 
 
@@ -13,10 +12,10 @@
 #' @description A custom version of the classical `head()` that prints the upper
 #'              leftmost corner of a data set, also showing row names and
 #'              controlling for possible out-of-bounds exceptions. Compared to
-#'              `head()`, `show_data()` *always displays data by columns*, even
-#'              in the case of vectors (i.e., one-dimensional arrays). Also,
-#'              `show_data` prints and returns the dimensions of the data set,
-#'              together with a custom heading label.
+#'              `head()`, `show_data()` **always displays data by columns**,
+#'              even in the case of vectors (i.e., one-dimensional arrays).
+#'              Also, `show_data` prints and returns the dimensions of the data
+#'              set, together with a custom heading label.
 #' 
 #' @param dataset Data frame, matrix, or vector to print.
 #' @param name Explanatory name to print in the heading (useful when logging).
@@ -27,11 +26,10 @@
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' x <- data.frame(var1 = c(1, 2, 3, 4, 5), var2 = c(6, 7, 8, 9, 10))
-#' show_data(x, "an example dataset", rows = 3)
-#' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' show_data(x, "an example dataset", rows = 3)}
+#' @author FeA.R
 show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
 {
   # Whenever possible, 'dataset' is converted to a data frame to be passed to
@@ -87,8 +85,7 @@ show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
 #'          representing its positions within `vec`.
 #' @export
 #' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 duplication_report <- function(vec)
 {
   if(!is.vector(vec)) {
@@ -122,8 +119,7 @@ duplication_report <- function(vec)
 #'          elements, and the global number of non-unique entries in `vec`.
 #' @export
 #' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 howMany_dnues <- function(vec)
 {
   if(!is.vector(vec)) {
@@ -148,6 +144,10 @@ howMany_dnues <- function(vec)
 #' 
 #' @description An alternative (faster?) implementation of `howMany_dnues()`,
 #'              independent of `duplication_report()`.
+#'              A function that tells how many *different non-unique* elements
+#'              there are in a given vector. Unlike `base::duplicated()` that
+#'              detects duplicated entries *after* their first occurrence, this
+#'              function looks at *all* non-unique values.
 #'              
 #' @param vec A vector to be scanned for duplicates.
 #' 
@@ -155,8 +155,7 @@ howMany_dnues <- function(vec)
 #'          elements, and the global number of non-unique entries in `vec`.
 #' @export
 #' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 howMany_dnues2 <- function(vec)
 {
   if(!is.vector(vec)) {
@@ -190,8 +189,7 @@ howMany_dnues2 <- function(vec)
 #'          matrix `X`.
 #' @export
 #' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 repmat <- function(X, m, n)
 {
   # Always convert to matrix first
@@ -219,8 +217,8 @@ repmat <- function(X, m, n)
 #' 
 #' @description A function that extracts the text from the help pages of a R
 #'              package or function. Adapted from MrFlick's `help_text()`
-#'              function, originally posted on stackoverflow (13 Jul 2018).
-#'              https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r
+#'              function, originally posted on stackoverflow (13 Jul 2018; see
+#'              References section).
 #'              
 #' @param meth_or_pkg The *quoted* name of the method or package of interest.
 #' @param pkg Name of the package to look into for documentation.
@@ -229,8 +227,9 @@ repmat <- function(X, m, n)
 #'          `help_as_text("seq") |> cat(sep = "\n")` to print.
 #' @export
 #' 
-#' @author MrFlick, //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @references https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r
+#' 
+#' @author MrFlick, FeA.R
 help_as_text <- function(meth_or_pkg, pkg = NULL)
 {
   file <- help(meth_or_pkg, package = (pkg))
@@ -270,12 +269,10 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #' @export
 #' 
 #' @examples
+#' \dontrun{
 #' for (animal in c("dog", "sheep", "worm", "lioness", "monkey")) {
-#'    cat(" -", tab(animal), ":: looking for a", animal, "...found!\n")
-#' }
-#'          
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#'    cat(" -", tab(animal), ":: looking for a", animal, "...found!\n")}}
+#' @author FeA.R
 tab <- function(word = "", sp = 7)
 {
   if (sp < nchar(word)) {
@@ -292,7 +289,9 @@ tab <- function(word = "", sp = 7)
 
 #' Title here
 #' 
-#' @description Hypergeometric test function.
+#' @description A wrapper for the Hypergeometric test function. Beside
+#'              *p*-values, `hgt()` also computes and returns other enrichment
+#'              statistics like the expected value and fold enrichment.
 #' 
 #' @param k Number of hits in the experimental set.  --OR--> Intersection
 #' @param n Size of the experimental set.            --OR--> Set A
@@ -303,8 +302,7 @@ tab <- function(word = "", sp = 7)
 #'          single-row data frames can be easily stacked using `rbind()`.
 #' @export
 #'          
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 hgt <- function(k, n, K, N = 1e4)
 {
   pval <- phyper(k-1, K, N-K, n, lower.tail = FALSE) # p-value
@@ -327,7 +325,7 @@ hgt <- function(k, n, K, N = 1e4)
 #' @description A minimal graphical interface to retrieve the name of a suitable
 #'              annotation database (a `.db` R-package or a `GPL` GEO platform
 #'              record) starting from the selection of the name of a microarray
-#'              chip model.
+#'              chip model. To be used only in interactive mode.
 #'
 #' @param filt A string used to subset the list of platform annotations among
 #'             which to choose (i.e., a `grep` filter working on array names).
@@ -338,11 +336,10 @@ hgt <- function(k, n, K, N = 1e4)
 #'          user (to be used with `create.annot()` function).
 #' @export
 #' 
-# @examples
-# array_platform_selector() |> array_create_annot(platform) |> head()
-#'           
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @examples
+#' \dontrun{
+#' array_platform_selector() |> array_create_annot(platform) |> head()}
+#' @author FeA.R
 array_platform_selector <- function(filt = "All")
 {
   # Name of the Bioconductor db package or GPL GEO platform record
@@ -414,13 +411,12 @@ array_platform_selector <- function(filt = "All")
 #'          features selected by the user.
 #' @export
 #'
-# @examples
-# annot <- array_create_annot("hgu133plus2", collapsing = TRUE)
-# missing_report(annot)
-# d <- show_data(annot)
-#' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @examples
+#' \dontrun{
+#' annot <- array_create_annot("hgu133plus2", collapsing = TRUE)
+#' missing_report(annot)
+#' d <- show_data(annot)}
+#' @author FeA.R
 array_create_annot <- function(platform, collapsing = FALSE)
 {
   # Download the annotation matrix from GEO and subset by columns of interest  
@@ -536,11 +532,10 @@ array_create_annot <- function(platform, collapsing = FALSE)
 #'
 #' @export
 #'
-# @examples
-# array_platform_selector() |> array_create_annot() |> missing_report()
-#' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @examples
+#' \dontrun{
+#' array_platform_selector() |> array_create_annot() |> missing_report()}
+#' @author FeA.R
 missing_report <- function(dataFrame, naSymb = "")
 {
   cols <- colnames(dataFrame)
@@ -575,7 +570,7 @@ missing_report <- function(dataFrame, naSymb = "")
 
 #'--- old ---
 #' @description ppend annotation to genes and sort (do nothing if
-#'              do.the.job == FALSE).
+#'              do.the.job == FALSE). This is a GATTACA legacy piece of code.
 #' 
 #' @param gene.stat The table of genes, usually a DEG summary-statistic
 #'                  top-table (or an expression matrix).
@@ -586,8 +581,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #'
 #' @returns The annotated and sorted data frame passed as input.
 #' 
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 appendAnnotation = function(gene.stat, ann,
                             do.the.job = getOption("append.annot"),
                             sort.by = 1)
@@ -631,7 +625,7 @@ appendAnnotation = function(gene.stat, ann,
 
 #'--- old ---
 #' @description Return basics descriptive statistics of a single gene, by group
-#'              label.
+#'              label. This is a GATTACA legacy piece of code.
 #' 
 #' @param gene Numeric vector or single-row data frame from gene expression
 #'             matrix.
@@ -642,8 +636,7 @@ appendAnnotation = function(gene.stat, ann,
 #' @returns A data frame containing the statistics of interest for each gene of
 #'          `gene`.
 #'
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 descStat1G = function(gene, gr, des, prec = 4)
 {
   # Define a new empty data frame
@@ -672,7 +665,8 @@ descStat1G = function(gene, gr, des, prec = 4)
 
 
 #'--- old ---
-#' @description Plot single gene comparison chart.
+#' @description Plot single gene comparison chart. This is a GATTACA legacy
+#'              piece of code.
 #' 
 #' @param exp.mat Expression matrix (as data frame).
 #' @param gr Group names.
@@ -681,8 +675,7 @@ descStat1G = function(gene, gr, des, prec = 4)
 #' @param chart.type "BP" (Box Plot), "BC" (Bar Chart), or "MS" (Mean & SEM).
 #' @param ann Optional annotation data frame.
 #'
-#' @author //--FeA.R--//
-#' -----------------------------------------------------------------------------
+#' @author FeA.R
 singleGeneView = function(exp.mat, gr, des, gois, chart.type = "BP", ann = NULL)
 {
   geo = switch(chart.type,

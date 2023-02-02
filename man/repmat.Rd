@@ -23,6 +23,5 @@ matrix X and how many times you want it replicated row- (m) and
 column- (n) wise.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

@@ -20,9 +20,9 @@ singleGeneView(exp.mat, gr, des, gois, chart.type = "BP", ann = NULL)
 \item{ann}{Optional annotation data frame.}
 }
 \description{
-Plot single gene comparison chart.
+Plot single gene comparison chart. This is a GATTACA legacy
+piece of code.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

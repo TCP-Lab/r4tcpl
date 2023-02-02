@@ -16,8 +16,11 @@ elements, and the global number of non-unique entries in \code{vec}.
 \description{
 An alternative (faster?) implementation of \code{howMany_dnues()},
 independent of \code{duplication_report()}.
+A function that tells how many \emph{different non-unique} elements
+there are in a given vector. Unlike \code{base::duplicated()} that
+detects duplicated entries \emph{after} their first occurrence, this
+function looks at \emph{all} non-unique values.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

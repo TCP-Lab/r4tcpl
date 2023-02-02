@@ -24,7 +24,12 @@ implements a minimal graphical interface allowing the user to
 select the number and the type of features to be used as
 annotation.
 }
-\author{
-\subsection{//--FeA.R--//}{
+\examples{
+\dontrun{
+annot <- array_create_annot("hgu133plus2", collapsing = TRUE)
+missing_report(annot)
+d <- show_data(annot)}
 }
+\author{
+FeA.R
 }

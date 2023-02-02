@@ -22,17 +22,16 @@ A vector of the form \code{c(rows,cols)} containing \code{dataset} dimensions.
 A custom version of the classical \code{head()} that prints the upper
 leftmost corner of a data set, also showing row names and
 controlling for possible out-of-bounds exceptions. Compared to
-\code{head()}, \code{show_data()} \emph{always displays data by columns}, even
-in the case of vectors (i.e., one-dimensional arrays). Also,
-\code{show_data} prints and returns the dimensions of the data set,
-together with a custom heading label.
+\code{head()}, \code{show_data()} \strong{always displays data by columns},
+even in the case of vectors (i.e., one-dimensional arrays).
+Also, \code{show_data} prints and returns the dimensions of the data
+set, together with a custom heading label.
 }
 \examples{
+\dontrun{
 x <- data.frame(var1 = c(1, 2, 3, 4, 5), var2 = c(6, 7, 8, 9, 10))
-show_data(x, "an example dataset", rows = 3)
-
+show_data(x, "an example dataset", rows = 3)}
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

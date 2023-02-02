@@ -20,9 +20,10 @@ A 1-by-5 data frame containing enrichment statistics. Many
 single-row data frames can be easily stacked using \code{rbind()}.
 }
 \description{
-Hypergeometric test function.
+A wrapper for the Hypergeometric test function. Beside
+\emph{p}-values, \code{hgt()} also computes and returns other enrichment
+statistics like the expected value and fold enrichment.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

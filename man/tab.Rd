@@ -22,12 +22,10 @@ feature. It allows to control tab stop positions filling the
 given string with white spaces to reach a fixed width.
 }
 \examples{
+\dontrun{
 for (animal in c("dog", "sheep", "worm", "lioness", "monkey")) {
-   cat(" -", tab(animal), ":: looking for a", animal, "...found!\n")
-}
-         
+   cat(" -", tab(animal), ":: looking for a", animal, "...found!\n")}}
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

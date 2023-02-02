@@ -22,9 +22,8 @@ A data frame containing the statistics of interest for each gene of
 }
 \description{
 Return basics descriptive statistics of a single gene, by group
-label.
+label. This is a GATTACA legacy piece of code.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

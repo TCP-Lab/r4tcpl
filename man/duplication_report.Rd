@@ -23,6 +23,5 @@ entries and the positions they fill in the vector. Unlike
 non-unique values.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

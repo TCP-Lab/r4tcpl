@@ -27,9 +27,8 @@ The annotated and sorted data frame passed as input.
 }
 \description{
 ppend annotation to genes and sort (do nothing if
-do.the.job == FALSE).
+do.the.job == FALSE). This is a GATTACA legacy piece of code.
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }

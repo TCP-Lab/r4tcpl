@@ -20,9 +20,12 @@ user (to be used with \code{create.annot()} function).
 A minimal graphical interface to retrieve the name of a suitable
 annotation database (a \code{.db} R-package or a \code{GPL} GEO platform
 record) starting from the selection of the name of a microarray
-chip model.
+chip model. To be used only in interactive mode.
+}
+\examples{
+\dontrun{
+array_platform_selector() |> array_create_annot(platform) |> head()}
 }
 \author{
-\subsection{//--FeA.R--//}{
-}
+FeA.R
 }
