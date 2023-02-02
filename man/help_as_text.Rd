@@ -12,8 +12,7 @@ help_as_text(meth_or_pkg, pkg = NULL)
 \item{pkg}{Name of the package to look into for documentation.}
 }
 \value{
-A character vector containing the rows from the help page. Use
-\code{help_as_text("seq") |> cat(sep = "\\n")} to print.
+A character vector containing the rows from the help page.
 }
 \description{
 A function that extracts the text from the help pages of a R
@@ -21,8 +20,13 @@ package or function. Adapted from MrFlick's \code{help_text()}
 function, originally posted on stackoverflow (13 Jul 2018; see
 References section).
 }
+\examples{
+\dontrun{
+# Print seq() help to console
+help_as_text("seq") |> cat(sep = "\n")}
+}
 \references{
-https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r
+\url{https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r}
 }
 \author{
 MrFlick, FeA.R

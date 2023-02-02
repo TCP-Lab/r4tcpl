@@ -2,6 +2,7 @@
 
 export(array_create_annot)
 export(array_platform_selector)
+export(descriptives)
 export(duplication_report)
 export(help_as_text)
 export(hgt)

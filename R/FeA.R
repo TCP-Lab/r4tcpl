@@ -223,12 +223,14 @@ repmat <- function(X, m, n)
 #' @param meth_or_pkg The *quoted* name of the method or package of interest.
 #' @param pkg Name of the package to look into for documentation.
 #' 
-#' @returns A character vector containing the rows from the help page. Use
-#'          `help_as_text("seq") |> cat(sep = "\n")` to print.
+#' @returns A character vector containing the rows from the help page.
 #' @export
 #' 
-#' @references https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r
-#' 
+#' @examples
+#' \dontrun{
+#' # Print seq() help to console
+#' help_as_text("seq") |> cat(sep = "\n")}
+#' @references \url{https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r}
 #' @author MrFlick, FeA.R
 help_as_text <- function(meth_or_pkg, pkg = NULL)
 {
@@ -287,7 +289,7 @@ tab <- function(word = "", sp = 7)
 
 
 
-#' Title here
+#' Hypergeometric Test
 #' 
 #' @description A wrapper for the Hypergeometric test function. Beside
 #'              *p*-values, `hgt()` also computes and returns other enrichment
@@ -316,6 +318,76 @@ hgt <- function(k, n, K, N = 1e4)
                       Fold_Enrichment = FE,
                       p.value = pval)
   return(stats)
+}
+
+
+
+#' Basic Descriptive Statistics
+#' 
+#' @description Use this function to get basics descriptive statistics of many
+#'              experimental groups from a single one-dimensional numeric vector
+#'              according to a user-defined experimental design. This function
+#'              is a generalization of the legacy `descStat1G()` function
+#'              implemented in GATTACA for single-gene inspection.
+#' 
+#' @param vals One-dimensional numeric vector or data frame.
+#' @param design Experimental design: a numeric or character vector that
+#'               associates to each element of `vals` a symbol based on the
+#'               experimental group the element belong to. It can be shorter
+#'               than `vals`; in this case the last `length(vals)-length(design)`
+#'               elemnts of `vals` will be ignored (not included in any group).
+#' @param labels Optional. A character vector containing the labels for the
+#'               experimental groups.
+#' @param prec Decimal precision.
+#'
+#' @returns A data frame containing the statistics of interest (currently sample
+#'          size, arithmetic mean, median, IQR, variance, standard deviation,
+#'          and SEM) for each group defined in `design`.
+#' @export
+#' 
+#' @author FeA.R
+descriptives <- function(vals, design, labels = NULL, prec = 3)
+{
+  # Check design length
+  if (length(design) > length(vals)) {
+    stop("Design oversized!")
+  }
+  # Experimental groups
+  grps <- unique(design)
+  m <- length(grps)
+  
+  # Prepare a new empty data frame
+  stat_frame <- data.frame(n = integer(m),
+                           Mean = double(m),
+                           Median = double(m),
+                           IqR = double(m),
+                           Var = double(m),
+                           SD = double(m),
+                           SEM = double(m),
+                           stringsAsFactors = FALSE)
+  
+  # Fill the data frame with the stats of interest
+  for (i in 1:m) {
+    sub_vals <- as.numeric(vals[which(design == grps[i])])
+    stat_frame[i,1] <- length(sub_vals) # Sample size
+    stat_frame[i,2] <- round(mean(sub_vals), digits = prec)
+    stat_frame[i,3] <- round(median(sub_vals), digits = prec)
+    stat_frame[i,4] <- round(IQR(sub_vals), digits = prec)
+    stat_frame[i,5] <- round(var(sub_vals), digits = prec)
+    stat_frame[i,6] <- round(sd(sub_vals), digits = prec)
+    stat_frame[i,7] <- round(sd(sub_vals)/sqrt(stat_frame[i,1]),
+                             digits = prec) # SEM
+  }
+  
+  # Set row names
+  if (is.null(labels)) {
+    labels <- paste0("Group_", grps)
+  } else if (length(labels) != m) {
+    stop("Wrong number of labels.")
+  }
+  row.names(stat_frame) <- labels
+  
+  return(stat_frame)
 }
 
 
@@ -619,47 +691,6 @@ appendAnnotation = function(gene.stat, ann,
     gene.stat = gene.stat[order(gene.stat[,sort.by]),]
   }
   return(gene.stat)
-}
-
-
-
-#'--- old ---
-#' @description Return basics descriptive statistics of a single gene, by group
-#'              label. This is a GATTACA legacy piece of code.
-#' 
-#' @param gene Numeric vector or single-row data frame from gene expression
-#'             matrix.
-#' @param gr Group names.
-#' @param des Experimental design (full design mode vector).
-#' @param prec Decimal precision.
-#'
-#' @returns A data frame containing the statistics of interest for each gene of
-#'          `gene`.
-#'
-#' @author FeA.R
-descStat1G = function(gene, gr, des, prec = 4)
-{
-  # Define a new empty data frame
-  stat.frame = data.frame(GROUP = character(),
-                          n = integer(),
-                          MEAN = double(),
-                          VAR = double(),
-                          SD = double(),
-                          SEM = double(),
-                          stringsAsFactors = FALSE)
-  
-  for (i in 1:length(gr)) {
-    
-    n.gene = as.numeric(gene[des == i]) # Downcast to numeric vector
-    
-    stat.frame[i,1] = gr[i]
-    stat.frame[i,2] = sum(des == i)
-    stat.frame[i,3] = round(mean(n.gene), digits = prec)
-    stat.frame[i,4] = round(var(n.gene), digits = prec)
-    stat.frame[i,5] = round(sd(n.gene), digits = prec)
-    stat.frame[i,6] = round(sd(n.gene)/sqrt(sum(des == i)), digits = prec) # SEM
-  }
-  return(stat.frame)
 }
 
 

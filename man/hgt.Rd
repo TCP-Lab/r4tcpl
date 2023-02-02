@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{hgt}
 \alias{hgt}
-\title{Title here}
+\title{Hypergeometric Test}
 \usage{
 hgt(k, n, K, N = 10000)
 }
