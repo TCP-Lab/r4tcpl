@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{duplication_report}
 \alias{duplication_report}
-\title{Title here}
+\title{Duplication Report}
 \usage{
 duplication_report(vec)
 }

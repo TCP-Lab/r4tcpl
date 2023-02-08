@@ -8,6 +8,7 @@
 
 
 #' Show Data as matrix and return its dimensions
+#' @export
 #' 
 #' @description A custom version of the classical `head()` that prints the upper
 #'              leftmost corner of a data set, also showing row names and
@@ -23,7 +24,6 @@
 #' @param cols Maximum number of columns to display.
 #' 
 #' @returns A vector of the form `c(rows,cols)` containing `dataset` dimensions.
-#' @export
 #' 
 #' @examples
 #' \dontrun{
@@ -69,7 +69,8 @@ show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
 
 
 
-#' Title here
+#' Duplication Report
+#' @export
 #' 
 #' @description This function searches the vector passed as input for duplicated
 #'              entries and the positions they fill in the vector. Unlike
@@ -83,7 +84,6 @@ show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
 #'          this list is in turn a list of two elements: an integer indicating
 #'          the times the element is repeated and a vector of integers
 #'          representing its positions within `vec`.
-#' @export
 #' 
 #' @author FeA.R
 duplication_report <- function(vec)
@@ -107,6 +107,7 @@ duplication_report <- function(vec)
 
 
 #' Title here
+#' @export
 #' 
 #' @description A function that tells how many *different non-unique* elements
 #'              there are in a given vector. Unlike `base::duplicated()` that
@@ -117,7 +118,6 @@ duplication_report <- function(vec)
 #' 
 #' @returns A vector of two elements, namely the number of different non-unique
 #'          elements, and the global number of non-unique entries in `vec`.
-#' @export
 #' 
 #' @author FeA.R
 howMany_dnues <- function(vec)
@@ -141,6 +141,7 @@ howMany_dnues <- function(vec)
 
 
 #' Title here
+#' @export
 #' 
 #' @description An alternative (faster?) implementation of `howMany_dnues()`,
 #'              independent of `duplication_report()`.
@@ -153,7 +154,6 @@ howMany_dnues <- function(vec)
 #' 
 #' @returns A vector of two elements, namely the number of different non-unique
 #'          elements, and the global number of non-unique entries in `vec`.
-#' @export
 #' 
 #' @author FeA.R
 howMany_dnues2 <- function(vec)
@@ -176,6 +176,7 @@ howMany_dnues2 <- function(vec)
 
 
 #' Title here
+#' @export
 #' 
 #' @description R-equivalent to the MATLAB `repmat()` function. Just specify the
 #'              matrix X and how many times you want it replicated row- (m) and
@@ -187,7 +188,6 @@ howMany_dnues2 <- function(vec)
 #' 
 #' @returns A new matrix resulting from the m-by-n juxtaposition of the starting
 #'          matrix `X`.
-#' @export
 #' 
 #' @author FeA.R
 repmat <- function(X, m, n)
@@ -214,6 +214,7 @@ repmat <- function(X, m, n)
 
 
 #' Title here
+#' @export
 #' 
 #' @description A function that extracts the text from the help pages of a R
 #'              package or function. Adapted from MrFlick's `help_text()`
@@ -224,7 +225,6 @@ repmat <- function(X, m, n)
 #' @param pkg Name of the package to look into for documentation.
 #' 
 #' @returns A character vector containing the rows from the help page.
-#' @export
 #' 
 #' @examples
 #' \dontrun{
@@ -257,6 +257,7 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 
 
 #' Title here
+#' @export
 #' 
 #' @description To align strings in console as if using MS-Word tab stop
 #'              feature. It allows to control tab stop positions filling the
@@ -268,7 +269,6 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #'
 #' @returns A string consisting of the `word` followed by a variable number of
 #'          white spaces.
-#' @export
 #' 
 #' @examples
 #' \dontrun{
@@ -290,6 +290,7 @@ tab <- function(word = "", sp = 7)
 
 
 #' Hypergeometric Test
+#' @export
 #' 
 #' @description A wrapper for the Hypergeometric test function. Beside
 #'              *p*-values, `hgt()` also computes and returns other enrichment
@@ -302,7 +303,6 @@ tab <- function(word = "", sp = 7)
 #'
 #' @returns A 1-by-5 data frame containing enrichment statistics. Many
 #'          single-row data frames can be easily stacked using `rbind()`.
-#' @export
 #'          
 #' @author FeA.R
 hgt <- function(k, n, K, N = 1e4)
@@ -323,8 +323,9 @@ hgt <- function(k, n, K, N = 1e4)
 
 
 #' Basic Descriptive Statistics
+#' @export
 #' 
-#' @description Use this function to get basics descriptive statistics of many
+#' @description Use this function to get basic descriptive statistics of many
 #'              experimental groups from a single one-dimensional numeric vector
 #'              according to a user-defined experimental design. This function
 #'              is a generalization of the legacy `descStat1G()` function
@@ -339,7 +340,6 @@ hgt <- function(k, n, K, N = 1e4)
 #' @returns A data frame containing the statistics of interest (i.e., sample
 #'          size, arithmetic mean, median, IQR, variance, standard deviation,
 #'          and SEM) for each group defined in `design`.
-#' @export
 #' 
 #' @author FeA.R
 descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
@@ -394,8 +394,9 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 
 
 
-#' Standard plots for categorical data 
-#'
+#' Standard plots for categorical data
+#' @export
+#' 
 #' @description Use this function to plot a continuous response variable as a
 #'              function of a categorical explanatory one. Data need to be
 #'              passed as a single one-dimensional numeric vector together with
@@ -503,6 +504,7 @@ quick_chart <- function(vals, design, chart_type = "BP")
 
 
 #' Title here
+#' @export
 #' 
 #' @description A minimal graphical interface to retrieve the name of a suitable
 #'              annotation database (a `.db` R-package or a `GPL` GEO platform
@@ -516,7 +518,6 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #'
 #' @returns The name of the database corresponding to the platform chosen by the
 #'          user (to be used with `create.annot()` function).
-#' @export
 #' 
 #' @examples
 #' \dontrun{
@@ -577,6 +578,7 @@ array_platform_selector <- function(filt = "All")
 
 
 #' Title here
+#' @export
 #' 
 #' @description Create the annotation data frame starting from a database name
 #'              as returned by the `array_platform_selector()`. This function
@@ -591,7 +593,6 @@ array_platform_selector <- function(filt = "All")
 #' 
 #' @returns A data frame containing for each probe of the platform an number of
 #'          features selected by the user.
-#' @export
 #'
 #' @examples
 #' \dontrun{
@@ -700,6 +701,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
 
 
 #' Title here
+#' @export
 #' 
 #' @description This function takes a data frame, searches its columns for many
 #'              common missing-value placeholders, and finally prints a report
@@ -711,8 +713,6 @@ array_create_annot <- function(platform, collapsing = FALSE)
 #' 
 #' @param dataFrame Data frame or matrix to be scanned for NAs.
 #' @param naSymb A string containing the user-defined sequence for NAs.
-#'
-#' @export
 #'
 #' @examples
 #' \dontrun{

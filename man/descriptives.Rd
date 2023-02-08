@@ -21,7 +21,7 @@ size, arithmetic mean, median, IQR, variance, standard deviation,
 and SEM) for each group defined in \code{design}.
 }
 \description{
-Use this function to get basics descriptive statistics of many
+Use this function to get basic descriptive statistics of many
 experimental groups from a single one-dimensional numeric vector
 according to a user-defined experimental design. This function
 is a generalization of the legacy \code{descStat1G()} function
