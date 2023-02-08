@@ -3,7 +3,7 @@
 # cmatools - A collection of utility functions used in our R projects
 #
 # by //--FeA.R--//
-# ------------------------------------------------------------------------------
+#
 
 
 
@@ -332,32 +332,35 @@ hgt <- function(k, n, K, N = 1e4)
 #' 
 #' @param vals One-dimensional numeric vector or data frame.
 #' @param design Experimental design: a numeric or character vector that
-#'               associates to each element of `vals` a symbol based on the
-#'               experimental group the element belong to. It can be shorter
-#'               than `vals`; in this case the last `length(vals)-length(design)`
-#'               elemnts of `vals` will be ignored (not included in any group).
-#' @param labels Optional. A character vector containing the labels for the
-#'               experimental groups.
-#' @param prec Decimal precision.
+#'               associates each element of `vals` to a symbol, based on the
+#'               experimental group the element belongs to.
+#' @param prec Output decimal precision.
 #'
-#' @returns A data frame containing the statistics of interest (currently sample
+#' @returns A data frame containing the statistics of interest (i.e., sample
 #'          size, arithmetic mean, median, IQR, variance, standard deviation,
 #'          and SEM) for each group defined in `design`.
 #' @export
 #' 
 #' @author FeA.R
-descriptives <- function(vals, design, labels = NULL, prec = 3)
+descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 {
   # Check design length
-  if (length(design) > length(vals)) {
-    stop("Design oversized!")
+  if (length(design) != length(vals)) {
+    stop("Bad design size!")
   }
+  # Values-group association
+  if (is.numeric(design)) {
+    design <- paste0("Group_", design)
+  }
+  vals_grps <- data.frame(vals, design)
+  
   # Experimental groups
   grps <- unique(design)
   m <- length(grps)
   
   # Prepare a new empty data frame
-  stat_frame <- data.frame(n = integer(m),
+  stat_frame <- data.frame(Group = grps,
+                           n = integer(m),
                            Mean = double(m),
                            Median = double(m),
                            IqR = double(m),
@@ -365,29 +368,136 @@ descriptives <- function(vals, design, labels = NULL, prec = 3)
                            SD = double(m),
                            SEM = double(m),
                            stringsAsFactors = FALSE)
+  row.names(stat_frame) <- grps
   
   # Fill the data frame with the stats of interest
+  # 
+  # You can alternatively use by() as a non-loopy implementation:
+  # stat_frame[,1] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, mean)),
+  #                         digits = prec)
+  # stat_frame[,2] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, median)),
+  #                         digits = prec)
+  #                   [...]
   for (i in 1:m) {
-    sub_vals <- as.numeric(vals[which(design == grps[i])])
-    stat_frame[i,1] <- length(sub_vals) # Sample size
-    stat_frame[i,2] <- round(mean(sub_vals), digits = prec)
-    stat_frame[i,3] <- round(median(sub_vals), digits = prec)
-    stat_frame[i,4] <- round(IQR(sub_vals), digits = prec)
-    stat_frame[i,5] <- round(var(sub_vals), digits = prec)
-    stat_frame[i,6] <- round(sd(sub_vals), digits = prec)
-    stat_frame[i,7] <- round(sd(sub_vals)/sqrt(stat_frame[i,1]),
+    sub_vals <- as.numeric(vals[which(design == grps[i])]) # Downcast to vector
+    stat_frame[i,2] <- length(sub_vals) # Sample size
+    stat_frame[i,3] <- round(mean(sub_vals), digits = prec)
+    stat_frame[i,4] <- round(median(sub_vals), digits = prec)
+    stat_frame[i,5] <- round(IQR(sub_vals), digits = prec)
+    stat_frame[i,6] <- round(var(sub_vals), digits = prec)
+    stat_frame[i,7] <- round(sd(sub_vals), digits = prec)
+    stat_frame[i,8] <- round(sd(sub_vals)/sqrt(stat_frame$n[i]),
                              digits = prec) # SEM
   }
-  
-  # Set row names
-  if (is.null(labels)) {
-    labels <- paste0("Group_", grps)
-  } else if (length(labels) != m) {
-    stop("Wrong number of labels.")
-  }
-  row.names(stat_frame) <- labels
-  
   return(stat_frame)
+}
+
+
+
+#' Standard plots for categorical data 
+#'
+#' @description Use this function to plot a continuous response variable as a
+#'              function of a categorical explanatory one. Data need to be
+#'              passed as a single one-dimensional numeric vector together with
+#'              a user-defined experimental design. This function is a
+#'              generalization of the legacy `singleGeneView()` function
+#'              implemented in GATTACA for single-gene inspection.
+#' 
+#' @param vals One-dimensional numeric vector or data frame.
+#' @param design Experimental design: a numeric or character vector that
+#'               associates each element of `vals` to a symbol, based on the
+#'               experimental group the element belongs to.
+#' @param chart_type A string among the following: "BP" (Box Plot), "VP"
+#'                   (Violin Plot), "BC" (Bar Chart), or "MS" (Mean & SEM).
+#'
+#' @author FeA.R
+quick_chart <- function(vals, design, chart_type = "BP")
+{
+  # Check design length
+  if (length(design) != length(vals)) {
+    stop("Bad design size!")
+  }
+  
+  # Colors
+  line_color <- "gray17"
+  point_color <- "steelblue4"
+  fill_col <- "slategray4"
+  err_color <- "gray17"
+  
+  # Values-group association
+  if (is.numeric(design)) {
+    design <- paste0("Group_", design)
+  }
+  vals_grps <- data.frame(vals, design)
+  
+  # Descriptive statistics
+  desc <- descriptives(vals = vals, design = design)
+  
+  # Common ggplot terms
+  gg_base <- ggplot2::ggplot(data = vals_grps,
+                             mapping = ggplot2::aes(x = design, y = vals)) +
+    ggplot2::theme_bw(base_size = 15, base_rect_size = 1.5) +
+    ggplot2::theme(axis.text = ggplot2::element_text(size = 14),
+                   axis.title = ggplot2::element_text(size = 14)) +
+    ggplot2::xlab("Groups") + ggplot2::ylab("Response variable")
+  # geom_jitter() is a convenient shortcut for geom_point(position = "jitter")
+  gg_jitter <- ggplot2::geom_jitter(size = 2, color = point_color,
+                                    position = ggplot2::position_jitter(
+                                      width = 0.1, height = 0, seed = 123))
+  gg_errors <- ggplot2::geom_errorbar(data = desc,
+                                      mapping = ggplot2::aes(Group, Mean,
+                                                             ymin = Mean - SEM,
+                                                             ymax = Mean + SEM),
+                                      linewidth = 1.1, width = 0.2,
+                                      color = err_color)
+  # Now plot!
+  # NOTE: ggplot objects Within a for loop need to be printed explicitly 
+  if (chart_type == "BP") {
+    print(
+      gg_base +
+        ggplot2::geom_boxplot(color = line_color, fill = fill_col, alpha = 0.6,
+                              linewidth = 1, width = 0.5,
+                              notch = TRUE, outlier.shape = NA) +
+        ggplot2::stat_summary(fun = "mean", geom = "point",
+                              color = line_color, shape = "cross",
+                              size = 3, stroke = 2) +
+        gg_jitter +
+        ggplot2::ggtitle(label = "Box Plot with Notch and Jitter")
+    )
+  } else if (chart_type == "BC") {
+    print(
+      gg_base +
+        ggplot2::geom_bar(data = desc,
+                          mapping = ggplot2::aes(Group, Mean),
+                          stat = "identity",
+                          color = line_color, fill = fill_col, alpha = 0.6,
+                          linewidth = 1, width = 0.5) +
+        gg_errors +
+        gg_jitter +
+        ggplot2::ggtitle(label = "Bar Chart with Jitter")
+    )
+  } else if (chart_type == "MS") {
+    print(
+      gg_base +
+        ggplot2::stat_summary(fun = "mean", geom = "crossbar",
+                              color = line_color,
+                              linewidth = 0.5, width = 0.5) +
+        gg_errors +
+        gg_jitter +
+        ggplot2::ggtitle(label = "Mean & SEM Plot with Jitter")
+    )
+  } else if (chart_type == "VP") {
+    print(
+      gg_base +
+        ggplot2::geom_violin(color = line_color, fill = fill_col, alpha = 0.6,
+                             linewidth = 1, width = 0.5) +
+        gg_jitter +
+        ggplot2::ggtitle(label = "Violin Plot with Jitter")
+    )
+  } else {
+    cat("\n")
+    stop("Invalid chart_type!\n\n")
+  }
 }
 
 
@@ -634,133 +744,23 @@ missing_report <- function(dataFrame, naSymb = "")
 
 
 
-
-
-
-
-
-
-#'--- old ---
-#' @description ppend annotation to genes and sort (do nothing if
-#'              do.the.job == FALSE). This is a GATTACA legacy piece of code.
-#' 
-#' @param gene.stat The table of genes, usually a DEG summary-statistic
-#'                  top-table (or an expression matrix).
-#' @param ann The matrix containing the annotation data.
-#' @param do.the.job FALSE to skip the appending task by global settings,
-#'                   without the need for an external IF.
-#' @param sort.by The name or index of the column used to sort the final dataset
-#'
-#' @returns The annotated and sorted data frame passed as input.
-#' 
-#' @author FeA.R
-appendAnnotation = function(gene.stat, ann,
-                            do.the.job = getOption("append.annot"),
-                            sort.by = 1)
-{
-  # Check argument values
-  if (is.null(do.the.job)) {
-    do.the.job = TRUE
-    cat("\nWARNING: \'append.annot\' option defaulted to TRUE\n\n")
-  }
-  
-  if (do.the.job) {
     
-    # 'merge' function to merge two matrix-like objects horizontally and cast to
-    # data frame (right outer join).
-    # NOTE: both gene.stat and ann are supposed to have the Probe_IDs as rownames
-    
-    # To merge two data frames horizontally by one or more common key variables:
-    #  - inner join (default): Return only the rows that have matching keys in both
-    #     the tables (~ intersection)
-    #  - outer join (all = T): Return all rows from both the tables, joining the
-    #     records that have matching (~ union)
-    #  - left outer (all.x = T): Return all rows from the left table, and any rows
-    #     with matching keys from the right table
-    #  - right outer (all.y = T): Return all rows from the right table, and any rows
-    #     with matching keys from the left table
-    #  - cross join (by = NULL): Return the Cartesian product
-    
-    joined = merge(ann, gene.stat,
-                   by.x = "row.names", by.y = "row.names", all.y = TRUE)
-    rownames(joined) = joined[,1]
-    gene.stat = joined[,-1]
-    
-    # Re-sort the data frame by the content of 'sort.by' column ('sort.by' can
-    # be either a number or a column name).
-    gene.stat = gene.stat[order(gene.stat[,sort.by]),]
-  }
-  return(gene.stat)
-}
+# 'merge' function to merge two matrix-like objects horizontally and cast to
+# data frame (right outer join).
+# NOTE: both gene.stat and ann are supposed to have the Probe_IDs as rownames
 
+# To merge two data frames horizontally by one or more common key variables:
+#  - inner join (default): Return only the rows that have matching keys in both
+#     the tables (~ intersection)
+#  - outer join (all = T): Return all rows from both the tables, joining the
+#     records that have matching (~ union)
+#  - left outer (all.x = T): Return all rows from the left table, and any rows
+#     with matching keys from the right table
+#  - right outer (all.y = T): Return all rows from the right table, and any rows
+#     with matching keys from the left table
+#  - cross join (by = NULL): Return the Cartesian product
 
+# joined = merge(ann, gene.stat, by.x = "row.names", by.y = "row.names", all.y = TRUE)
 
-#'--- old ---
-#' @description Plot single gene comparison chart. This is a GATTACA legacy
-#'              piece of code.
-#' 
-#' @param exp.mat Expression matrix (as data frame).
-#' @param gr Group names.
-#' @param des Experimental design (full design mode vector).
-#' @param gois Genes of interest by probe (char vector).
-#' @param chart.type "BP" (Box Plot), "BC" (Bar Chart), or "MS" (Mean & SEM).
-#' @param ann Optional annotation data frame.
-#'
-#' @author FeA.R
-singleGeneView = function(exp.mat, gr, des, gois, chart.type = "BP", ann = NULL)
-{
-  geo = switch(chart.type,
-               "BP" = "point",
-               "BC" = "bar",
-               "MS" = "crossbar")
-  
-  for (i in 1:length(gois)) {
     
-    var.expr = as.numeric(exp.mat[gois[i],]) # Downcast to vector
-    var.groups = gr[des]
-    sgex = data.frame(var.expr, var.groups) # Single Gene Expression Data Frame
-    sgs = descStat1G(exp.mat[gois[i],], gr, des, 6) # Single Gene Summary Data Frame
-    
-    if (is.null(ann)) {
-      gene.symb = ""
-    } else {
-      gene.symb = paste(ann[gois[i], grepl("Symbol", colnames(ann))], " - ", sep = "")
-    }
-    
-    if (chart.type == "BP") {
-      
-      print( # NOTICE: When in a for loop, you have to explicitly print your resulting ggplot object
-        ggplot(data = sgex, aes(var.groups, var.expr)) +
-          theme_bw(base_size = 15, base_rect_size = 1.5) +
-          xlab("Group") + # In the following functions, when data=NULL (default), the data is inherited from ggplot()
-          ylab("log2 Expression") +
-          ggtitle(label = "Box Plot with Jitter", subtitle = paste(gene.symb, "Probe ID: ", gois[i], sep = "")) +
-          geom_boxplot(width = 0.5, size = 0.5, notch = TRUE, outlier.shape = NA) +
-          stat_summary(fun = "mean", geom = geo, color = "red3", size = 2) +
-          geom_jitter(position = position_jitter(width = 0.1, height = 0, seed = 123), size = 1.5))
-      
-    } else if (chart.type == "BC" | chart.type == "MS") {
-      
-      print(
-        ggplot(data = sgex, aes(var.groups, var.expr)) +
-          theme_bw(base_size = 15, base_rect_size = 1.5) +
-          xlab("Group") +
-          ylab("log2 Expression") +
-          ggtitle(label = "Mean & SEM Plot with Jitter", subtitle = paste(gene.symb, "Probe ID: ", gois[i], sep = "")) +
-          stat_summary(fun = "mean", geom = geo, color = "black", size = 0.5, width = 0.2) +
-          # Recommended alternative for bar charts in ggplot2:
-          #geom_bar(data = sgs, aes(GROUP, MEAN), stat = "identity", color = "black", size = 0.5, width = 0.2) +
-          geom_errorbar(data = sgs, aes(GROUP, MEAN, ymin = MEAN - SEM, ymax = MEAN + SEM), size = 1, width = 0.1) + 
-          geom_jitter(position = position_jitter(width = 0.1, height = 0, seed = 123), size = 1.5))
-      
-    } else {
-      
-      cat("\n")
-      stop("Invalid chart.type!\n\n")
-    }
-    
-    printPlots(paste("SingleGene Plot - ", chart.type, " - ", gois[i], sep = ""))
-  }
-}
-
 

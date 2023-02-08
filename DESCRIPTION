@@ -1,6 +1,6 @@
 Package: cmatools
 Title: A collection of utility functions used in our R projects
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: c(
     person("Federico Alessandro", "Ruffinatti", ,
         "federicoalessandro.ruffinatti@unito.it", role = c("aut", "cre"),
@@ -19,5 +19,6 @@ Suggests:
 Config/testthat/edition: 3
 Imports: 
     GEOquery (>= 2.60.0),
+    ggplot2 (>= 3.4.0),
     svDialogs (>= 1.1.0),
     tools (>= 4.2.2)
