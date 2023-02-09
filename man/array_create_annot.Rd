@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{array_create_annot}
 \alias{array_create_annot}
-\title{Title here}
+\title{Microarray Annotation Retriever}
 \usage{
 array_create_annot(platform, collapsing = FALSE)
 }
@@ -14,15 +14,18 @@ ID in the case of annotation packages from Bioconductor
 (GPL records from GEO are already collapsed).}
 }
 \value{
-A data frame containing for each probe of the platform an number of
-features selected by the user.
+A data frame containing for each probe of the platform a number of
+features as selected by the user.
 }
 \description{
-Create the annotation data frame starting from a database name
-as returned by the \code{array_platform_selector()}. This function
-implements a minimal graphical interface allowing the user to
-select the number and the type of features to be used as
-annotation.
+This function retrieves gene annotation for a given microarray
+platform and returns them as a data frame. It requires as input
+a database name as returned by the \code{array_platform_selector()}.
+This function uses \code{svDialogs} package to implement a minimal
+graphical interface allowing the user to select the number and
+the type of features to be used as annotation. GPL-based
+annotation are retrieved from GEO using \code{GEOquery::getGEO()}
+function that needs a working FTP connection.
 }
 \examples{
 \dontrun{

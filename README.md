@@ -33,6 +33,8 @@ documentation and (re)generate `NAMESPACE` (based on `@export` tags).
 
 1. Possibly update tests in `.../cmatools/tests/testthat/test-data_exploration.R`.
 
+1. Possibly update the package version in the `DESCRIPTION` file
+
 1. Run `devtools::check()` (Remember that all `@examples` will be used as tests
 in this phase. To prevent some of them from being run put them inside a
 `\dontrun{}` section).

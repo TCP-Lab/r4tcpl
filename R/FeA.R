@@ -503,7 +503,7 @@ quick_chart <- function(vals, design, chart_type = "BP")
 
 
 
-#' Title here
+#' Microarray Platform Selector
 #' @export
 #' 
 #' @description A minimal graphical interface to retrieve the name of a suitable
@@ -523,7 +523,7 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #' \dontrun{
 #' array_platform_selector() |> array_create_annot(platform) |> head()}
 #' @author FeA.R
-array_platform_selector <- function(filt = "All")
+array_platform_selector <- function(filt = ".*")
 {
   # Name of the Bioconductor db package or GPL GEO platform record
   db_BCorGPL <- c("hgu133a",
@@ -535,11 +535,14 @@ array_platform_selector <- function(filt = "All")
                   "hgug4112a",
                   "GPL6480",
                   "HsAgilentDesign026652",
+                  "GPL13497",
                   "GPL22763",
-                  "GPL19072")
+                  "GPL19072",
+                  "GPL21185",
+                  "GPL10787")
   
   # Array full-length name or `title` value from @header slot of a GPL object
-  # NOTE_1: GEOquery::getGEO() function needs FTP
+  # NOTE_1: GEOquery::getGEO() function needs a working FTP connection.
   # NOTE_2: Only Agilent 'Probe Name Versions' (NO 'Gene Symbol Versions') GPLs
   #         have been included in this list. 
   long_names <- c("Affymetrix Human Genome U133 A Set - from Bioconductor",
@@ -551,20 +554,20 @@ array_platform_selector <- function(filt = "All")
                   "Agilent-014850 Whole Human Genome Microarray 4x44K G4112F - from Bioconductor",
                   "Agilent-014850 Whole Human Genome Microarray 4x44K G4112F - from GPL6480",
                   "Agilent-026652 Whole Human Genome Microarray 4x44K v2 G4845A - from Bioconductor",
+                  "Agilent-026652 Whole Human Genome Microarray 4x44K v2 G4845A - from GPL13497",
                   "Agilent-039714 LincRNA SurePrint G3 Human GE 8x60K Microarray PVD 028004 - from GPL22763",
-                  "Agilent-052909 CBC_lncRNAmRNA_V3 - from GPL19072")
+                  "Agilent-052909 CBC_lncRNAmRNA_V3 - from GPL19072",
+                  "Agilent-072363 SurePrint G3 Human GE v3 8x60K Microarray 039494 - from GPL21185",
+                  "Agilent-028005 SurePrint G3 Mouse GE 8x60K Microarray G4852A - from GPL10787")
   
-  if (filt != "All") {
-    filt_index <- grep(filt, long_names, ignore.case = TRUE)
-    long_names_sub <- long_names[filt_index]
-    db_BCorGPL_sub <- db_BCorGPL[filt_index]
-  } else {
-    long_names_sub <- long_names
-    db_BCorGPL_sub <- db_BCorGPL
-  }
+  # Filter according to `filt` argument (regex ".*" stand for "take all")
+  filt_index <- grep(filt, long_names, ignore.case = TRUE)
+  long_names_sub <- long_names[filt_index]
+  db_BCorGPL_sub <- db_BCorGPL[filt_index]
   
-  platform_index <- menu(long_names_sub, title = "Choose platform annotation",
-                         graphics = TRUE)
+  platform_index <- utils::menu(long_names_sub,
+                                title = "Choose platform annotation",
+                                graphics = TRUE)
   
   if (platform_index == 0) {
     cat("\nNo platform selected!\n\n")
@@ -577,22 +580,25 @@ array_platform_selector <- function(filt = "All")
 
 
 
-#' Title here
+#' Microarray Annotation Retriever
 #' @export
 #' 
-#' @description Create the annotation data frame starting from a database name
-#'              as returned by the `array_platform_selector()`. This function
-#'              implements a minimal graphical interface allowing the user to
-#'              select the number and the type of features to be used as
-#'              annotation.
+#' @description This function retrieves gene annotation for a given microarray
+#'              platform and returns them as a data frame. It requires as input
+#'              a database name as returned by the `array_platform_selector()`.
+#'              This function uses `svDialogs` package to implement a minimal
+#'              graphical interface allowing the user to select the number and
+#'              the type of features to be used as annotation. GPL-based
+#'              annotation are retrieved from GEO using `GEOquery::getGEO()`
+#'              function that needs a working FTP connection.
 #' 
 #' @param platform Affymetrix/Agilent platform annotation database.
 #' @param collapsing Boolean flag to choose whether to collapse by unique Probe
 #'                   ID in the case of annotation packages from Bioconductor
 #'                   (GPL records from GEO are already collapsed).
 #' 
-#' @returns A data frame containing for each probe of the platform an number of
-#'          features selected by the user.
+#' @returns A data frame containing for each probe of the platform a number of
+#'          features as selected by the user.
 #'
 #' @examples
 #' \dontrun{
@@ -635,23 +641,25 @@ array_create_annot <- function(platform, collapsing = FALSE)
     
     # Load Annotation Database from Bioconductor and retrieve columns of interest
     annot_db <- paste0(platform, ".db")
-    # library() converts its argument into a string unless you specify the
-    # option character.only = TRUE
-    library(annot_db, character.only = TRUE)
-    library(AnnotationDbi)
+    if(!requireNamespace(annot_db, quietly = TRUE)) {
+      stop(paste0(annot_db," package is not installed.",
+                  "\nRun `BiocManager::install(\"", annot_db, "\")` to proceed."))
+    }
+    
     # Print some information
     cat("\nLoaded annotation: ", annot_db,
         " (ver.: ", toString(packageVersion(annot_db)), ")",
         " [date: ", toString(packageDate(annot_db)), "]", sep = "")
     
-    # The evaluated expression of the (unquoted) annot_db (e.g., hgu133a.db)
-    evaluating_db <- eval(parse(text = annot_db))
+    # The evaluated expression of the (unquoted) annot_db
+    # e.g., hgu133a.db::hgu133a.db
+    evaluating_db <- eval(parse(text = paste0(annot_db, "::", annot_db)))
     
     # Retrieve all the columns of the data base, except "PROBEID" that will be
     # used as key and so it must be unique
-    cols <- columns(evaluating_db)
+    cols <- AnnotationDbi::columns(evaluating_db)
     cols <- cols[! cols %in% "PROBEID"]
-  
+    
     # Feature selection
     feats <- svDialogs::dlg_list(choice = cols,
                                  preselect = c("ENSEMBL",
@@ -661,15 +669,15 @@ array_create_annot <- function(platform, collapsing = FALSE)
                                  multiple = TRUE,
                                  title = "Select multiple features")$res
     
-    # Always use Probe IDs as keys (although they cannot be row names since, in
-    # general, they will not be unique after feature retrieval)
-    ids <- keys(evaluating_db, keytype = "PROBEID")
+    # Always use Probe IDs as keys (although they cannot be used as row names
+    # since, in general, they will not be unique after feature retrieval)
+    ids <- AnnotationDbi::keys(evaluating_db, keytype = "PROBEID")
     cat("\n", length(ids), " unique Probe_IDs retrieved from ",
         annot_db,"\n", sep = "")
-    annot_long <- select(evaluating_db,
-                         keys = ids,
-                         columns = feats,
-                         keytype = "PROBEID")
+    annot_long <- AnnotationDbi::select(evaluating_db,
+                                        keys = ids,
+                                        columns = feats,
+                                        keytype = "PROBEID")
     cat("1:many mapping resulted in a ",
         dim(annot_long)[1], " x ", dim(annot_long)[2],
         " annotation data frame", sep = "")
@@ -677,8 +685,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
     if (collapsing) {
       del = " /// " # Affymetrix-style delimiter
       # Always use Probe IDs as keys
-      annot_collapse <- data.frame(PROBEID = keys(evaluating_db,
-                                                  keytype = "PROBEID"))
+      annot_collapse <- data.frame(PROBEID = ids)
       for (feat in feats) {
         annot_collapse <- merge(annot_collapse,
                                 aggregate(annot_long[feat],

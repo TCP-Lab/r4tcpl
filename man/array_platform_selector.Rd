@@ -2,9 +2,9 @@
 % Please edit documentation in R/FeA.R
 \name{array_platform_selector}
 \alias{array_platform_selector}
-\title{Title here}
+\title{Microarray Platform Selector}
 \usage{
-array_platform_selector(filt = "All")
+array_platform_selector(filt = ".*")
 }
 \arguments{
 \item{filt}{A string used to subset the list of platform annotations among
