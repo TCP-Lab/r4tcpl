@@ -22,3 +22,6 @@ Imports:
     ggplot2 (>= 3.4.0),
     svDialogs (>= 1.1.0),
     tools (>= 4.2.2)
+    dplyr (>= 1.0.10),
+    stringr
+
