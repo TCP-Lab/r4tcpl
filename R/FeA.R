@@ -324,6 +324,7 @@ hgt <- function(k, n, K, N = 1e4)
 
 #' Basic Descriptive Statistics
 #' @export
+#' @import stats
 #' 
 #' @description Use this function to get basic descriptive statistics of many
 #'              experimental groups from a single one-dimensional numeric vector
@@ -446,9 +447,11 @@ quick_chart <- function(vals, design, chart_type = "BP")
                                     position = ggplot2::position_jitter(
                                       width = 0.1, height = 0, seed = 123))
   gg_errors <- ggplot2::geom_errorbar(data = desc,
-                                      mapping = ggplot2::aes(Group, Mean,
-                                                             ymin = Mean - SEM,
-                                                             ymax = Mean + SEM),
+                                      mapping = ggplot2::aes(
+                                        desc$Group,
+                                        desc$Mean,
+                                        ymin = desc$Mean - desc$SEM,
+                                        ymax = desc$Mean + desc$SEM),
                                       linewidth = 1.1, width = 0.2,
                                       color = err_color)
   # Now plot!
@@ -469,7 +472,7 @@ quick_chart <- function(vals, design, chart_type = "BP")
     print(
       gg_base +
         ggplot2::geom_bar(data = desc,
-                          mapping = ggplot2::aes(Group, Mean),
+                          mapping = ggplot2::aes(desc$Group, desc$Mean),
                           stat = "identity",
                           color = line_color, fill = fill_col, alpha = 0.6,
                           linewidth = 1, width = 0.5) +
@@ -582,6 +585,7 @@ array_platform_selector <- function(filt = ".*")
 
 #' Microarray Annotation Retriever
 #' @export
+#' @import utils
 #' 
 #' @description This function retrieves gene annotation for a given microarray
 #'              platform and returns them as a data frame. It requires as input
@@ -642,6 +646,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
     # Load Annotation Database from Bioconductor and retrieve columns of interest
     annot_db <- paste0(platform, ".db")
     if(!requireNamespace(annot_db, quietly = TRUE)) {
+      # Don't want to make all annotation packages mandatory dependencies for cmatools
       stop(paste0(annot_db," package is not installed.",
                   "\nRun `BiocManager::install(\"", annot_db, "\")` to proceed."))
     }
