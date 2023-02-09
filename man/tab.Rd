@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{tab}
 \alias{tab}
-\title{Title here}
+\title{Tab Stop}
 \usage{
 tab(word = "", sp = 7)
 }

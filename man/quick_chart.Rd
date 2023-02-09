@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{quick_chart}
 \alias{quick_chart}
-\title{Standard plots for categorical data}
+\title{Standard Plots for Categorical Data}
 \usage{
 quick_chart(vals, design, chart_type = "BP")
 }

@@ -15,7 +15,9 @@ https://r-pkgs.org/
 already installed, otherwise install them running:
 `install.packages(c("devtools", "roxygen2", "testthat", "knitr"))`.
 
-1. Write/copy your function(s) into a R file in `.../cmatools/R/`.
+1. Set the project directory `.../cmatools/` as the working directory in RStudio.
+
+1. Write/copy your function(s) into a .R file in `.../cmatools/R/`.
 
 1. Remember to include the `@export` tag in the `roxygen` comments of all the
 functions you want to make visible when `cmatools` package will be loaded.
@@ -23,10 +25,17 @@ functions you want to make visible when `cmatools` package will be loaded.
 1. It’s important to note that `library()` should **NEVER** be used inside a
 package. Use instead the `::` notation to explicitly refer specific namespaces.
 
-1. Set the project directory as the working directory in RStudio.
+1. For each dependency (i.e., wherever you used the syntax
+`<package_name>::<object>`) remember to add `package_name` to `Imports` field in
+`DESCRIPTION` by typing `usethis::use_package("package_name", min_version=TRUE)`
 
-1. For each dependency, use `usethis::use_package("package_name", min_version = TRUE)`
-to add `package_name` to `Imports` field in `DESCRIPTION`.
+1. Unlike *User Libraries*, *System Libraries* don't need to be declared as
+dependencies (since they are expected to be always installed by default in every
+R distribution). However, whenever some function from a System Library other than
+*The R Base Package* (`base`) is used it is recommended to import it or the
+entire library in the package namespace by adding the `roxygen` tags `@importFrom`
+or `@import`, respectively. This will produce a suitable `import()` entry
+in the `NAMESPACE` file.
 
 1. Run `devtools::document()` to convert roxygen comments into proper R
 documentation and (re)generate `NAMESPACE` (based on `@export` tags).

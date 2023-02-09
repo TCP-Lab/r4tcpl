@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{howMany_dnues2}
 \alias{howMany_dnues2}
-\title{Title here}
+\title{Different Non-Unique Elements (Version 2)}
 \usage{
 howMany_dnues2(vec)
 }

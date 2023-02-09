@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{repmat}
 \alias{repmat}
-\title{Title here}
+\title{Replicate Matrix-like Objects}
 \usage{
 repmat(X, m, n)
 }

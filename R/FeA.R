@@ -71,6 +71,7 @@ show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
 
 #' Duplication Report
 #' @export
+#' @import stats
 #' 
 #' @description This function searches the vector passed as input for duplicated
 #'              entries and the positions they fill in the vector. Unlike
@@ -106,8 +107,9 @@ duplication_report <- function(vec)
 
 
 
-#' Title here
+#' Different Non-Unique Elements
 #' @export
+#' @import stats
 #' 
 #' @description A function that tells how many *different non-unique* elements
 #'              there are in a given vector. Unlike `base::duplicated()` that
@@ -140,8 +142,9 @@ howMany_dnues <- function(vec)
 
 
 
-#' Title here
+#' Different Non-Unique Elements (Version 2)
 #' @export
+#' @import stats
 #' 
 #' @description An alternative (faster?) implementation of `howMany_dnues()`,
 #'              independent of `duplication_report()`.
@@ -175,7 +178,7 @@ howMany_dnues2 <- function(vec)
 
 
 
-#' Title here
+#' Replicate Matrix-like Objects
 #' @export
 #' 
 #' @description R-equivalent to the MATLAB `repmat()` function. Just specify the
@@ -213,8 +216,9 @@ repmat <- function(X, m, n)
 
 
 
-#' Title here
+#' Help Pages as Text
 #' @export
+#' @import utils
 #' 
 #' @description A function that extracts the text from the help pages of a R
 #'              package or function. Adapted from MrFlick's `help_text()`
@@ -228,7 +232,7 @@ repmat <- function(X, m, n)
 #' 
 #' @examples
 #' \dontrun{
-#' # Print seq() help to console
+#' # Print `seq()` help to console
 #' help_as_text("seq") |> cat(sep = "\n")}
 #' @references \url{https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r}
 #' @author MrFlick, FeA.R
@@ -237,9 +241,9 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
   # The following function is the mere copy-and-paste of `tools:::fetchRdDB`
   # with the addition of the only line
   #  `%notin%` <- Negate(`%in%`)
-  # to define the %notin% operator.
+  # to define the %notin% operator used therein.
   # This function is used to replace the `fetchRdDB()` unexported function from
-  # `tools` package and avoid annoying warnings from `devtools::check()`
+  # `tools` package and avoid annoying warnings when running `devtools::check()`.
   tools_fetchRdDB <- function (filebase, key = NULL) 
   {
     fun <- function(db) {
@@ -295,7 +299,7 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 
 
 
-#' Title here
+#' Tab Stop
 #' @export
 #' 
 #' @description To align strings in console as if using MS-Word tab stop
@@ -330,6 +334,7 @@ tab <- function(word = "", sp = 7)
 
 #' Hypergeometric Test
 #' @export
+#' @import stats
 #' 
 #' @description A wrapper for the Hypergeometric test function. Beside
 #'              *p*-values, `hgt()` also computes and returns other enrichment
@@ -434,7 +439,7 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 
 
 
-#' Standard plots for categorical data
+#' Standard Plots for Categorical Data
 #' @export
 #' 
 #' @description Use this function to plot a continuous response variable as a
@@ -748,10 +753,22 @@ array_create_annot <- function(platform, collapsing = FALSE)
     }
   }
 }
+# A quick reminder about `merge()` usage:
+#
+# To merge two data frames horizontally by one or more common key variables:
+#  - inner join (default): Return only the rows that have matching keys in both
+#     the tables (~ intersection)
+#  - outer join (all = T): Return all rows from both the tables, joining the
+#     records that have matching (~ union)
+#  - left outer (all.x = T): Return all rows from the left table, and any rows
+#     with matching keys from the right table
+#  - right outer (all.y = T): Return all rows from the right table, and any rows
+#     with matching keys from the left table
+#  - cross join (by = NULL): Return the Cartesian product
 
 
 
-#' Title here
+#' Count Missing Values in a Matrix-like Object
 #' @export
 #' 
 #' @description This function takes a data frame, searches its columns for many
@@ -790,28 +807,4 @@ missing_report <- function(dataFrame, naSymb = "")
   print(missing_data)
   cat("\n")
 }
-
-
-
-
-
-    
-# 'merge' function to merge two matrix-like objects horizontally and cast to
-# data frame (right outer join).
-# NOTE: both gene.stat and ann are supposed to have the Probe_IDs as rownames
-
-# To merge two data frames horizontally by one or more common key variables:
-#  - inner join (default): Return only the rows that have matching keys in both
-#     the tables (~ intersection)
-#  - outer join (all = T): Return all rows from both the tables, joining the
-#     records that have matching (~ union)
-#  - left outer (all.x = T): Return all rows from the left table, and any rows
-#     with matching keys from the right table
-#  - right outer (all.y = T): Return all rows from the right table, and any rows
-#     with matching keys from the left table
-#  - cross join (by = NULL): Return the Cartesian product
-
-# joined = merge(ann, gene.stat, by.x = "row.names", by.y = "row.names", all.y = TRUE)
-
-    
 

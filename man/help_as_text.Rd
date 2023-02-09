@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{help_as_text}
 \alias{help_as_text}
-\title{Title here}
+\title{Help Pages as Text}
 \usage{
 help_as_text(meth_or_pkg, pkg = NULL)
 }
@@ -22,7 +22,7 @@ References section).
 }
 \examples{
 \dontrun{
-# Print seq() help to console
+# Print `seq()` help to console
 help_as_text("seq") |> cat(sep = "\n")}
 }
 \references{

@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{missing_report}
 \alias{missing_report}
-\title{Title here}
+\title{Count Missing Values in a Matrix-like Object}
 \usage{
 missing_report(dataFrame, naSymb = "")
 }
