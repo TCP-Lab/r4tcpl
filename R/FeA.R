@@ -234,6 +234,44 @@ repmat <- function(X, m, n)
 #' @author MrFlick, FeA.R
 help_as_text <- function(meth_or_pkg, pkg = NULL)
 {
+  # The following function is the mere copy-and-paste of `tools:::fetchRdDB`
+  # with the addition of the only line
+  #  `%notin%` <- Negate(`%in%`)
+  # to define the %notin% operator.
+  # This function is used to replace the `fetchRdDB()` unexported function from
+  # `tools` package and avoid annoying warnings from `devtools::check()`
+  tools_fetchRdDB <- function (filebase, key = NULL) 
+  {
+    fun <- function(db) {
+      
+      `%notin%` <- Negate(`%in%`)
+      
+      vals <- db$vals
+      vars <- db$vars
+      datafile <- db$datafile
+      compressed <- db$compressed
+      envhook <- db$envhook
+      fetch <- function(key) lazyLoadDBfetch(vals[key][[1L]], 
+                                             datafile, compressed, envhook)
+      if (length(key)) {
+        if (key %notin% vars) 
+          stop(gettextf("No help on %s found in RdDB %s", 
+                        sQuote(key), sQuote(filebase)), domain = NA)
+        fetch(key)
+      }
+      else {
+        res <- lapply(vars, fetch)
+        names(res) <- vars
+        res
+      }
+    }
+    res <- lazyLoadDBexec(filebase, fun)
+    if (length(key)) 
+      res
+    else invisible(res)
+  }
+  
+  # Here it starts the actual `help_as_text()` function...
   file <- help(meth_or_pkg, package = (pkg))
   
   if (length(file) > 1) {
@@ -249,7 +287,8 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
   RdDB <- file.path(path, pkgname)
   
   print(dirpath)
-  rd <- tools:::fetchRdDB(RdDB, basename(file))
+  #rd <- tools:::fetchRdDB(RdDB, basename(file)) # Replaced by tools_fetchRdDB()
+  rd <- tools_fetchRdDB(RdDB, basename(file))
   capture.output(tools::Rd2txt(rd, out = "",
                                options = list(underline_titles = FALSE)))
 }
