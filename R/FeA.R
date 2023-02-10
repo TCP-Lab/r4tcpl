@@ -7,7 +7,7 @@
 
 
 
-#' Show Data as matrix and return its dimensions
+#' Show Data as Matrix and Return its Dimensions
 #' @export
 #' 
 #' @description A custom version of the classical `head()` that prints the upper
@@ -397,7 +397,6 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
   if (is.numeric(design)) {
     design <- paste0("Group_", design)
   }
-  vals_grps <- data.frame(vals, design)
   
   # Experimental groups
   grps <- unique(design)
@@ -417,7 +416,9 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
   
   # Fill the data frame with the stats of interest
   # 
-  # You can alternatively use by() as a non-loopy implementation:
+  # You can alternatively use by() for a non-loopy implementation:
+  # vals <- c(length(vals),1) # Force `vals` to column shape
+  # vals_grps <- data.frame(vals, design)
   # stat_frame[,1] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, mean)),
   #                         digits = prec)
   # stat_frame[,2] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, median)),

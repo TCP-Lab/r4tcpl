@@ -1,6 +1,6 @@
 Package: cmatools
 Title: A collection of utility functions used in our R projects
-Version: 0.0.4
+Version: 0.0.5
 Authors@R: c(
     person("Federico Alessandro", "Ruffinatti", ,
         "federicoalessandro.ruffinatti@unito.it", role = c("aut", "cre"),
@@ -25,3 +25,6 @@ Imports:
     dplyr (>= 1.0.10),
     stringr (>= 1.5.0),
     AnnotationDbi (>= 1.60.0)
+Depends: 
+    R (>= 2.10)
+LazyData: true

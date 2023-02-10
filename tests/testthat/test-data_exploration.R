@@ -10,6 +10,16 @@ test_that("show_data returns actual dimensions", {
 })
 
 
+
+test_that("repmat() works as expected", {
+  expect_equal(
+    repmat(matrix(c(4,6,5,3,8,9,7,9), nrow = 2, ncol = 4, byrow = TRUE), 3, 2),
+    matrix(rep(c(rep(c(4,6,5,3),2), rep(c(8,9,7,9),2)), 3),
+           nrow = 6, ncol = 8, byrow = TRUE))
+})
+
+
+
 ### To regenerate:
 # set.seed(...some seed...)
 # val <- round(

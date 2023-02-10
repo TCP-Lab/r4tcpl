@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{show_data}
 \alias{show_data}
-\title{Show Data as matrix and return its dimensions}
+\title{Show Data as Matrix and Return its Dimensions}
 \usage{
 show_data(dataset, name = NULL, rows = 10, cols = 5)
 }
