@@ -7,30 +7,28 @@
 
 
 
-#' Show Data as Matrix and Return its Dimensions
+#' Let Me See (Data as Matrix)
 #' @export
 #' 
 #' @description A custom version of the classical `head()` that prints the upper
 #'              leftmost corner of a data set, also showing row names and
 #'              controlling for possible out-of-bounds exceptions. Compared to
-#'              `head()`, `show_data()` **always displays data by columns**,
-#'              even in the case of vectors (i.e., one-dimensional arrays).
-#'              Also, `show_data` prints and returns the dimensions of the data
-#'              set, together with a custom heading label.
+#'              `head()`, `lms()` **always displays data by columns**, even in
+#'              the case of vectors (i.e., one-dimensional arrays). Also, `lms`
+#'              prints the dimensions of the data set, along with a custom
+#'              heading label.
 #' 
 #' @param dataset Data frame, matrix, or vector to print.
 #' @param name Explanatory name to print in the heading (useful when logging).
 #' @param rows Maximum number of rows to display.
 #' @param cols Maximum number of columns to display.
 #' 
-#' @returns A vector of the form `c(rows,cols)` containing `dataset` dimensions.
-#' 
 #' @examples
 #' \dontrun{
 #' x <- data.frame(var1 = c(1, 2, 3, 4, 5), var2 = c(6, 7, 8, 9, 10))
-#' show_data(x, "an example dataset", rows = 3)}
+#' lms(x, "an example dataset", rows = 3)}
 #' @author FeA.R
-show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
+lms <- function(dataset, name = NULL, rows = 10, cols = 5)
 {
   # Whenever possible, 'dataset' is converted to a data frame to be passed to
   # dim() function and displayed column-wise preserving the type specificity of
@@ -63,8 +61,6 @@ show_data <- function(dataset, name = NULL, rows = 10, cols = 5)
   # NOTE: if you only return a data frame subset of one column, R will drop the
   # names by default. To avoid this use the drop=FALSE option.
   print(dataset[1:rows, 1:cols, drop = FALSE])
-  
-  return(d)
 }
 
 
@@ -417,7 +413,7 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
   # Fill the data frame with the stats of interest
   # 
   # You can alternatively use by() for a non-loopy implementation:
-  # vals <- c(length(vals),1) # Force `vals` to column shape
+  # dim(vals) <- c(length(vals),1) # Force `vals` to column shape
   # vals_grps <- data.frame(vals, design)
   # stat_frame[,1] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, mean)),
   #                         digits = prec)
@@ -475,7 +471,8 @@ quick_chart <- function(vals, design, chart_type = "BP")
   if (is.numeric(design)) {
     design <- paste0("Group_", design)
   }
-  vals_grps <- data.frame(vals, design)
+  
+  vals_grps <- data.frame(vals = as.numeric(vals), design)
   
   # Descriptive statistics
   desc <- descriptives(vals = vals, design = design)
@@ -653,7 +650,7 @@ array_platform_selector <- function(filt = ".*")
 #' \dontrun{
 #' annot <- array_create_annot("hgu133plus2", collapsing = TRUE)
 #' missing_report(annot)
-#' d <- show_data(annot)}
+#' lms(annot)}
 #' @author FeA.R
 array_create_annot <- function(platform, collapsing = FALSE)
 {
