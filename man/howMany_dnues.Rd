@@ -10,14 +10,20 @@ howMany_dnues(vec)
 \item{vec}{A vector to be scanned for duplicates.}
 }
 \value{
-A vector of two elements, namely the number of different non-unique
-elements, and the global number of non-unique entries in \code{vec}.
+A numeric vector of two elements, namely the number of different
+non-unique elements, and the global number of non-unique entries in
+\code{vec}.
 }
 \description{
 A function that tells how many \emph{different non-unique} elements
 there are in a given vector. Unlike \code{base::duplicated()} that
 detects duplicated entries \emph{after} their first occurrence, this
-function looks at \emph{all} non-unique values.
+function looks at \emph{all} non-unique values. \code{NA}s are ignored by
+default.
+}
+\examples{
+# How many different non-unique Gene Symbols are there in DEGs data set? 
+howMany_dnues(DEGs$GeneSymbol)
 }
 \author{
 FeA.R

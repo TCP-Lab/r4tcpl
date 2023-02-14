@@ -4,10 +4,10 @@
 \alias{lms}
 \title{Let Me See (Data as Matrix)}
 \usage{
-lms(dataset, rows = 10, cols = 5, name = NULL)
+lms(data2see, rows = 10, cols = 5, name = NULL)
 }
 \arguments{
-\item{dataset}{Data frame, matrix, or vector to print.}
+\item{data2see}{Data frame, matrix, factor, or vector to print.}
 
 \item{rows}{Maximum number of rows to display.}
 
@@ -19,37 +19,22 @@ lms(dataset, rows = 10, cols = 5, name = NULL)
 A custom version of the classical \code{head()} that prints the upper
 leftmost corner of a data set, also showing row names and
 controlling for possible out-of-bounds exceptions. Compared to
-\code{head()}, \code{lms()} \strong{displays vectors by columns} and prints the
-dimensions of the data set, along with a custom heading label.
-}
-\details{
-Whenever possible, \code{dataset} is converted to data frame to be passed
-to \code{dim()} function and displayed column-wise preserving the type
-specificity of each column. Notably, duplicated names are allowed in
-both named vectors and matrices, but not in data frames. So, when
-converting to data frame, names of named vectors are discarded (or
-better "reassigned to integers) \strong{if and only if} duplicates are
-present, while possible duplicated row names from matrices are
-disambiguated by progressively appending the suffixes \code{.1}, \code{.2},
-\code{.3}... to the original row names (!!). For all these reasons,
-matrices and named vectors with duplicated names will be converted
-to matrices instead of data frames before being printed, in order to
-preserve in any case original row names. Note that all these
-conversions only concern the on-screen printed copy of \code{dataset},
-not the original data, that are left untouched.
+\code{head()}, \code{lms()} \strong{displays 1D vectors by columns}, unquotes
+strings in character vectors and matrices, and prints the
+dimensions and the type (\code{class()}) of the data set, along with
+a custom heading label.
 }
 \examples{
-  head(x$named_animal)
-  lms(x$named_animal)
-  
-  head(x$ages)
-  lms(x$ages)
-  
-  head(x$named_ages)
-  lms(x$named_ages)
-  
-  head(x$all_data)
-  lms(x$all_data)
+# Let me see The Nanto Warriors Data Set
+lms(nanto)
+
+# Compare lms() with head()
+for (i in 1:length(nanto)) {
+  cat("\nhead()\n")
+  print(head(nanto[[i]]))
+  cat("\nlms()\n")
+  lms(nanto[[i]])
+}
 }
 \author{
 FeA.R

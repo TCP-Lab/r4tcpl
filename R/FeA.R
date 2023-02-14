@@ -13,61 +13,69 @@
 #' @description A custom version of the classical `head()` that prints the upper
 #'              leftmost corner of a data set, also showing row names and
 #'              controlling for possible out-of-bounds exceptions. Compared to
-#'              `head()`, `lms()` **displays vectors by columns** and prints the
-#'              dimensions of the data set, along with a custom heading label.
+#'              `head()`, `lms()` **displays 1D vectors by columns**, unquotes
+#'              strings in character vectors and matrices, and prints the
+#'              dimensions and the type (`class()`) of the data set, along with
+#'              a custom heading label.
 #' 
-#' @param dataset Data frame, matrix, or vector to print.
+#' @param data2see Data frame, matrix, factor, or vector to print.
 #' @param rows Maximum number of rows to display.
 #' @param cols Maximum number of columns to display.
 #' @param name Explanatory name to print in the heading (useful when logging).
 #' 
-#' @details Whenever possible, `dataset` is converted to data frame to be passed
-#'          to `dim()` function and displayed column-wise preserving the type
-#'          specificity of each column. Notably, duplicated names are allowed in
-#'          both named vectors and matrices, but not in data frames. So, when
-#'          converting to data frame, names of named vectors are discarded (or
-#'          better "reassigned to integers) **if and only if** duplicates are
-#'          present, while possible duplicated row names from matrices are
-#'          disambiguated by progressively appending the suffixes `.1`, `.2`,
-#'          `.3`... to the original row names (!!). For all these reasons,
-#'          matrices and named vectors with duplicated names will be converted
-#'          to matrices instead of data frames before being printed, in order to
-#'          preserve in any case original row names. Note that all these
-#'          conversions only concern the on-screen printed copy of `dataset`,
-#'          not the original data, that are left untouched.
-#'          
 #' @examples
-#'   head(x$named_animal)
-#'   lms(x$named_animal)
-#'   
-#'   head(x$ages)
-#'   lms(x$ages)
-#'   
-#'   head(x$named_ages)
-#'   lms(x$named_ages)
-#'   
-#'   head(x$all_data)
-#'   lms(x$all_data)
+#' # Let me see The Nanto Warriors Data Set
+#' lms(nanto)
+#' 
+#' # Compare lms() with head()
+#' for (i in 1:length(nanto)) {
+#'   cat("\nhead()\n")
+#'   print(head(nanto[[i]]))
+#'   cat("\nlms()\n")
+#'   lms(nanto[[i]])
+#' }
 #' @author FeA.R
-lms <- function(dataset, rows = 10, cols = 5, name = NULL)
+lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 {
-  stored_class <- class(dataset)
-  if (is.vector(dataset)) {
-    stored_names <- names(dataset)
-    dataset <- matrix(dataset, ncol = 1)
-    row.names(dataset) <- stored_names
+  stored_class <- class(data2see)
+  
+  # NOTE 1: is.list() would have been TRUE also for data.frames!
+  # NOTE 2: deparse(substitute()) is used to get the variable name as a string
+  if (stored_class[1] == "list") {
+    cat(paste0("\n", deparse(substitute(data2see)),
+               " is a list of ", length(data2see), " objects:\n"))
+    for (i in 1:length(data2see)) {
+      lms(data2see[[i]], name = names(data2see)[i]) # Recursive call
+    }
+  } else {
+    if (is.vector(data2see)) {
+      suffix_class <- "vector"
+      stored_names <- names(data2see)
+      data2see <- matrix(data2see, ncol = 1)
+      row.names(data2see) <- stored_names
+    } else if (is.factor(data2see)) {
+      suffix_class <- c("[", levels(data2see), "]")
+      data2see <- matrix(data2see, ncol = 1)
+    } else { # it is a matrix or a data frame
+      suffix_class <- NULL
+    }
+    
+    d <- dim(data2see)
+    if (is.null(name)) {
+      cat("\nObject dimensions:", d[1], "x", d[2])
+    } else {
+      cat(paste0("\n", name, " dimensions: ", d[1], " x ", d[2]))
+    }
+    cat("\nObject class:", stored_class, suffix_class, "\n\n")
+    
+    rows <- min(d[1], rows)
+    cols <- min(d[2], cols)
+    
+    # 'print' because automatic printing is turned off in loops (and functions)
+    # NOTE: if you only return a data frame subset of one column, R will drop
+    #       names by default. To avoid this behavior use the option drop=FALSE.
+    print(data2see[1:rows, 1:cols, drop = FALSE], quote = FALSE)
   }
-  d <- dim(dataset)
-  cat("\nDataset", name, "dimensions:", d[1], "x", d[2])
-  cat("\nObject class:", stored_class, "\n\n")
-  
-  rows <- min(d[1], rows)
-  cols <- min(d[2], cols)
-  
-  # 'print' because automatic printing is turned off in loops (and functions)
-  # NOTE: if you only return a data frame subset of one column, R will drop the
-  # names by default. To avoid this behavior use the drop=FALSE option.
-  print(dataset[1:rows, 1:cols, drop = FALSE], quote = FALSE)
 }
 
 
@@ -80,7 +88,7 @@ lms <- function(dataset, rows = 10, cols = 5, name = NULL)
 #'              entries and the positions they fill in the vector. Unlike
 #'              `base::duplicated()` that only detects duplicated entries
 #'              *after* their first occurrence, this function looks at *all*
-#'              non-unique values.
+#'              non-unique values. `NA`s are ignored by default.
 #'
 #' @param vec A vector to be scanned for duplicates.
 #' 
@@ -89,19 +97,22 @@ lms <- function(dataset, rows = 10, cols = 5, name = NULL)
 #'          the times the element is repeated and a vector of integers
 #'          representing its positions within `vec`.
 #' 
+#' @examples
+#' # Locate duplicated entries within the `Category` column of `DEGs` dataset
+#' duplication_report(DEGs$Category)
 #' @author FeA.R
 duplication_report <- function(vec)
 {
   if(!is.vector(vec)) {
     stop("The input argument is not a vector")
   }
-  vec <- na.omit(vec)
   
   dups_indx <- which(duplicated(vec))
   dups <- unique(vec[dups_indx])
+  dups <- as.vector(na.omit(dups))
   lapply(dups, function(dups){
     srch <- vec == dups
-    list(repeated = sum(srch), is_in = which(srch))
+    list(repetitions = sum(na.omit(srch)), found_in = which(srch))
   }) -> report
   names(report) <- dups
   
@@ -117,20 +128,25 @@ duplication_report <- function(vec)
 #' @description A function that tells how many *different non-unique* elements
 #'              there are in a given vector. Unlike `base::duplicated()` that
 #'              detects duplicated entries *after* their first occurrence, this
-#'              function looks at *all* non-unique values.
+#'              function looks at *all* non-unique values. `NA`s are ignored by
+#'              default.
 #'              
 #' @param vec A vector to be scanned for duplicates.
 #' 
-#' @returns A vector of two elements, namely the number of different non-unique
-#'          elements, and the global number of non-unique entries in `vec`.
+#' @returns A numeric vector of two elements, namely the number of different
+#'          non-unique elements, and the global number of non-unique entries in
+#'          `vec`.
 #' 
+#' @examples
+#' # How many different non-unique Gene Symbols are there in DEGs data set? 
+#' howMany_dnues(DEGs$GeneSymbol)
 #' @author FeA.R
 howMany_dnues <- function(vec)
 {
   if(!is.vector(vec)) {
     stop("The input argument is not a vector")
   }
-  vec <- na.omit(vec)
+  vec <- as.vector(na.omit(vec))
   
   report <- duplication_report(vec)
   a <- length(report)
@@ -138,9 +154,9 @@ howMany_dnues <- function(vec)
   
   return(c(a,b))
   # Interpretation:
-  # 'length(dup)' different entries are repeated over 'sum(idx)' vector slots,
-  # corresponding to 'sum(idx) - length(dup) == sum(duplicated(vec))' duplicated
-  # entries.
+  # `a` different entries are found to be repeated over `b` slots of the input
+  # vector, corresponding to `b - a == sum(duplicated(vec))` duplicated entries
+  # (in the absence of NAs).
 }
 
 
@@ -150,17 +166,22 @@ howMany_dnues <- function(vec)
 #' @import stats
 #' 
 #' @description An alternative (faster?) implementation of `howMany_dnues()`,
-#'              independent of `duplication_report()`.
+#'              independent of `duplication_report()` function.
 #'              A function that tells how many *different non-unique* elements
 #'              there are in a given vector. Unlike `base::duplicated()` that
 #'              detects duplicated entries *after* their first occurrence, this
-#'              function looks at *all* non-unique values.
+#'              function looks at *all* non-unique values. `NA`s are ignored by
+#'              default.
 #'              
 #' @param vec A vector to be scanned for duplicates.
 #' 
-#' @returns A vector of two elements, namely the number of different non-unique
-#'          elements, and the global number of non-unique entries in `vec`.
+#' @returns A numeric vector of two elements, namely the number of different
+#'          non-unique elements, and the global number of non-unique entries in
+#'          `vec`.
 #' 
+#' @examples
+#' # How many different non-unique Gene Symbols are there in DEGs data set? 
+#' howMany_dnues2(DEGs$GeneSymbol)
 #' @author FeA.R
 howMany_dnues2 <- function(vec)
 {
@@ -174,9 +195,9 @@ howMany_dnues2 <- function(vec)
   
   return(c(length(dup), sum(idx)))
   # Interpretation:
-  # 'length(dup)' different entries are repeated over 'sum(idx)' vector slots,
-  # corresponding to 'sum(idx) - length(dup) == sum(duplicated(vec))' duplicated
-  # entries.
+  # 'length(dup)' different entries are found to be repeated over 'sum(idx)'
+  # slots of the input vector, corresponding to 'sum(idx) - length(dup) ==
+  # sum(duplicated(vec))' duplicated entries (in the absence of NAs).
 }
 
 
@@ -194,7 +215,9 @@ howMany_dnues2 <- function(vec)
 #' 
 #' @returns A new matrix resulting from the m-by-n juxtaposition of the starting
 #'          matrix `X`.
-#' 
+#' @examples
+#' # Replicate some scores of the Nanto warriors
+#' repmat(nanto$named_scores,2,3)
 #' @author FeA.R
 repmat <- function(X, m, n)
 {
@@ -305,9 +328,9 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #' Tab Stop
 #' @export
 #' 
-#' @description To align strings in console as if using MS-Word tab stop
-#'              feature. It allows to control tab stop positions filling the
-#'              given string with white spaces to reach a fixed width.
+#' @description To align strings in console as if using MS-Word tab stops
+#'              It allows to control tab stop positions padding the given
+#'              string with white spaces to reach a fixed width.
 #' 
 #' @param word The string to be included in the tabular space.
 #' @param sp Spacing parameter indicating tab stop position (i.e., the total
@@ -318,8 +341,11 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #' 
 #' @examples
 #' \dontrun{
-#' for (animal in c("dog", "sheep", "worm", "lioness", "monkey")) {
-#'    cat(" -", tab(animal), ":: looking for a", animal, "...found!\n")}}
+#' # Print Nanto warriors' hair color
+#' for (warrior in nanto$warrior) {
+#' cat(" -", tab(warrior), ":: has",
+#'     tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
+#' }}
 #' @author FeA.R
 tab <- function(word = "", sp = 7)
 {

@@ -17,14 +17,17 @@ A string consisting of the \code{word} followed by a variable number of
 white spaces.
 }
 \description{
-To align strings in console as if using MS-Word tab stop
-feature. It allows to control tab stop positions filling the
-given string with white spaces to reach a fixed width.
+To align strings in console as if using MS-Word tab stops
+It allows to control tab stop positions padding the given
+string with white spaces to reach a fixed width.
 }
 \examples{
 \dontrun{
-for (animal in c("dog", "sheep", "worm", "lioness", "monkey")) {
-   cat(" -", tab(animal), ":: looking for a", animal, "...found!\n")}}
+# Print Nanto warriors' hair color
+for (warrior in nanto$warrior) {
+cat(" -", tab(warrior), ":: has",
+    tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
+}}
 }
 \author{
 FeA.R

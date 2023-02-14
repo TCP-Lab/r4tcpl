@@ -22,6 +22,10 @@ R-equivalent to the MATLAB \code{repmat()} function. Just specify the
 matrix X and how many times you want it replicated row- (m) and
 column- (n) wise.
 }
+\examples{
+# Replicate some scores of the Nanto warriors
+repmat(nanto$named_scores,2,3)
+}
 \author{
 FeA.R
 }

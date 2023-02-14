@@ -1,57 +1,59 @@
-#' General Test Variable (Animals, Ages, and Owners)
+#' The Nanto Warriors Data Set
 #' 
-#' A list containing the most common basic data type you can find in R. Useful
-#' for interactive trials and testing.
-#'
-#' @format ## `x`
-#' A list containing 12 named objects of different types.
+#' This data set, inspired by the six Nanto warriors of the epic
+#' **Hokuto no Ken** (aka *Fist of the North Star*) saga, is provided in the
+#' form of a named list containing some of the most common basic data types you
+#' can find in R. It is very useful for educational purposes, interactive
+#' trials, and general testing.
+#' 
+#' @format ## `nanto`
+#' A named list containing 12 named objects of different types.
 #' \describe{
-#'   \item{animal}{Character vector with no duplicated entries}
-#'   \item{owner}{Character vector with duplicated entries}
-#'   \item{named_animal}{Named character vector (with duplicated names)}
-#'   \item{a_age}{Numeric vector with no duplicated entries}
-#'   \item{o_age}{Numeric vector with duplicated entries}
-#'   \item{named_ages}{Named numeric vector (with duplicated names)}
-#'   \item{fur}{Logical vector}
+#'   \item{warrior}{Character vector with no duplicated entries}
+#'   \item{hair_color}{Character vector with duplicated entries}
+#'   \item{named_warrior}{Named character vector (with duplicated names)}
+#'   \item{power}{Numeric (float) vector with no duplicated entries}
+#'   \item{w_age}{Numeric (integer) vector with duplicated entries and NAs}
+#'   \item{named_pwr}{Named numeric vector}
+#'   \item{killed_by_Ken}{Logical vector}
 #'   \item{sex}{A factor with 3 levels}
 #'   \item{whos}{Character matrix}
-#'   \item{ages}{Numeric matrix}
-#'   \item{named_ages}{Numeric matrix with (duplicated) row and column names}
+#'   \item{scores}{Numeric matrix}
+#'   \item{named_scores}{Numeric matrix with row and column names}
 #'   \item{all_data}{A data frame containing all the previous objects}
 #' }
-#' @source Created by me (FeA.R). See comments in .../cmatools/R/data.R to
-#'         recreate or modify the dataset.
-"x"
-## Source code for x
-# animal <- c("dog", "cat", "mouse", "fish", "hamster")
-# owner <- c("Mike", "Tom", "Mike", "James", "Julia")
-# named_animal <- animal
-# names(named_animal) <- owner
-# a_age <- c(6, 12, 2, NA, 1)
-# o_age <- c(17, 30, 17, 5, 25)
-# named_age <- o_age
-# names(named_age) <- owner
-# fur <- c(T, T, F, F, T)
-# sex <- factor(c("male", "female", "male", "hermaphrodite", "female"))
-# whos <- matrix(c(animal, owner), nrow = 5, ncol = 2)
-# ages <- matrix(c(a_age, o_age), nrow = 5, ncol = 2)
-# named_ages <- ages
-# row.names(named_ages) <- owner
-# colnames(named_ages) <- c("animal", "owner")
-# all_data = data.frame(a_age, sex, fur, owner, o_age,
-#                       row.names = c("dog", "cat", "mouse", "fish", "hamster"))
-# x <- list(animal = animal,
-#           owner = owner,
-#           named_animal = named_animal,
-#           a_age = a_age,
-#           o_age = o_age,
-#           named_age = named_age,
-#           fur = fur,
-#           sex = sex,
-#           whos = whos,
-#           ages = ages,
-#           named_ages = named_ages,
-#           all_data = all_data)
+#' @source <https://en.wikipedia.org/wiki/List_of_Fist_of_the_North_Star_characters>
+"nanto"
+## Source code to modify or recreate `nanto` data set
+# warrior <- c("Shin", "Rei", "Yuda", "Shu", "Souther", "Yuria")
+# hair_color <- c("blonde", "blue", "red", "blue", "blonde", "variable")
+# named_warrior <- warrior
+# names(named_warrior) <- hair_color
+# power_score <- c(5.3, 7.7, 3.6, 7.8, 8.7, 10.0)
+# w_age <- c(20, 19, 19, NA, NA, 22)
+# named_pwr <- power_score
+# names(named_pwr) <- warrior
+# killed_by_Ken <- c(T, F, F, F, T, F)
+# sex <- factor(c("male", "male", "hermaphrodite", "male", "male", "female"))
+# whos <- matrix(c(warrior, hair_color), nrow = 6, ncol = 2)
+# scores <- matrix(c(w_age, power_score), nrow = 6, ncol = 2)
+# named_scores <- scores
+# row.names(named_scores) <- warrior
+# colnames(named_scores) <- c("age", "power_score")
+# all_data <- data.frame(power_score, w_age, sex, hair_color, killed_by_Ken,
+#                        row.names = warrior)
+# nanto <- list(warrior = warrior,
+#               hair_color = hair_color,
+#               named_warrior = named_warrior,
+#               power_score = power_score,
+#               w_age = w_age,
+#               named_pwr = named_pwr,
+#               killed_by_Ken = killed_by_Ken,
+#               sex = sex,
+#               whos = whos,
+#               scores = scores,
+#               named_scores = named_scores,
+#               all_data = all_data)
 
 
 

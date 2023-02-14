@@ -20,7 +20,11 @@ This function searches the vector passed as input for duplicated
 entries and the positions they fill in the vector. Unlike
 \code{base::duplicated()} that only detects duplicated entries
 \emph{after} their first occurrence, this function looks at \emph{all}
-non-unique values.
+non-unique values. \code{NA}s are ignored by default.
+}
+\examples{
+# Locate duplicated entries within the `Category` column of `DEGs` dataset
+duplication_report(DEGs$Category)
 }
 \author{
 FeA.R
