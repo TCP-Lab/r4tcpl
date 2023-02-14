@@ -13,8 +13,8 @@ A data frame with 436 rows and 14 columns:
 \item{GeneName}{Official Gene Name}
 \item{Category}{Manual curated membership to one of the following
 categories: NA, "Inflammation", "Immune Response", "Metallopeptidase"}
-\item{Anti-TNFa_1, _2, _3, _4, _5}{anti-TNFalpha-treated patients}
-\item{MTX_1, _2, _3, _4, _5, _6}{Methotrexate-treated patients}
+\item{Anti-TNFa_1 : Anti-TNFa_5}{anti-TNFalpha-treated patients}
+\item{MTX_1 : MTX_6}{Methotrexate-treated patients}
 }
 }
 }

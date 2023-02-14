@@ -13,54 +13,61 @@
 #' @description A custom version of the classical `head()` that prints the upper
 #'              leftmost corner of a data set, also showing row names and
 #'              controlling for possible out-of-bounds exceptions. Compared to
-#'              `head()`, `lms()` **always displays data by columns**, even in
-#'              the case of vectors (i.e., one-dimensional arrays). Also, `lms`
-#'              prints the dimensions of the data set, along with a custom
-#'              heading label.
+#'              `head()`, `lms()` **displays vectors by columns** and prints the
+#'              dimensions of the data set, along with a custom heading label.
 #' 
 #' @param dataset Data frame, matrix, or vector to print.
-#' @param name Explanatory name to print in the heading (useful when logging).
 #' @param rows Maximum number of rows to display.
 #' @param cols Maximum number of columns to display.
+#' @param name Explanatory name to print in the heading (useful when logging).
 #' 
+#' @details Whenever possible, `dataset` is converted to data frame to be passed
+#'          to `dim()` function and displayed column-wise preserving the type
+#'          specificity of each column. Notably, duplicated names are allowed in
+#'          both named vectors and matrices, but not in data frames. So, when
+#'          converting to data frame, names of named vectors are discarded (or
+#'          better "reassigned to integers) **if and only if** duplicates are
+#'          present, while possible duplicated row names from matrices are
+#'          disambiguated by progressively appending the suffixes `.1`, `.2`,
+#'          `.3`... to the original row names (!!). For all these reasons,
+#'          matrices and named vectors with duplicated names will be converted
+#'          to matrices instead of data frames before being printed, in order to
+#'          preserve in any case original row names. Note that all these
+#'          conversions only concern the on-screen printed copy of `dataset`,
+#'          not the original data, that are left untouched.
+#'          
 #' @examples
-#' \dontrun{
-#' x <- data.frame(var1 = c(1, 2, 3, 4, 5), var2 = c(6, 7, 8, 9, 10))
-#' lms(x, "an example dataset", rows = 3)}
+#'   head(x$named_animal)
+#'   lms(x$named_animal)
+#'   
+#'   head(x$ages)
+#'   lms(x$ages)
+#'   
+#'   head(x$named_ages)
+#'   lms(x$named_ages)
+#'   
+#'   head(x$all_data)
+#'   lms(x$all_data)
 #' @author FeA.R
-lms <- function(dataset, name = NULL, rows = 10, cols = 5)
+lms <- function(dataset, rows = 10, cols = 5, name = NULL)
 {
-  # Whenever possible, 'dataset' is converted to a data frame to be passed to
-  # dim() function and displayed column-wise preserving the type specificity of
-  # each column. Notably, duplicated names are allowed in both named vectors and
-  # matrices, but not in data frames. So, when converting to data frame, names
-  # of named vectors are discarded (or better "reassigned to integers) if and
-  # only if duplicates are present, while possible duplicated row names from
-  # matrices are disambiguated by progressively appending the suffixes '.1',
-  # '.2', '.3'... to the original row names!! For all these reasons, matrices
-  # and named vectors with duplicated names will be converted to matrices
-  # instead of data frames before being printed, in order to always preserve
-  # original row names. Note that all these conversions only concern the printed
-  # copy of 'dataset', while the type of the original data is unaffected.
-  if ((is.vector(dataset) & sum(duplicated(names(dataset))) > 0) |
-      (is.matrix(dataset) & sum(duplicated(row.names(dataset))) > 0)) { 
-    # If 'dataset' is a named vector with duplicated names or a matrix with
-    # duplicated row names, convert it to a matrix...
-    dataset <- as.matrix(dataset)
-  } else {
-    # ...otherwise convert it to a data frame.
-    dataset <- as.data.frame(dataset)
+  stored_class <- class(dataset)
+  if (is.vector(dataset)) {
+    stored_names <- names(dataset)
+    dataset <- matrix(dataset, ncol = 1)
+    row.names(dataset) <- stored_names
   }
   d <- dim(dataset)
-  cat("\nDataset", name, "dimensions:", d[1], "x", d[2], "\n\n")
+  cat("\nDataset", name, "dimensions:", d[1], "x", d[2])
+  cat("\nObject class:", stored_class, "\n\n")
   
   rows <- min(d[1], rows)
   cols <- min(d[2], cols)
   
   # 'print' because automatic printing is turned off in loops (and functions)
   # NOTE: if you only return a data frame subset of one column, R will drop the
-  # names by default. To avoid this use the drop=FALSE option.
-  print(dataset[1:rows, 1:cols, drop = FALSE])
+  # names by default. To avoid this behavior use the drop=FALSE option.
+  print(dataset[1:rows, 1:cols, drop = FALSE], quote = FALSE)
 }
 
 

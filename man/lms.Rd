@@ -4,30 +4,52 @@
 \alias{lms}
 \title{Let Me See (Data as Matrix)}
 \usage{
-lms(dataset, name = NULL, rows = 10, cols = 5)
+lms(dataset, rows = 10, cols = 5, name = NULL)
 }
 \arguments{
 \item{dataset}{Data frame, matrix, or vector to print.}
 
-\item{name}{Explanatory name to print in the heading (useful when logging).}
-
 \item{rows}{Maximum number of rows to display.}
 
 \item{cols}{Maximum number of columns to display.}
+
+\item{name}{Explanatory name to print in the heading (useful when logging).}
 }
 \description{
 A custom version of the classical \code{head()} that prints the upper
 leftmost corner of a data set, also showing row names and
 controlling for possible out-of-bounds exceptions. Compared to
-\code{head()}, \code{lms()} \strong{always displays data by columns}, even in
-the case of vectors (i.e., one-dimensional arrays). Also, \code{lms}
-prints the dimensions of the data set, along with a custom
-heading label.
+\code{head()}, \code{lms()} \strong{displays vectors by columns} and prints the
+dimensions of the data set, along with a custom heading label.
+}
+\details{
+Whenever possible, \code{dataset} is converted to data frame to be passed
+to \code{dim()} function and displayed column-wise preserving the type
+specificity of each column. Notably, duplicated names are allowed in
+both named vectors and matrices, but not in data frames. So, when
+converting to data frame, names of named vectors are discarded (or
+better "reassigned to integers) \strong{if and only if} duplicates are
+present, while possible duplicated row names from matrices are
+disambiguated by progressively appending the suffixes \code{.1}, \code{.2},
+\code{.3}... to the original row names (!!). For all these reasons,
+matrices and named vectors with duplicated names will be converted
+to matrices instead of data frames before being printed, in order to
+preserve in any case original row names. Note that all these
+conversions only concern the on-screen printed copy of \code{dataset},
+not the original data, that are left untouched.
 }
 \examples{
-\dontrun{
-x <- data.frame(var1 = c(1, 2, 3, 4, 5), var2 = c(6, 7, 8, 9, 10))
-lms(x, "an example dataset", rows = 3)}
+  head(x$named_animal)
+  lms(x$named_animal)
+  
+  head(x$ages)
+  lms(x$ages)
+  
+  head(x$named_ages)
+  lms(x$named_ages)
+  
+  head(x$all_data)
+  lms(x$all_data)
 }
 \author{
 FeA.R

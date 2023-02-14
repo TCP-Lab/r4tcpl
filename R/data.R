@@ -1,3 +1,60 @@
+#' General Test Variable (Animals, Ages, and Owners)
+#' 
+#' A list containing the most common basic data type you can find in R. Useful
+#' for interactive trials and testing.
+#'
+#' @format ## `x`
+#' A list containing 12 named objects of different types.
+#' \describe{
+#'   \item{animal}{Character vector with no duplicated entries}
+#'   \item{owner}{Character vector with duplicated entries}
+#'   \item{named_animal}{Named character vector (with duplicated names)}
+#'   \item{a_age}{Numeric vector with no duplicated entries}
+#'   \item{o_age}{Numeric vector with duplicated entries}
+#'   \item{named_ages}{Named numeric vector (with duplicated names)}
+#'   \item{fur}{Logical vector}
+#'   \item{sex}{A factor with 3 levels}
+#'   \item{whos}{Character matrix}
+#'   \item{ages}{Numeric matrix}
+#'   \item{named_ages}{Numeric matrix with (duplicated) row and column names}
+#'   \item{all_data}{A data frame containing all the previous objects}
+#' }
+#' @source Created by me (FeA.R). See comments in .../cmatools/R/data.R to
+#'         recreate or modify the dataset.
+"x"
+## Source code for x
+# animal <- c("dog", "cat", "mouse", "fish", "hamster")
+# owner <- c("Mike", "Tom", "Mike", "James", "Julia")
+# named_animal <- animal
+# names(named_animal) <- owner
+# a_age <- c(6, 12, 2, NA, 1)
+# o_age <- c(17, 30, 17, 5, 25)
+# named_age <- o_age
+# names(named_age) <- owner
+# fur <- c(T, T, F, F, T)
+# sex <- factor(c("male", "female", "male", "hermaphrodite", "female"))
+# whos <- matrix(c(animal, owner), nrow = 5, ncol = 2)
+# ages <- matrix(c(a_age, o_age), nrow = 5, ncol = 2)
+# named_ages <- ages
+# row.names(named_ages) <- owner
+# colnames(named_ages) <- c("animal", "owner")
+# all_data = data.frame(a_age, sex, fur, owner, o_age,
+#                       row.names = c("dog", "cat", "mouse", "fish", "hamster"))
+# x <- list(animal = animal,
+#           owner = owner,
+#           named_animal = named_animal,
+#           a_age = a_age,
+#           o_age = o_age,
+#           named_age = named_age,
+#           fur = fur,
+#           sex = sex,
+#           whos = whos,
+#           ages = ages,
+#           named_ages = named_ages,
+#           all_data = all_data)
+
+
+
 #' Anti-TNFalpha-induced differential gene expression in AR patients.
 #' 
 #' DEG list from my Rheumatoid Arthritis (AR) microarray study (references...)
@@ -15,11 +72,12 @@
 #'   \item{GeneName}{Official Gene Name}
 #'   \item{Category}{Manual curated membership to one of the following
 #'    categories: NA, "Inflammation", "Immune Response", "Metallopeptidase"}
-#'   \item{Anti-TNFa_1, _2, _3, _4, _5}{anti-TNFalpha-treated patients}
-#'   \item{MTX_1, _2, _3, _4, _5, _6}{Methotrexate-treated patients}
+#'   \item{Anti-TNFa_1 : Anti-TNFa_5}{anti-TNFalpha-treated patients}
+#'   \item{MTX_1 : MTX_6}{Methotrexate-treated patients}
 #' }
 #' @source <https://www.referenzaweb>
 "DEGs"
+
 
 
 #' Titanium surface ISO 25178 descriptors
