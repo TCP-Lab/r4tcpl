@@ -3,7 +3,7 @@
 \docType{data}
 \name{DEGs}
 \alias{DEGs}
-\title{Anti-TNFalpha-induced differential gene expression in AR patients.}
+\title{Anti-TNFalpha-induced transcription in AR patients}
 \format{
 \subsection{\code{DEGs}}{
 

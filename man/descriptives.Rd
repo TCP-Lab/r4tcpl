@@ -27,6 +27,12 @@ according to a user-defined experimental design. This function
 is a generalization of the legacy \code{descStat1G()} function
 implemented in GATTACA for single-gene inspection.
 }
+\examples{
+# Get descriptive statistics of gene expression
+gene <- DEGs["A_33_P3307955", -c(1:3)]
+dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
+descriptives(gene, dsgn, 4)
+}
 \author{
 FeA.R
 }

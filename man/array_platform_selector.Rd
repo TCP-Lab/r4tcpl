@@ -14,7 +14,7 @@ or the source of annotation ("Biocondutor", "GPL" for GEO).}
 }
 \value{
 The name of the database corresponding to the platform chosen by the
-user (to be used with \code{create.annot()} function).
+user (to be used with \code{array_create_annot()} function).
 }
 \description{
 A minimal graphical interface to retrieve the name of a suitable

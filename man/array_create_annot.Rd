@@ -7,7 +7,8 @@
 array_create_annot(platform, collapsing = FALSE)
 }
 \arguments{
-\item{platform}{Affymetrix/Agilent platform annotation database.}
+\item{platform}{Affymetrix/Agilent platform annotation database as returned
+by the \code{array_platform_selector()} function.}
 
 \item{collapsing}{Boolean flag to choose whether to collapse by unique Probe
 ID in the case of annotation packages from Bioconductor
@@ -19,8 +20,8 @@ features as selected by the user.
 }
 \description{
 This function retrieves gene annotation for a given microarray
-platform and returns them as a data frame. It requires as input
-a database name as returned by the \code{array_platform_selector()}.
+platform and returns them as a data frame. As input, it requires
+a database name as returned by \code{array_platform_selector()}.
 This function uses \code{svDialogs} package to implement a minimal
 graphical interface allowing the user to select the number and
 the type of features to be used as annotation. GPL-based

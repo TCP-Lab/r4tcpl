@@ -30,6 +30,6 @@ A data frame with 8 rows and 11 columns:
 ISO
 }
 \description{
-ISO 25178: Geometrical Product Specifications (GPS) – Surface texture: areal.
+ISO 25178: Geometrical Product Specifications (GPS) -- Surface texture: areal.
 }
 \keyword{datasets}
