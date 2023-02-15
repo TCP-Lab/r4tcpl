@@ -98,8 +98,8 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 #'          representing its positions within `vec`.
 #' 
 #' @examples
-#' # Locate duplicated entries within the `Category` column of `DEGs` dataset
-#' dup_report(DEGs$Category)
+#' # Locate duplicated entries within the `Category` column of `DEGs_expr` dataset
+#' dup_report(DEGs_expr$Category)
 #' @author FeA.R
 dup_report <- function(vec)
 {
@@ -138,8 +138,8 @@ dup_report <- function(vec)
 #'          `vec`.
 #' 
 #' @examples
-#' # How many different non-unique Gene Symbols are there in DEGs data set? 
-#' dnues(DEGs$GeneSymbol)
+#' # How many different non-unique Gene Symbols are there in DEGs_expr data set? 
+#' dnues(DEGs_expr$GeneSymbol)
 #' @author FeA.R
 dnues <- function(vec)
 {
@@ -179,8 +179,8 @@ dnues <- function(vec)
 #'          `vec`.
 #' 
 #' @examples
-#' # How many different non-unique Gene Symbols are there in DEGs data set? 
-#' dnues2(DEGs$GeneSymbol)
+#' # How many different non-unique Gene Symbols are there in DEGs_expr data set? 
+#' dnues2(DEGs_expr$GeneSymbol)
 #' @author FeA.R
 dnues2 <- function(vec)
 {
@@ -320,7 +320,6 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
   pkgname <- basename(dirpath)
   RdDB <- file.path(path, pkgname)
   
-  print(dirpath)
   #rd <- tools:::fetchRdDB(RdDB, basename(file)) # Replaced by tools_fetchRdDB()
   rd <- tools_fetchRdDB(RdDB, basename(file))
   capture.output(tools::Rd2txt(rd, out = "",
@@ -420,7 +419,7 @@ hgt <- function(k, n, K, N = 1e4)
 #' 
 #' @examples
 #' # Get descriptive statistics of gene expression
-#' gene <- DEGs["A_33_P3307955", -c(1:3)]
+#' gene <- DEGs_expr["A_33_P3307955", -c(1:3)]
 #' dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
 #' descriptives(gene, dsgn, 4)
 #' @author FeA.R
@@ -497,7 +496,7 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 #' @examples
 #' \dontrun{
 #' # Get a graphical representation of gene differential expression
-#' gene <- DEGs["A_33_P3307955", -c(1:3)]
+#' gene <- DEGs_expr["A_33_P3307955", -c(1:3)]
 #' dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
 #' for (type in c("BP", "VP", "BC", "MS")) {
 #'   quick_chart(gene, dsgn, type)}

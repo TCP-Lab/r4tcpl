@@ -23,8 +23,8 @@ entries \emph{after} their first occurrence, this function looks at
 \emph{all} non-unique values. \code{NA}s are ignored by default.
 }
 \examples{
-# How many different non-unique Gene Symbols are there in DEGs data set? 
-dnues2(DEGs$GeneSymbol)
+# How many different non-unique Gene Symbols are there in DEGs_expr data set? 
+dnues2(DEGs_expr$GeneSymbol)
 }
 \author{
 FeA.R

@@ -27,7 +27,7 @@ implemented in GATTACA for single-gene inspection.
 \examples{
 \dontrun{
 # Get a graphical representation of gene differential expression
-gene <- DEGs["A_33_P3307955", -c(1:3)]
+gene <- DEGs_expr["A_33_P3307955", -c(1:3)]
 dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
 for (type in c("BP", "VP", "BC", "MS")) {
   quick_chart(gene, dsgn, type)}

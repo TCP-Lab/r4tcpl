@@ -23,8 +23,8 @@ entries and the positions they fill in the vector. Unlike
 non-unique values. \code{NA}s are ignored by default.
 }
 \examples{
-# Locate duplicated entries within the `Category` column of `DEGs` dataset
-dup_report(DEGs$Category)
+# Locate duplicated entries within the `Category` column of `DEGs_expr` dataset
+dup_report(DEGs_expr$Category)
 }
 \author{
 FeA.R

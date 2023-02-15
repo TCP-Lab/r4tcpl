@@ -58,19 +58,27 @@
 
 
 
-#' Anti-TNFalpha-induced transcription in AR patients
+#' Anti-TNFalpha-induced transcription in AR patients - Expression
 #' 
-#' DEG list from my Rheumatoid Arthritis (AR) microarray study
-#' (PMID: ..., DOI: ..., GEO accession "GSE224330").
-#' This data set is a subset of the original one, in that it only contains the
-#' expression values of statistically significant genes resulting from the sole
-#' comparison of Etanercept (anti-TNFalpha) with Methotrexate (MTX)-treated
-#' patients. Accordingly, only samples taking part in such a contrast (n = 5 for
-#' Etanercept and n = 6 for MTX) have been included. Additional columns from 1
-#' to 3 contain some gene annotation, namely: GeneSymbol, GeneName, and Category
-#' membership. Row names are Agilent probe_IDs.
+#' Expression values for the 436 Differentially Expressed Genes (DEGs) resulting
+#' from my Rheumatoid Arthritis (AR) microarray study (PMID: ..., DOI: ...,
+#' GEO accession "GSE224330").
+#' Agilent-072363 SurePrint G3 Human GE v3 8x60K chips Chip were hybridized with
+#' RNA of monocytes taken from bDMARD-treated AR-patients and compared with the
+#' transcriptional profile of healthy and Methotrexate (MTX)-treated samples.
+#' Raw florescence intensities were background-subtracted and interarray-
+#' normalized to obtain the expression data matrix. The expression data set
+#' stored in this R variable is a subset of the original one, in that it only
+#' contains the expression values of the statistically significant genes
+#' resulting from the sole comparison of Etanercept (anti-TNFalpha) with MTX-
+#' treated patients (RankProduct-based differential expression analysis; see
+#' `cmatools::DEGs_stat` data set). Accordingly, only samples taking part in
+#' such a contrast (n = 5 for Etanercept and n = 6 for MTX) have been included.
+#' Additional columns from 1 to 3 contain some gene annotation, namely:
+#' GeneSymbol, GeneName, and Category membership. Row names are Agilent
+#' probe_IDs.
 #' 
-#' @format ## `DEGs`
+#' @format ## `DEGs_expr`
 #' A data frame with 436 rows and 14 columns:
 #' \describe{
 #'   \item{GeneSymbol}{HGNC Official Gene Symbol}
@@ -82,7 +90,45 @@
 #' }
 #' @author FeA.R
 #' @source PMID: ..., DOI: ..., GEO accession "GSE224330"
-"DEGs"
+"DEGs_expr"
+
+
+
+#' Anti-TNFalpha-induced transcription in AR patients - Statistics
+#' 
+#' Descriptive (logFC) and inferential (*p*-value) statistics for the same 436
+#' significant genes already used to build the `DEGs_expr` data set and
+#' resulting from the Differential Expression Analysis (DEA) of the
+#' transcriptomics data from my Rheumatoid Arthritis (AR) microarray study
+#' (PMID: ..., DOI: ..., GEO accession "GSE224330").
+#' Agilent-072363 SurePrint G3 Human GE v3 8x60K chips Chip were hybridized with
+#' RNA of monocytes taken from bDMARD-treated AR-patients and compared with the
+#' transcriptional profile of healthy and Methotrexate (MTX)-treated samples.
+#' Raw florescence intensities were background-subtracted and interarray-
+#' normalized to obtain the expression data matrix. DEA among the different
+#' experimental groups were conducted using a RankProduct-based statistical
+#' analysis. All genes with an adjusted *p*-value < 0.05 and with a |FC| > 1.5
+#' were deemed as statistically significant. The data set stored in this R
+#' variable is a subset of the original one, in that it only contains the
+#' statistics of the Differentially Expressed Genes (DEGs) resulting from the
+#' sole comparison of Etanercept (anti-TNFalpha) with MTX-treated patients
+#' (n = 5 and n = 6, respectively). Additionally, first two columns contain some
+#' gene annotation, namely GeneSymbol and GeneName. Row names are Agilent
+#' probe_IDs.
+#' 
+#' @format ## `DEGs_stat`
+#' A data frame with 436 rows and 5 columns:
+#' \describe{
+#'   \item{GENE_SYMBOL}{HGNC Official Gene Symbol}
+#'   \item{GENE_NAME}{Official Gene Name}
+#'   \item{logFC}{log_2 Fold Changes of gene expression in anti-TNFalpha
+#'                compared to MTX-treated patients}
+#'   \item{p_value}{RankProduct-based (unadjusted) *p*-values}
+#'   \item{adj.p_value}{Benjamini-Hochberg adjusted *p*-values}
+#' }
+#' @author FeA.R
+#' @source PMID: ..., DOI: ..., GEO accession "GSE224330"
+"DEGs_stat"
 
 
 
