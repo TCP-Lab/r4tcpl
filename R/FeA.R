@@ -415,6 +415,11 @@ hgt <- function(k, n, K, N = 1e4)
 #'          size, arithmetic mean, median, IQR, variance, standard deviation,
 #'          and SEM) for each group defined in `design`.
 #' 
+#' @examples
+#' # Get descriptive statistics of gene expression
+#' gene <- DEGs["A_33_P3307955", -c(1:3)]
+#' dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
+#' descriptives(gene, dsgn, 4)
 #' @author FeA.R
 descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 {
@@ -485,7 +490,14 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 #'               experimental group the element belongs to.
 #' @param chart_type A string among the following: "BP" (Box Plot), "VP"
 #'                   (Violin Plot), "BC" (Bar Chart), or "MS" (Mean & SEM).
-#'
+#' 
+#' @examples
+#' \dontrun{
+#' # Get a graphical representation of gene differential expression
+#' gene <- DEGs["A_33_P3307955", -c(1:3)]
+#' dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
+#' for (type in c("BP", "VP", "BC", "MS")) {
+#'   quick_chart(gene, dsgn, type)}}
 #' @author FeA.R
 quick_chart <- function(vals, design, chart_type = "BP")
 {
@@ -505,13 +517,11 @@ quick_chart <- function(vals, design, chart_type = "BP")
     design <- paste0("Group_", design)
   }
   
-  vals_grps <- data.frame(vals = as.numeric(vals), design)
-  
   # Descriptive statistics
   desc <- descriptives(vals = vals, design = design)
   
   # Common ggplot terms
-  gg_base <- ggplot2::ggplot(data = vals_grps,
+  gg_base <- ggplot2::ggplot(data = data.frame(vals = as.numeric(vals), design),
                              mapping = ggplot2::aes(x = design, y = vals)) +
     ggplot2::theme_bw(base_size = 15, base_rect_size = 1.5) +
     ggplot2::theme(axis.text = ggplot2::element_text(size = 14),
@@ -595,7 +605,7 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #'             or the source of annotation ("Biocondutor", "GPL" for GEO).
 #'
 #' @returns The name of the database corresponding to the platform chosen by the
-#'          user (to be used with `create.annot()` function).
+#'          user (to be used with `array_create_annot()` function).
 #' 
 #' @examples
 #' \dontrun{
@@ -648,11 +658,18 @@ array_platform_selector <- function(filt = ".*")
                                 graphics = TRUE)
   
   if (platform_index == 0) {
+    selected_db <- ""
+  } else {
+    selected_long <- long_names_sub[platform_index]
+    selected_db <- db_BCorGPL_sub[platform_index]
+  }
+  
+  if (selected_db == "") {
     cat("\nNo platform selected!\n\n")
   } else {
-    cat(paste("\nSelected platform:\n", long_names_sub[platform_index], "\n\n"))
+    cat(paste("\nSelected platform:\n", selected_long, "\n\n"))
     
-    return(db_BCorGPL_sub[platform_index])
+    return(selected_db)
   }
 }
 
@@ -663,15 +680,16 @@ array_platform_selector <- function(filt = ".*")
 #' @import utils
 #' 
 #' @description This function retrieves gene annotation for a given microarray
-#'              platform and returns them as a data frame. It requires as input
-#'              a database name as returned by the `array_platform_selector()`.
+#'              platform and returns them as a data frame. As input, it requires
+#'              a database name as returned by `array_platform_selector()`.
 #'              This function uses `svDialogs` package to implement a minimal
 #'              graphical interface allowing the user to select the number and
 #'              the type of features to be used as annotation. GPL-based
 #'              annotation are retrieved from GEO using `GEOquery::getGEO()`
 #'              function that needs a working FTP connection.
 #' 
-#' @param platform Affymetrix/Agilent platform annotation database.
+#' @param platform Affymetrix/Agilent platform annotation database as returned
+#'                 by the `array_platform_selector()` function.
 #' @param collapsing Boolean flag to choose whether to collapse by unique Probe
 #'                   ID in the case of annotation packages from Bioconductor
 #'                   (GPL records from GEO are already collapsed).
@@ -721,7 +739,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
     # Load Annotation Database from Bioconductor and retrieve columns of interest
     annot_db <- paste0(platform, ".db")
     if(!requireNamespace(annot_db, quietly = TRUE)) {
-      # Don't want to make all annotation packages mandatory dependencies for cmatools
+      # Don't want to make all annotation packages mandatory dependencies for cmatools!
       stop(paste0(annot_db," package is not installed.",
                   "\nRun `BiocManager::install(\"", annot_db, "\")` to proceed."))
     }

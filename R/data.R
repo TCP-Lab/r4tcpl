@@ -57,7 +57,7 @@
 
 
 
-#' Anti-TNFalpha-induced differential gene expression in AR patients.
+#' Anti-TNFalpha-induced transcription in AR patients
 #' 
 #' DEG list from my Rheumatoid Arthritis (AR) microarray study (references...)
 #' This subset contains the expression values for each sample taking part in the
@@ -84,7 +84,7 @@
 
 #' Titanium surface ISO 25178 descriptors
 #' 
-#' ISO 25178: Geometrical Product Specifications (GPS) – Surface texture: areal.
+#' ISO 25178: Geometrical Product Specifications (GPS) -- Surface texture: areal.
 #'
 #' @format ## `ISO`
 #' A data frame with 8 rows and 11 columns:

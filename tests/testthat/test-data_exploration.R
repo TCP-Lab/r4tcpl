@@ -8,13 +8,12 @@ test_that("repmat() works as expected", {
 
 
 
-### To regenerate:
+### Code to regenerate values for the test below:
 # set.seed(...some seed...)
 # val <- round(
 #   c(rnorm(5, mean = 0, sd = 1),
 #     rnorm(4, mean = -3, sd = 2),
-#     rnorm(7, mean = 2, sd = 3),
-#     rnorm(5, mean = -6, sd = 4)), 4)
+#     rnorm(7, mean = 2, sd = 3)), 4)
 # dig <- 4
 # reference <- data.frame(
 #   c(5,4,7),
