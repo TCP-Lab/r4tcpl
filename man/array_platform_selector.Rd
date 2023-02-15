@@ -24,7 +24,8 @@ chip model. To be used only in interactive mode.
 }
 \examples{
 \dontrun{
-array_platform_selector() |> array_create_annot(platform) |> head()}
+array_platform_selector() |> array_create_annot() |> lms(10,10)
+}
 }
 \author{
 FeA.R

@@ -32,7 +32,8 @@ function that needs a working FTP connection.
 \dontrun{
 annot <- array_create_annot("hgu133plus2", collapsing = TRUE)
 missing_report(annot)
-lms(annot)}
+lms(annot)
+}
 }
 \author{
 FeA.R

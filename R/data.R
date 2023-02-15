@@ -22,6 +22,7 @@
 #'   \item{named_scores}{Numeric matrix with row and column names}
 #'   \item{all_data}{A data frame containing all the previous objects}
 #' }
+#' @author FeA.R
 #' @source <https://en.wikipedia.org/wiki/List_of_Fist_of_the_North_Star_characters>
 "nanto"
 ## Source code to modify or recreate `nanto` data set
@@ -59,14 +60,16 @@
 
 #' Anti-TNFalpha-induced transcription in AR patients
 #' 
-#' DEG list from my Rheumatoid Arthritis (AR) microarray study (references...)
-#' This subset contains the expression values for each sample taking part in the
-#' Etanercept (anti-TNFalpha) vs Methotrexate (MTX) contrast (n = 5 and n = 6,
-#' respectively). Row names are Agilent probe_IDs. Additional columns (1 to 3)
-#' contains some gene annotation, namely: GeneSymbol, GeneName, and Category
-#' membership.
-#' Row-wise, only statistically significant genes are included in this dataset.
-#'
+#' DEG list from my Rheumatoid Arthritis (AR) microarray study
+#' (PMID: ..., DOI: ..., GEO accession "GSE224330").
+#' This data set is a subset of the original one, in that it only contains the
+#' expression values of statistically significant genes resulting from the sole
+#' comparison of Etanercept (anti-TNFalpha) with Methotrexate (MTX)-treated
+#' patients. Accordingly, only samples taking part in such a contrast (n = 5 for
+#' Etanercept and n = 6 for MTX) have been included. Additional columns from 1
+#' to 3 contain some gene annotation, namely: GeneSymbol, GeneName, and Category
+#' membership. Row names are Agilent probe_IDs.
+#' 
 #' @format ## `DEGs`
 #' A data frame with 436 rows and 14 columns:
 #' \describe{
@@ -77,15 +80,21 @@
 #'   \item{Anti-TNFa_1 : Anti-TNFa_5}{anti-TNFalpha-treated patients}
 #'   \item{MTX_1 : MTX_6}{Methotrexate-treated patients}
 #' }
-#' @source <https://www.referenzaweb>
+#' @author FeA.R
+#' @source PMID: ..., DOI: ..., GEO accession "GSE224330"
 "DEGs"
 
 
 
-#' Titanium surface ISO 25178 descriptors
+#' Titanium surface descriptors (ISO 25178)
 #' 
-#' ISO 25178: Geometrical Product Specifications (GPS) -- Surface texture: areal.
-#'
+#' This data set contains the experimentally measured values of eleven ISO 25178
+#' (Geometrical Product Specifications, GPS, Surface texture: areal) descriptors
+#' evaluated for eight different types of titanium disks. These data, together
+#' with the related profiles of cell adhesion and protein adsorption, have been
+#' presented, analyzed, and discussed in the following paper: PMID: ...,
+#' DOI: ...,
+#' 
 #' @format ## `ISO`
 #' A data frame with 8 rows and 11 columns:
 #' \describe{
@@ -101,8 +110,8 @@
 #'   \item{Sal}{Fastest decay auto-correlation rate}
 #'   \item{Str}{Texture aspect ratio of the surface}
 #' }
-#' @source <https://en.wikipedia.org/wiki/ISO_25178>
+#' @author FeA.R
+#' @source PMID: ..., DOI: ..., <https://en.wikipedia.org/wiki/ISO_25178>
 "ISO"
-
 
 

@@ -23,7 +23,12 @@ References section).
 \examples{
 \dontrun{
 # Print `seq()` help to console
-help_as_text("seq") |> cat(sep = "\n")}
+help_as_text("seq") |> cat(sep = "\n")
+
+# Get author's name:
+hh <- help_as_text("lms")
+gsub("\\\\s{2,}", "", hh[grep("^Author", hh) + 2])
+}
 }
 \references{
 \url{https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r}

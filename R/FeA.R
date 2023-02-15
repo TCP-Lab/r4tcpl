@@ -99,9 +99,9 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 #' 
 #' @examples
 #' # Locate duplicated entries within the `Category` column of `DEGs` dataset
-#' duplication_report(DEGs$Category)
+#' dup_report(DEGs$Category)
 #' @author FeA.R
-duplication_report <- function(vec)
+dup_report <- function(vec)
 {
   if(!is.vector(vec)) {
     stop("The input argument is not a vector")
@@ -139,16 +139,16 @@ duplication_report <- function(vec)
 #' 
 #' @examples
 #' # How many different non-unique Gene Symbols are there in DEGs data set? 
-#' howMany_dnues(DEGs$GeneSymbol)
+#' dnues(DEGs$GeneSymbol)
 #' @author FeA.R
-howMany_dnues <- function(vec)
+dnues <- function(vec)
 {
   if(!is.vector(vec)) {
     stop("The input argument is not a vector")
   }
   vec <- as.vector(na.omit(vec))
   
-  report <- duplication_report(vec)
+  report <- dup_report(vec)
   a <- length(report)
   b <- sum(sapply(report, function(repo){repo[[1]]}))
   
@@ -161,17 +161,16 @@ howMany_dnues <- function(vec)
 
 
 
-#' Different Non-Unique Elements (Version 2)
+#' Different Non-Unique Elements (Alternative)
 #' @export
 #' @import stats
 #' 
-#' @description An alternative (faster?) implementation of `howMany_dnues()`,
-#'              independent of `duplication_report()` function.
-#'              A function that tells how many *different non-unique* elements
-#'              there are in a given vector. Unlike `base::duplicated()` that
-#'              detects duplicated entries *after* their first occurrence, this
-#'              function looks at *all* non-unique values. `NA`s are ignored by
-#'              default.
+#' @description An alternative (faster?) implementation of `dnues()`,
+#'              independent of `dup_report()` function. A function that tells
+#'              how many *different non-unique* elements there are in a given
+#'              vector. Unlike `base::duplicated()` that detects duplicated
+#'              entries *after* their first occurrence, this function looks at
+#'              *all* non-unique values. `NA`s are ignored by default.
 #'              
 #' @param vec A vector to be scanned for duplicates.
 #' 
@@ -181,9 +180,9 @@ howMany_dnues <- function(vec)
 #' 
 #' @examples
 #' # How many different non-unique Gene Symbols are there in DEGs data set? 
-#' howMany_dnues2(DEGs$GeneSymbol)
+#' dnues2(DEGs$GeneSymbol)
 #' @author FeA.R
-howMany_dnues2 <- function(vec)
+dnues2 <- function(vec)
 {
   if(!is.vector(vec)) {
     stop("The input argument is not a vector")
@@ -259,7 +258,12 @@ repmat <- function(X, m, n)
 #' @examples
 #' \dontrun{
 #' # Print `seq()` help to console
-#' help_as_text("seq") |> cat(sep = "\n")}
+#' help_as_text("seq") |> cat(sep = "\n")
+#' 
+#' # Get author's name:
+#' hh <- help_as_text("lms")
+#' gsub("\\s{2,}", "", hh[grep("^Author", hh) + 2])
+#' }
 #' @references \url{https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r}
 #' @author MrFlick, FeA.R
 help_as_text <- function(meth_or_pkg, pkg = NULL)
@@ -340,12 +344,11 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #'          white spaces.
 #' 
 #' @examples
-#' \dontrun{
 #' # Print Nanto warriors' hair color
 #' for (warrior in nanto$warrior) {
 #' cat(" -", tab(warrior), ":: has",
 #'     tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
-#' }}
+#' }
 #' @author FeA.R
 tab <- function(word = "", sp = 7)
 {
@@ -453,11 +456,11 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
   # You can alternatively use by() for a non-loopy implementation:
   # dim(vals) <- c(length(vals),1) # Force `vals` to column shape
   # vals_grps <- data.frame(vals, design)
-  # stat_frame[,1] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, mean)),
+  # stat_frame[,1]<-round(as.matrix(by(vals_grps$vals, vals_grps$design, mean)),
   #                         digits = prec)
-  # stat_frame[,2] <- round(as.matrix(by(vals_grps$vals, vals_grps$design, median)),
+  # stat_frame[,2]<-round(as.matrix(by(vals_grps$vals, vals_grps$design, median)),
   #                         digits = prec)
-  #                   [...]
+  #                 [...]
   for (i in 1:m) {
     sub_vals <- as.numeric(vals[which(design == grps[i])]) # Downcast to vector
     stat_frame[i,2] <- length(sub_vals) # Sample size
@@ -497,7 +500,8 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 #' gene <- DEGs["A_33_P3307955", -c(1:3)]
 #' dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
 #' for (type in c("BP", "VP", "BC", "MS")) {
-#'   quick_chart(gene, dsgn, type)}}
+#'   quick_chart(gene, dsgn, type)}
+#' }
 #' @author FeA.R
 quick_chart <- function(vals, design, chart_type = "BP")
 {
@@ -609,7 +613,8 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #' 
 #' @examples
 #' \dontrun{
-#' array_platform_selector() |> array_create_annot(platform) |> head()}
+#' array_platform_selector() |> array_create_annot() |> lms(10,10)
+#' }
 #' @author FeA.R
 array_platform_selector <- function(filt = ".*")
 {
@@ -701,7 +706,8 @@ array_platform_selector <- function(filt = ".*")
 #' \dontrun{
 #' annot <- array_create_annot("hgu133plus2", collapsing = TRUE)
 #' missing_report(annot)
-#' lms(annot)}
+#' lms(annot)
+#' }
 #' @author FeA.R
 array_create_annot <- function(platform, collapsing = FALSE)
 {
@@ -736,12 +742,14 @@ array_create_annot <- function(platform, collapsing = FALSE)
     
   } else {
     
-    # Load Annotation Database from Bioconductor and retrieve columns of interest
+    # Load Annotation db from Bioconductor and retrieve the columns of interest
     annot_db <- paste0(platform, ".db")
     if(!requireNamespace(annot_db, quietly = TRUE)) {
-      # Don't want to make all annotation packages mandatory dependencies for cmatools!
+      # Don't want to make all annotation packages mandatory dependencies for
+      # cmatools package!
       stop(paste0(annot_db," package is not installed.",
-                  "\nRun `BiocManager::install(\"", annot_db, "\")` to proceed."))
+                  "\nRun `BiocManager::install(\"", annot_db,
+                  "\")` to proceed."))
     }
     
     # Print some information
@@ -754,7 +762,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
     evaluating_db <- eval(parse(text = paste0(annot_db, "::", annot_db)))
     
     # Retrieve all the columns of the data base, except "PROBEID" that will be
-    # used as key and so it must be unique
+    # included by default as key
     cols <- AnnotationDbi::columns(evaluating_db)
     cols <- cols[! cols %in% "PROBEID"]
     
@@ -822,7 +830,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
 #' 
 #' @description This function takes a data frame, searches its columns for many
 #'              common missing-value placeholders, and finally prints a report
-#'              report of the number and the relative amount of missing values
+#'              of the absolute number and the relative amount of missing values
 #'              detected column-wise. In particular, it searches for `NA`,
 #'              `"NA"`, and patterns of whitespaces (`\s`), hyphens (`-`),
 #'              slashes (`/`), including empty fields and a possible
@@ -833,13 +841,14 @@ array_create_annot <- function(platform, collapsing = FALSE)
 #'
 #' @examples
 #' \dontrun{
-#' array_platform_selector() |> array_create_annot() |> missing_report()}
+#' array_platform_selector() |> array_create_annot() |> missing_report()
+#' }
 #' @author FeA.R
 missing_report <- function(dataFrame, naSymb = "")
 {
   cols <- colnames(dataFrame)
   missing_data <- matrix(0, nrow = 2, ncol = length(cols),
-                         dimnames = list(c("Not Mapped","%"), cols))
+                         dimnames = list(c("Not Mapped", "%"), cols))
   
   # Search for NAs, "NA"s and patterns of whitespaces (\s), hyphens (-),
   # slashes (/), including empty fields (*) and a user-defined sequence

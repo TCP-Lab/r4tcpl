@@ -22,12 +22,11 @@ It allows to control tab stop positions padding the given
 string with white spaces to reach a fixed width.
 }
 \examples{
-\dontrun{
 # Print Nanto warriors' hair color
 for (warrior in nanto$warrior) {
 cat(" -", tab(warrior), ":: has",
     tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
-}}
+}
 }
 \author{
 FeA.R

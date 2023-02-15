@@ -14,7 +14,7 @@ missing_report(dataFrame, naSymb = "")
 \description{
 This function takes a data frame, searches its columns for many
 common missing-value placeholders, and finally prints a report
-report of the number and the relative amount of missing values
+of the absolute number and the relative amount of missing values
 detected column-wise. In particular, it searches for \code{NA},
 \code{"NA"}, and patterns of whitespaces (\verb{\\s}), hyphens (\code{-}),
 slashes (\code{/}), including empty fields and a possible
@@ -22,7 +22,8 @@ user-defined sequence.
 }
 \examples{
 \dontrun{
-array_platform_selector() |> array_create_annot() |> missing_report()}
+array_platform_selector() |> array_create_annot() |> missing_report()
+}
 }
 \author{
 FeA.R

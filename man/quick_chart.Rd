@@ -30,7 +30,8 @@ implemented in GATTACA for single-gene inspection.
 gene <- DEGs["A_33_P3307955", -c(1:3)]
 dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
 for (type in c("BP", "VP", "BC", "MS")) {
-  quick_chart(gene, dsgn, type)}}
+  quick_chart(gene, dsgn, type)}
+}
 }
 \author{
 FeA.R

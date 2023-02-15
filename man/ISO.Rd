@@ -3,7 +3,7 @@
 \docType{data}
 \name{ISO}
 \alias{ISO}
-\title{Titanium surface ISO 25178 descriptors}
+\title{Titanium surface descriptors (ISO 25178)}
 \format{
 \subsection{\code{ISO}}{
 
@@ -24,12 +24,20 @@ A data frame with 8 rows and 11 columns:
 }
 }
 \source{
-\url{https://en.wikipedia.org/wiki/ISO_25178}
+PMID: ..., DOI: ..., \url{https://en.wikipedia.org/wiki/ISO_25178}
 }
 \usage{
 ISO
 }
 \description{
-ISO 25178: Geometrical Product Specifications (GPS) -- Surface texture: areal.
+This data set contains the experimentally measured values of eleven ISO 25178
+(Geometrical Product Specifications, GPS, Surface texture: areal) descriptors
+evaluated for eight different types of titanium disks. These data, together
+with the related profiles of cell adhesion and protein adsorption, have been
+presented, analyzed, and discussed in the following paper: PMID: ...,
+DOI: ...,
+}
+\author{
+FeA.R
 }
 \keyword{datasets}

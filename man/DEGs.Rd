@@ -19,18 +19,23 @@ categories: NA, "Inflammation", "Immune Response", "Metallopeptidase"}
 }
 }
 \source{
-\url{https://www.referenzaweb}
+PMID: ..., DOI: ..., GEO accession "GSE224330"
 }
 \usage{
 DEGs
 }
 \description{
-DEG list from my Rheumatoid Arthritis (AR) microarray study (references...)
-This subset contains the expression values for each sample taking part in the
-Etanercept (anti-TNFalpha) vs Methotrexate (MTX) contrast (n = 5 and n = 6,
-respectively). Row names are Agilent probe_IDs. Additional columns (1 to 3)
-contains some gene annotation, namely: GeneSymbol, GeneName, and Category
-membership.
-Row-wise, only statistically significant genes are included in this dataset.
+DEG list from my Rheumatoid Arthritis (AR) microarray study
+(PMID: ..., DOI: ..., GEO accession "GSE224330").
+This data set is a subset of the original one, in that it only contains the
+expression values of statistically significant genes resulting from the sole
+comparison of Etanercept (anti-TNFalpha) with Methotrexate (MTX)-treated
+patients. Accordingly, only samples taking part in such a contrast (n = 5 for
+Etanercept and n = 6 for MTX) have been included. Additional columns from 1
+to 3 contain some gene annotation, namely: GeneSymbol, GeneName, and Category
+membership. Row names are Agilent probe_IDs.
+}
+\author{
+FeA.R
 }
 \keyword{datasets}

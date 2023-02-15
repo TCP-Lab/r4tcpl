@@ -37,4 +37,7 @@ form of a named list containing some of the most common basic data types you
 can find in R. It is very useful for educational purposes, interactive
 trials, and general testing.
 }
+\author{
+FeA.R
+}
 \keyword{datasets}
