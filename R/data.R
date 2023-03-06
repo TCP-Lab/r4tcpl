@@ -7,7 +7,7 @@
 #' trials, and general testing.
 #' 
 #' @format ## `nanto`
-#' A named list containing 12 named objects of different types.
+#' A named list containing 12 objects of different types:
 #' \describe{
 #'   \item{warrior}{Character vector with no duplicated entries}
 #'   \item{hair_color}{Character vector with duplicated entries}
@@ -159,5 +159,30 @@
 #' @author FeA.R
 #' @source PMID: ..., DOI: ..., <https://en.wikipedia.org/wiki/ISO_25178>
 "ISO"
+
+
+
+#' The Transportome Gene Set - TGS
+#' 
+#' This is a comprehensive list of the gene symbols representing the entire
+#' human transportome, defined as the set of all the Ion Channels and
+#' Transporters (ICTs) that can be found across the human cell membrane. Gene
+#' Symbols are organized in 5 character vectors as described below.
+#' 
+#' @format ## `TGS`
+#' A named list containing 5 character vectors:
+#' \describe{
+#'   \item{pseudo}{All human ICTs, including pseudogenes}
+#'   \item{whole}{All human ICTs, without pseudogenes (a subset of `pseudo`)}
+#'   \item{ICs}{All human Ion Channels (a subset of `whole`)}
+#'   \item{Ca_ICs}{All human Calcium-Permeable Ion Channels (a subset of `ICs`)}
+#'   \item{trans}{All human transporters, including solute carriers (SLCs), ABC
+#'                transporters, and ATPase pumps (a subset of `whole` with null
+#'                overlap with `ICs`).}
+#' }
+#' @author FeA.R
+#' @source HGNC DB at <https://www.genenames.org/> and
+#'         IUPHAR/BPS DB at <https://www.guidetopharmacology.org/>
+"TGS"
 
 

@@ -7,7 +7,7 @@
 \format{
 \subsection{\code{nanto}}{
 
-A named list containing 12 named objects of different types.
+A named list containing 12 objects of different types:
 \describe{
 \item{warrior}{Character vector with no duplicated entries}
 \item{hair_color}{Character vector with duplicated entries}
