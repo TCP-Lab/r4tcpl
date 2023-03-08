@@ -16,7 +16,8 @@
 #'              `head()`, `lms()` **displays 1D vectors by columns**, unquotes
 #'              strings in character vectors and matrices, and prints the
 #'              dimensions and the type (`class()`) of the data set, along with
-#'              a custom heading label.
+#'              a custom heading label. In addition, `lms()` features a better
+#'              list management.
 #' 
 #' @param data2see Data frame, matrix, factor, or vector to print.
 #' @param rows Maximum number of rows to display.
@@ -214,6 +215,7 @@ dnues2 <- function(vec)
 #' 
 #' @returns A new matrix resulting from the m-by-n juxtaposition of the starting
 #'          matrix `X`.
+#'
 #' @examples
 #' # Replicate some scores of the Nanto warriors
 #' repmat(nanto$named_scores,2,3)
@@ -375,12 +377,44 @@ tab <- function(word = "", sp = 7)
 #' @param n Size of the experimental set.            --OR--> Set A
 #' @param K Number of possible hits in the universe. --OR--> Set B
 #' @param N Size of the universe.                    --OR--> Background
+#' 
+#' @details The default value for the size of the universe (or background) set
+#'          is `N=2e4`, very close to the current estimate of the number of
+#'          human protein-coding genes, as annotated in `org.Hs.eg.db` (see
+#'          example below).
 #'
 #' @returns A 1-by-5 data frame containing enrichment statistics. Many
 #'          single-row data frames can be easily stacked using `rbind()`.
 #'          
+#' @examples
+#' # Annotation packages
+#' library(AnnotationDbi)
+#' library(org.Hs.eg.db) # Human
+#' 
+#' # Make a genome-wide data frame that associates the gene-type to each Entrez
+#' # ID, then count only the "protein-coding" entries
+#' x <- select(org.Hs.eg.db,
+#'             keys = keys(org.Hs.eg.db),
+#'             columns = c("ENTREZID", "GENETYPE"),
+#'             keytype = "ENTREZID")
+#' N <- sum(x$GENETYPE == "protein-coding") # 20,598 - EGSOURCEDATE: 2022-Sep12
+#' 
+#' # Matrix MetalloPeptidases (MMPs) in a DEG list
+#' k <- sum(na.omit(DEGs_expr$Category) == "Metallopeptidase")
+#' 
+#' # Number of DEGs
+#' n <- dim(DEGs_expr)[1]
+#' 
+#' # Total number of MMPs in Humans
+#' K <- 24 # source https://en.wikipedia.org/wiki/Matrix_metalloproteinase
+#' 
+#' # Hypergeometric Test with the `N=2e4` conventional background
+#' hgt(k, n, K)
+#' 
+#' # Hypergeometric Test with the actual background for human
+#' hgt(k, n, K, N)
 #' @author FeA.R
-hgt <- function(k, n, K, N = 1e4)
+hgt <- function(k, n, K, N = 2e4)
 {
   pval <- phyper(k-1, K, N-K, n, lower.tail = FALSE) # p-value
   expect <- n*(K/N) # Expected value
@@ -393,6 +427,114 @@ hgt <- function(k, n, K, N = 1e4)
                       Fold_Enrichment = FE,
                       p.value = pval)
   return(stats)
+}
+
+
+
+#' Overlap Analysis
+#' @export
+#' @import grid
+#' 
+#' @description Given **two** vectors of symbols, this function finds the
+#'              elements that exist in both sets and computes the statistical
+#'              significance of the overlap between them. Optionally, it plots
+#'              a Venn diagram representation.
+#' 
+#' @param set_A A character or numeric (1D) vector.
+#' @param set_B Another character or numeric (1D) vector.
+#' @param N Size of the universe (or background set). see `hgt()` function.
+#' @param venn Boolean. Set it to `FALSE` to suppress Venn plotting.
+#' @param lab Labels for the Venn. A character vector of two elements.
+#' @param titles Titles and subtitles for the Venn diagram. A character vector
+#'               of two elements. 
+#'
+#' @returns A list made up of a data frame named `ORA` (containing the results
+#'          of the OverRepresentation Analysis), and three vectors named
+#'          `intersection`, `left_set`, and `right_set`, featuring the elements
+#'          of those three sets, respectively.
+#'
+#' @examples
+#' # Find how many (and which) Ion Channels there are within a given DEG list
+#' # and if that gene set is enriched (over-represented) or not:
+#' x <- venny(TGS$ICs, DEGs_stat$GENE_SYMBOL,
+#'            lab = c("Ion Channels","DEGs"),
+#'            titles = c("Transportome Analysis", "Ion Channels"))
+#' @author FeA.R
+venny <- function(set_A, set_B, N = 2e4,
+                  venn = TRUE,
+                  lab = c("Set A", "Set B"),
+                  titles = c("Venn diagram", "by cmatools"))
+{
+  # Check arguments
+  if (!is.vector(set_A) | !is.vector(set_B)) {
+    stop("At least one input set is not a vector")
+  }
+  
+  # Set operations
+  intersection <- intersect(set_A, set_B)
+  left_set <- setdiff(set_A, set_B)
+  right_set <- setdiff(set_B, set_A)
+  
+  # Compute p-values through hypergeometric distribution
+  ORA <- hgt(length(intersection),
+             length(set_A), length(set_B), N)
+  
+  # Output list
+  set_stat <- list(ORA = ORA,
+                   intersection = intersection,
+                   left_set = left_set,
+                   right_set = right_set)
+  
+  if (venn) {
+    # To suppress 'venn.diagram()' log messages with priority lower than "ERROR"
+    futile.logger::flog.threshold(futile.logger::ERROR,
+                                  name = "VennDiagramLogger")
+    # Create the Venn diagram
+    venn.plot <- VennDiagram::venn.diagram(
+      x = list(set_A, set_B),
+      force.unique = TRUE,
+      
+      # Output features
+      filename = NULL,        # Print plot just on screen
+      disable.logging = TRUE, # Disable log file output and print to console
+      
+      # Title and Subtitle
+      main = titles[1], 
+      main.cex = 2,
+      main.fontface = "bold",
+      main.fontfamily = "sans",
+      sub = titles[2],
+      sub.fontfamily = "sans",
+      
+      # Circles
+      lwd = 2,
+      lty = 1, # Set lty="blank" to remove borders
+      fill = c("mediumpurple3", "#0073C2FF"),
+      alpha = 0.5,
+      #col = c("#401050ff", "#353560ff"),
+      rotation.degree = 30,
+      scaled = FALSE,
+      
+      # Numbers
+      cex = 2,
+      fontface = "bold",
+      fontfamily = "sans",
+      
+      # Set names (labels)
+      category.names = lab,
+      cat.cex = 2,
+      cat.fontface = "bold",
+      cat.default.pos = "outer",
+      cat.pos = c(-20, -20),
+      cat.dist = c(0.05, 0.05),
+      cat.fontfamily = "sans")
+    
+    # Create a new canvas and draw the Venn
+    grid::grid.newpage()
+    grid::grid.draw(venn.plot)
+  }
+
+  return(set_stat)
 }
 
 

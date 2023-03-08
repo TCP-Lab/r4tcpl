@@ -22,7 +22,8 @@ controlling for possible out-of-bounds exceptions. Compared to
 \code{head()}, \code{lms()} \strong{displays 1D vectors by columns}, unquotes
 strings in character vectors and matrices, and prints the
 dimensions and the type (\code{class()}) of the data set, along with
-a custom heading label.
+a custom heading label. In addition, \code{lms()} features a better
+list management.
 }
 \examples{
 # Let me see The Nanto Warriors Data Set

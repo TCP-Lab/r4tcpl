@@ -1,6 +1,6 @@
 Package: cmatools
 Title: A collection of utility functions used in our R projects
-Version: 0.1.2
+Version: 0.2.0
 Authors@R: c(
     person("Federico Alessandro", "Ruffinatti", ,
         "federicoalessandro.ruffinatti@unito.it", role = c("aut", "cre"),
@@ -24,7 +24,10 @@ Imports:
     tools (>= 4.2.2),
     dplyr (>= 1.0.10),
     stringr (>= 1.5.0),
-    AnnotationDbi (>= 1.60.0)
+    AnnotationDbi (>= 1.60.0),
+    VennDiagram (>= 1.7.3),
+    futile.logger (>= 1.4.3),
+    org.Hs.eg.db (>= 3.16.0)
 Depends: 
     R (>= 2.10)
 LazyData: true

@@ -26,4 +26,5 @@
 ignore_unused_imports <- function() {
   stringr::str_length
   dplyr::mutate
+  org.Hs.eg.db::org.Hs.eg.db
 }
