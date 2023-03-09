@@ -28,13 +28,19 @@
 #' # Let me see The Nanto Warriors Data Set
 #' lms(nanto)
 #' 
-#' # Compare lms() with head()
+#' # Compare `lms()` and `head()` behavior when applied to different data types
 #' for (i in 1:length(nanto)) {
 #'   cat("\nhead()\n")
 #'   print(head(nanto[[i]]))
 #'   cat("\nlms()\n")
 #'   lms(nanto[[i]])
 #' }
+#' 
+#' # Compare `lms()` and `head()` behavior when applied to a list of objects
+#' cat("\nhead()\n")
+#' print(head(nanto))
+#' cat("\nlms()\n")
+#' lms(nanto)
 #' @author FeA.R
 lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 {
@@ -219,7 +225,8 @@ dnues2 <- function(vec)
 #' @examples
 #' # Replicate some scores of the Nanto warriors
 #' repmat(nanto$named_scores,2,3)
-#' @author FeA.R
+#' @references \url{https://stackoverflow.com/questions/19590541/r-duplicate-a-matrix-several-times-and-then-bind-by-rows-together}
+#' @author Lucas Fortini, FeA.R
 repmat <- function(X, m, n)
 {
   # Always convert to matrix first
@@ -258,14 +265,12 @@ repmat <- function(X, m, n)
 #' @returns A character vector containing the rows from the help page.
 #' 
 #' @examples
-#' \dontrun{
 #' # Print `seq()` help to console
 #' help_as_text("seq") |> cat(sep = "\n")
 #' 
 #' # Get author's name:
 #' hh <- help_as_text("lms")
 #' gsub("\\s{2,}", "", hh[grep("^Author", hh) + 2])
-#' }
 #' @references \url{https://stackoverflow.com/questions/51330090/how-to-get-text-data-from-help-pages-in-r}
 #' @author MrFlick, FeA.R
 help_as_text <- function(meth_or_pkg, pkg = NULL)
@@ -444,25 +449,40 @@ hgt <- function(k, n, K, N = 2e4)
 #' @param set_B Another character or numeric (1D) vector.
 #' @param N Size of the universe (or background set). see `hgt()` function.
 #' @param venn Boolean. Set it to `FALSE` to suppress Venn plotting.
-#' @param lab Labels for the Venn. A character vector of two elements.
+#' @param lab Labels for the Venn. A character vector of two elements, that
+#'            defaults to variable names.
 #' @param titles Titles and subtitles for the Venn diagram. A character vector
 #'               of two elements. 
 #'
 #' @returns A list made up of a data frame named `ORA` (containing the results
 #'          of the OverRepresentation Analysis), and three vectors named
-#'          `intersection`, `left_set`, and `right_set`, featuring the elements
-#'          of those three sets, respectively.
+#'          `intersection`, `diff_AB`, and `diff_BA`, featuring the common
+#'          elements, the elements that exist only in set A, and those that
+#'          exist only in set B, respectively.
 #'
 #' @examples
 #' # Find how many (and which) Ion Channels there are within a given DEG list
 #' # and if that gene set is enriched (over-represented) or not:
 #' x <- venny(TGS$ICs, DEGs_stat$GENE_SYMBOL,
-#'            lab = c("Ion Channels","DEGs"),
+#'            lab = c("Ion Channels", "DEGs"),
 #'            titles = c("Transportome Analysis", "Ion Channels"))
+#' 
+#' # Have an overview of the results
+#' lms(x)
+#' 
+#' # ICs within DEG list
+#' x$intersection
+#' 
+#' # Is the gene set of ion channels enriched?
+#' x$ORA$p.value # Nope
+#' 
+#' # Show all DEGs except ion channels
+#' x$diff_BA
 #' @author FeA.R
 venny <- function(set_A, set_B, N = 2e4,
                   venn = TRUE,
-                  lab = c("Set A", "Set B"),
+                  lab = c(deparse(substitute(set_A)),
+                          deparse(substitute(set_B))),
                   titles = c("Venn diagram", "by cmatools"))
 {
   # Check arguments
@@ -472,8 +492,8 @@ venny <- function(set_A, set_B, N = 2e4,
   
   # Set operations
   intersection <- intersect(set_A, set_B)
-  left_set <- setdiff(set_A, set_B)
-  right_set <- setdiff(set_B, set_A)
+  diff_AB <- setdiff(set_A, set_B)
+  diff_BA <- setdiff(set_B, set_A)
   
   # Compute p-values through hypergeometric distribution
   ORA <- hgt(length(intersection),
@@ -482,8 +502,8 @@ venny <- function(set_A, set_B, N = 2e4,
   # Output list
   set_stat <- list(ORA = ORA,
                    intersection = intersection,
-                   left_set = left_set,
-                   right_set = right_set)
+                   diff_AB = diff_AB,
+                   diff_BA = diff_BA)
   
   if (venn) {
     # To suppress 'venn.diagram()' log messages with priority lower than "ERROR"

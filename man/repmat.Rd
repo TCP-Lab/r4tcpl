@@ -26,6 +26,9 @@ column- (n) wise.
 # Replicate some scores of the Nanto warriors
 repmat(nanto$named_scores,2,3)
 }
+\references{
+\url{https://stackoverflow.com/questions/19590541/r-duplicate-a-matrix-several-times-and-then-bind-by-rows-together}
+}
 \author{
-FeA.R
+Lucas Fortini, FeA.R
 }

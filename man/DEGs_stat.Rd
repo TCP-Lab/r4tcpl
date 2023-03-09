@@ -19,7 +19,8 @@ compared to MTX-treated patients}
 }
 }
 \source{
-PMID: ..., DOI: ..., GEO accession "GSE224330"
+PMID: 36877690, DOI: 10.1371/journal.pone.0282564,
+GEO accession "GSE224330".
 }
 \usage{
 DEGs_stat
@@ -28,8 +29,9 @@ DEGs_stat
 Descriptive (logFC) and inferential (\emph{p}-value) statistics for the same 436
 significant genes already used to build the \code{DEGs_expr} data set and
 resulting from the Differential Expression Analysis (DEA) of the
-transcriptomics data from my Rheumatoid Arthritis (AR) microarray study
-(PMID: ..., DOI: ..., GEO accession "GSE224330").
+transcriptomics data from our 2017-2023 Rheumatoid Arthritis (AR) microarray
+study (PMID: 36877690, DOI: 10.1371/journal.pone.0282564, GEO accession
+"GSE224330").
 Agilent-072363 SurePrint G3 Human GE v3 8x60K chips Chip were hybridized with
 RNA of monocytes taken from bDMARD-treated AR-patients and compared with the
 transcriptional profile of healthy and Methotrexate (MTX)-treated samples.

@@ -9,7 +9,7 @@ venny(
   set_B,
   N = 20000,
   venn = TRUE,
-  lab = c("Set A", "Set B"),
+  lab = c(deparse(substitute(set_A)), deparse(substitute(set_B))),
   titles = c("Venn diagram", "by cmatools")
 )
 }
@@ -22,7 +22,8 @@ venny(
 
 \item{venn}{Boolean. Set it to \code{FALSE} to suppress Venn plotting.}
 
-\item{lab}{Labels for the Venn. A character vector of two elements.}
+\item{lab}{Labels for the Venn. A character vector of two elements, that
+defaults to variable names.}
 
 \item{titles}{Titles and subtitles for the Venn diagram. A character vector
 of two elements.}
@@ -30,8 +31,9 @@ of two elements.}
 \value{
 A list made up of a data frame named \code{ORA} (containing the results
 of the OverRepresentation Analysis), and three vectors named
-\code{intersection}, \code{left_set}, and \code{right_set}, featuring the elements
-of those three sets, respectively.
+\code{intersection}, \code{diff_AB}, and \code{diff_BA}, featuring the common
+elements, the elements that exist only in set A, and those that
+exist only in set B, respectively.
 }
 \description{
 Given \strong{two} vectors of symbols, this function finds the
@@ -43,8 +45,20 @@ a Venn diagram representation.
 # Find how many (and which) Ion Channels there are within a given DEG list
 # and if that gene set is enriched (over-represented) or not:
 x <- venny(TGS$ICs, DEGs_stat$GENE_SYMBOL,
-           lab = c("Ion Channels","DEGs"),
+           lab = c("Ion Channels", "DEGs"),
            titles = c("Transportome Analysis", "Ion Channels"))
+
+# Have an overview of the results
+lms(x)
+
+# ICs within DEG list
+x$intersection
+
+# Is the gene set of ion channels enriched?
+x$ORA$p.value # Nope
+
+# Show all DEGs except ion channels
+x$diff_BA
 }
 \author{
 FeA.R

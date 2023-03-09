@@ -61,8 +61,8 @@
 #' Anti-TNFalpha-induced transcription in AR patients - Expression
 #' 
 #' Expression values for the 436 Differentially Expressed Genes (DEGs) resulting
-#' from my Rheumatoid Arthritis (AR) microarray study (PMID: ..., DOI: ...,
-#' GEO accession "GSE224330").
+#' from our 2017-2023 Rheumatoid Arthritis (AR) microarray study (PMID: 36877690,
+#' DOI: 10.1371/journal.pone.0282564, GEO accession "GSE224330").
 #' Agilent-072363 SurePrint G3 Human GE v3 8x60K chips Chip were hybridized with
 #' RNA of monocytes taken from bDMARD-treated AR-patients and compared with the
 #' transcriptional profile of healthy and Methotrexate (MTX)-treated samples.
@@ -84,12 +84,14 @@
 #'   \item{GeneSymbol}{HGNC Official Gene Symbol}
 #'   \item{GeneName}{Official Gene Name}
 #'   \item{Category}{Manual curated membership to one of the following
-#'    categories: NA, "Inflammation", "Immune Response", "Metallopeptidase"}
+#'    categories: NA, "Inflammation", "Immune Response", and
+#'    (Matrix)"Metallopeptidase"}
 #'   \item{Anti-TNFa_1 : Anti-TNFa_5}{anti-TNFalpha-treated patients}
 #'   \item{MTX_1 : MTX_6}{Methotrexate-treated patients}
 #' }
 #' @author FeA.R
-#' @source PMID: ..., DOI: ..., GEO accession "GSE224330"
+#' @source PMID: 36877690, DOI: 10.1371/journal.pone.0282564,
+#'         GEO accession "GSE224330".
 "DEGs_expr"
 
 
@@ -99,8 +101,9 @@
 #' Descriptive (logFC) and inferential (*p*-value) statistics for the same 436
 #' significant genes already used to build the `DEGs_expr` data set and
 #' resulting from the Differential Expression Analysis (DEA) of the
-#' transcriptomics data from my Rheumatoid Arthritis (AR) microarray study
-#' (PMID: ..., DOI: ..., GEO accession "GSE224330").
+#' transcriptomics data from our 2017-2023 Rheumatoid Arthritis (AR) microarray
+#' study (PMID: 36877690, DOI: 10.1371/journal.pone.0282564, GEO accession
+#' "GSE224330").
 #' Agilent-072363 SurePrint G3 Human GE v3 8x60K chips Chip were hybridized with
 #' RNA of monocytes taken from bDMARD-treated AR-patients and compared with the
 #' transcriptional profile of healthy and Methotrexate (MTX)-treated samples.
@@ -127,7 +130,8 @@
 #'   \item{adj.p_value}{Benjamini-Hochberg adjusted *p*-values}
 #' }
 #' @author FeA.R
-#' @source PMID: ..., DOI: ..., GEO accession "GSE224330"
+#' @source PMID: 36877690, DOI: 10.1371/journal.pone.0282564,
+#'         GEO accession "GSE224330".
 "DEGs_stat"
 
 
