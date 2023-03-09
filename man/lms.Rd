@@ -29,6 +29,9 @@ list management.
 # Let me see The Nanto Warriors Data Set
 lms(nanto)
 
+# Compare `head()` behavior when applied to a list of objects
+print(head(nanto))
+
 # Compare `lms()` and `head()` behavior when applied to different data types
 for (i in 1:length(nanto)) {
   cat("\nhead()\n")
@@ -36,12 +39,6 @@ for (i in 1:length(nanto)) {
   cat("\nlms()\n")
   lms(nanto[[i]])
 }
-
-# Compare `lms()` and `head()` behavior when applied to a list of objects
-cat("\nhead()\n")
-print(head(nanto))
-cat("\nlms()\n")
-lms(nanto)
 }
 \author{
 FeA.R

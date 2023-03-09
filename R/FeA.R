@@ -28,6 +28,9 @@
 #' # Let me see The Nanto Warriors Data Set
 #' lms(nanto)
 #' 
+#' # Compare `head()` behavior when applied to a list of objects
+#' print(head(nanto))
+#' 
 #' # Compare `lms()` and `head()` behavior when applied to different data types
 #' for (i in 1:length(nanto)) {
 #'   cat("\nhead()\n")
@@ -35,12 +38,6 @@
 #'   cat("\nlms()\n")
 #'   lms(nanto[[i]])
 #' }
-#' 
-#' # Compare `lms()` and `head()` behavior when applied to a list of objects
-#' cat("\nhead()\n")
-#' print(head(nanto))
-#' cat("\nlms()\n")
-#' lms(nanto)
 #' @author FeA.R
 lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 {
@@ -52,7 +49,8 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
     cat(paste0("\n", deparse(substitute(data2see)),
                " is a list of ", length(data2see), " objects:\n"))
     for (i in 1:length(data2see)) {
-      lms(data2see[[i]], name = names(data2see)[i]) # Recursive call
+      # Recursive call
+      lms(data2see[[i]], rows = rows, cols = cols, name = names(data2see)[i])
     }
   } else {
     if (is.vector(data2see)) {
