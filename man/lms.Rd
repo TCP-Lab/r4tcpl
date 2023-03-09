@@ -30,14 +30,15 @@ list management.
 lms(nanto)
 
 # Compare `head()` behavior when applied to a list of objects
-print(head(nanto))
+head(nanto)
 
 # Compare `lms()` and `head()` behavior when applied to different data types
 for (i in 1:length(nanto)) {
   cat("\nhead()\n")
   print(head(nanto[[i]]))
-  cat("\nlms()\n")
+  cat("\nlms()")
   lms(nanto[[i]])
+  cat("\n------------------------------------------------------\n")
 }
 }
 \author{
