@@ -511,7 +511,8 @@ venny <- function(set_A, set_B, N = 2e4,
     # Create the Venn diagram
     venn.plot <- VennDiagram::venn.diagram(
       x = list(set_A, set_B),
-      force.unique = TRUE,
+      force.unique = TRUE,   # Remove duplicates
+      na = "remove",         # Remove NAs
       
       # Output features
       filename = NULL,        # Print plot just on screen
