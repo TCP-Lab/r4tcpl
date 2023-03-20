@@ -2,6 +2,7 @@
 
 export(array_create_annot)
 export(array_platform_selector)
+export(ccat)
 export(descriptives)
 export(dnues)
 export(dnues2)
