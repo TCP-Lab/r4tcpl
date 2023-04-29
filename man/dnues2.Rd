@@ -15,7 +15,7 @@ non-unique elements, and the global number of non-unique entries in
 \code{vec}.
 }
 \description{
-An alternative (faster?) implementation of \code{dnues()},
+An alternative and faster implementation of \code{dnues()},
 independent of \code{dup_report()} function. A function that tells
 how many \emph{different non-unique} elements there are in a given
 vector. Unlike \code{base::duplicated()} that detects duplicated

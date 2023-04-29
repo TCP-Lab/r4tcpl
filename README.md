@@ -57,6 +57,8 @@ comments into proper R documentation and (re)generate `NAMESPACE` (based on
 (remember that all `@examples` will be used as tests in this phase; to prevent
 some of them from being run put them inside a `\dontrun{}` section).
 
+1. Now you can `git add`, `commit`, and `push`.
+
 1. Use `devtools::load_all()` to load the package from the local directory.
 
 1. Regardless of your wd, use `devtools::install_github("CMA-Lab/cmatools")` to

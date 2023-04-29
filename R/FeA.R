@@ -156,7 +156,11 @@ dnues <- function(vec)
   
   report <- dup_report(vec)
   a <- length(report)
-  b <- sum(sapply(report, function(repo){repo[[1]]}))
+  if (a > 0) {
+    b <- sum(sapply(report, function(repo){repo[[1]]}))
+  } else {
+    b <- 0
+  }
   
   return(c(a,b))
   # Interpretation:
@@ -171,7 +175,7 @@ dnues <- function(vec)
 #' @export
 #' @import stats
 #' 
-#' @description An alternative (faster?) implementation of `dnues()`,
+#' @description An alternative and faster implementation of `dnues()`,
 #'              independent of `dup_report()` function. A function that tells
 #'              how many *different non-unique* elements there are in a given
 #'              vector. Unlike `base::duplicated()` that detects duplicated
