@@ -1,6 +1,6 @@
 Package: cmatools
 Title: A collection of utility functions used in our R projects
-Version: 0.3.1
+Version: 0.4.1
 Authors@R: c(
     person("Federico Alessandro", "Ruffinatti", ,
         "federicoalessandro.ruffinatti@unito.it", role = c("aut", "cre"),
@@ -27,7 +27,8 @@ Imports:
     AnnotationDbi (>= 1.60.0),
     VennDiagram (>= 1.7.3),
     futile.logger (>= 1.4.3),
-    org.Hs.eg.db (>= 3.16.0)
+    org.Hs.eg.db (>= 3.16.0),
+    mclust (>= 6.0.0)
 Depends: 
     R (>= 2.10)
 LazyData: true

@@ -70,7 +70,7 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
     if (is.null(name)) {
       cat("\nObject dimensions:", d[1], "x", d[2])
     } else {
-      cat(paste0("\n", name, " dimensions: ", d[1], " x ", d[2]))
+      cat(paste0("\n\'", name, "\' dimensions: ", d[1], " x ", d[2]))
     }
     cat("\nObject class:", stored_class, suffix_class, "\n\n")
     
@@ -1031,3 +1031,78 @@ missing_report <- function(dataFrame, naSymb = "")
   cat("\n")
 }
 
+
+
+#' Gaussian Mixture Model applied to RNA-Seq count data
+#' @export
+#' @import stats
+#' 
+#' @description Use a Gaussian Mixture Model (GMM) to fit RNA-Seq count
+#'              distribution in order to identify the sub-populations of
+#'              expressed and unexpressed genes. Starting from raw (unbinned)
+#'              data, this function returns the individual Gaussian components
+#'              of the mixture and a boundary value suitable for subpopulation
+#'              separation.
+#' 
+#' @param count_data One-dimensional numeric vector or data frame.
+#' @param comp_num Number of components to be used for the mixture.
+#' @param sub_pops A two-element integer vector containing the index of the two
+#'                 components to intersect to find the boundary.
+#'
+#' @returns A list with the following elements:
+#' 
+#' @examples
+#' \dontrun{
+#' log_expression <- DEGs_expr$`Anti-TNFa_4`
+#' plot(density(DEGs_expr$`Anti-TNFa_4`), main = "Kernel Density Plot")
+#' 
+#' gmm <- seq_GMM(log_expression, comp_num = 3, sub_pops = c(1,2))
+#' 
+#' for (i in 1:gmm$fit$G) {
+#'   lines(gmm$x, gmm$components[,i], col = "blue")
+#' }
+#' lines(gmm$x, rowSums(gmm$components), col = "red", lty = 2)
+#' y_lim <- par("yaxp")[2]
+#' lines(c(gmm$boundary, gmm$boundary), c(0, 1.5*y_lim), lty = 2)
+#' }
+#' @author FeA.R
+seq_GMM <- function(count_data, comp_num = 2, sub_pops = c(1, comp_num)) {
+  
+  # Mclust V (univariate, unequal variance) model with G components
+  fit <- mclust::Mclust(count_data, G = comp_num, modelNames = "V")
+  print(summary(fit))
+  
+  x_lim <- ceiling(max(count_data))
+  x <- seq(-1, x_lim, length.out = 1e3)
+  
+  components <- data.frame(x) # Just to set row dimension
+  for (i in 1:fit$G) {
+    components[,i] <-
+      fit$parameters$pro[i] * dnorm(x,
+                                    fit$parameters$mean[i],
+                                    sqrt(fit$parameters$variance$sigmasq[i]))
+    colnames(components)[i] <- paste0("comp_", i)
+  }
+  
+  # Coefficient computation
+  p <- fit$parameters$pro[sub_pops]
+  mu <- fit$parameters$mean[sub_pops]
+  s2 <- fit$parameters$variance$sigmasq[sub_pops]
+  
+  A <- s2[1] - s2[2]
+  B <- 2*(s2[2]*mu[1] - s2[1]*mu[2])
+  C <- s2[1]*mu[2]^2 - s2[2]*mu[1]^2 -
+    2*s2[1]*s2[2]*log((p[2]*sqrt(s2[1]))/(p[1]*sqrt(s2[2])))
+  
+  delta <- sqrt((B/2)^2 - A*C) # ...actually the square root of a quarter delta
+  roots <- c((-B/2 - delta)/A, (-B/2 + delta)/A)
+  index <- which.max(dnorm(roots, mu[1], s2[1]))
+  boundary <- roots[index]
+  
+  return(list(fit = fit, x = x, components = components, boundary = boundary))
+}
+  
+  
+  
+  
+  
