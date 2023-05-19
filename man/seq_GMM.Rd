@@ -9,24 +9,33 @@ seq_GMM(count_data, comp_num = 2, sub_pops = c(1, comp_num))
 \arguments{
 \item{count_data}{One-dimensional numeric vector or data frame.}
 
-\item{comp_num}{Number of components to be used for the mixture.}
+\item{comp_num}{Number of gaussian components to be used for the mixture.}
 
 \item{sub_pops}{A two-element integer vector containing the index of the two
 components to intersect to find the boundary.}
 }
 \value{
-A list with the following elements:
+A named list with the following elements:
+\describe{
+\item{fit}{An object of class 'Mclust' providing the GMM estimation.}
+\item{x}{A 1000-point numeric vector providing the x-values used
+to evaluate the components. Useful for plotting.}
+\item{components}{A 1000 x \code{comp_num} data frame featuring the
+probability-weighted Gaussian components evaluated in x.}
+\item{boundary}{The decision boundary computed as the intersection between
+the two Gaussian components specified by the \code{sub_pops}
+argument.}
+}
 }
 \description{
 Use a Gaussian Mixture Model (GMM) to fit RNA-Seq count
-distribution in order to identify the sub-populations of
-expressed and unexpressed genes. Starting from raw (unbinned)
-data, this function returns the individual Gaussian components
-of the mixture and a boundary value suitable for subpopulation
+distribution in order to identify expression sub-populations
+(i.e., expressed vs unexpressed genes). Starting from unbinned
+counts, this function returns the individual Gaussian components
+of the mixture and a boundary value suitable for sub-population
 separation.
 }
 \examples{
-\dontrun{
 log_expression <- DEGs_expr$`Anti-TNFa_4`
 plot(density(DEGs_expr$`Anti-TNFa_4`), main = "Kernel Density Plot")
 
@@ -36,9 +45,7 @@ for (i in 1:gmm$fit$G) {
   lines(gmm$x, gmm$components[,i], col = "blue")
 }
 lines(gmm$x, rowSums(gmm$components), col = "red", lty = 2)
-y_lim <- par("yaxp")[2]
-lines(c(gmm$boundary, gmm$boundary), c(0, 1.5*y_lim), lty = 2)
-}
+lines(c(gmm$boundary, gmm$boundary), c(0, 1), lty = 2)
 }
 \author{
 FeA.R

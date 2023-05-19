@@ -1038,21 +1038,30 @@ missing_report <- function(dataFrame, naSymb = "")
 #' @import stats
 #' 
 #' @description Use a Gaussian Mixture Model (GMM) to fit RNA-Seq count
-#'              distribution in order to identify the sub-populations of
-#'              expressed and unexpressed genes. Starting from raw (unbinned)
-#'              data, this function returns the individual Gaussian components
-#'              of the mixture and a boundary value suitable for subpopulation
+#'              distribution in order to identify expression sub-populations
+#'              (i.e., expressed vs unexpressed genes). Starting from unbinned
+#'              counts, this function returns the individual Gaussian components
+#'              of the mixture and a boundary value suitable for sub-population
 #'              separation.
 #' 
 #' @param count_data One-dimensional numeric vector or data frame.
-#' @param comp_num Number of components to be used for the mixture.
+#' @param comp_num Number of gaussian components to be used for the mixture.
 #' @param sub_pops A two-element integer vector containing the index of the two
 #'                 components to intersect to find the boundary.
 #'
-#' @returns A list with the following elements:
+#' @returns A named list with the following elements:
+#' \describe{
+#'   \item{fit}{An object of class 'Mclust' providing the GMM estimation.}
+#'   \item{x}{A 1000-point numeric vector providing the x-values used
+#'            to evaluate the components. Useful for plotting.}
+#'   \item{components}{A 1000 x `comp_num` data frame featuring the
+#'                     probability-weighted Gaussian components evaluated in x.}
+#'   \item{boundary}{The decision boundary computed as the intersection between
+#'                   the two Gaussian components specified by the `sub_pops`
+#'                   argument.}
+#' }
 #' 
 #' @examples
-#' \dontrun{
 #' log_expression <- DEGs_expr$`Anti-TNFa_4`
 #' plot(density(DEGs_expr$`Anti-TNFa_4`), main = "Kernel Density Plot")
 #' 
@@ -1062,11 +1071,12 @@ missing_report <- function(dataFrame, naSymb = "")
 #'   lines(gmm$x, gmm$components[,i], col = "blue")
 #' }
 #' lines(gmm$x, rowSums(gmm$components), col = "red", lty = 2)
-#' y_lim <- par("yaxp")[2]
-#' lines(c(gmm$boundary, gmm$boundary), c(0, 1.5*y_lim), lty = 2)
-#' }
+#' lines(c(gmm$boundary, gmm$boundary), c(0, 1), lty = 2)
 #' @author FeA.R
 seq_GMM <- function(count_data, comp_num = 2, sub_pops = c(1, comp_num)) {
+  
+  # To fix the mclust package issue <<could not find function "mclustBIC">>
+  mclustBIC <- mclust::mclustBIC
   
   # Mclust V (univariate, unequal variance) model with G components
   fit <- mclust::Mclust(count_data, G = comp_num, modelNames = "V")
