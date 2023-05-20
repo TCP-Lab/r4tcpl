@@ -1033,39 +1033,95 @@ missing_report <- function(dataFrame, naSymb = "")
 
 
 
-#' Gaussian Mixture Model applied to RNA-Seq count data
+#' Gaussian Mixture Model for unbinned data
 #' @export
 #' @import stats
 #' 
-#' @description Use a Gaussian Mixture Model (GMM) to fit RNA-Seq count
-#'              distribution in order to identify expression sub-populations
-#'              (i.e., expressed vs unexpressed genes). Starting from unbinned
-#'              counts, this function returns the individual Gaussian components
-#'              of the mixture and a boundary value suitable for sub-population
-#'              separation.
+#' @description This is a wrapper for the `Mclust` function (`mclust` package)
+#'              which uses Gaussian Mixture Models (GMMs) to fit the data
+#'              distribution. Here, GMMs are primarily used to analyze
+#'              expression data (from both microarray and RNA-Seq experiments)
+#'              and to identify possible expression subpopulations (i.e.,
+#'              separating expressed from unexpressed genes). `GMM` function
+#'              returns the values of the individual probability-weighted
+#'              Gaussian mixture components and a boundary value suitable for
+#'              subpopulation separation. Expected input data are unbinned
+#'              expression values, usually log2-transformed (not their
+#'              probability density finction!).
+#'              **NOTE:** when analyzing counts, it is better to remove 0s first.
 #' 
-#' @param count_data One-dimensional numeric vector or data frame.
-#' @param comp_num Number of gaussian components to be used for the mixture.
-#' @param sub_pops A two-element integer vector containing the index of the two
-#'                 components to intersect to find the boundary.
+#' @param vec One-dimensional numeric vector or data frame.
+#' @param comp_num Number of Gaussian components to be used for the mixture.
+#' @param sub_pops A two-element integer vector containing the indexes of the
+#'                 two GMM components to intersect for boundary computation.
 #'
+#' @details The decision boundary is computed from the intersection of the two
+#'          GMM components specified in the `sub_pops` input argument. To find
+#'          such a point, two probability-weighted Gaussian functions with
+#'          unequal variances need to be equated, namely
+#'          \deqn{\frac{P_1}{\sqrt{2\pi}\sigma_1}
+#'                e^{-\left(\mu_1-x\right)^2/2\sigma_{1}^{2}}=
+#'                \frac{P_2}{\sqrt{2\pi}\sigma_2}
+#'                e^{-\left(\mu_2-x\right)^2/2\sigma_{2}^{2}}}
+#'          \deqn{e^{\left(\mu_2-x\right)^2/2\sigma_{2}^{2}-
+#'                \left(\mu_1-x\right)^2/2\sigma_{1}^{2}}=
+#'                \frac{P_2\sigma_1}{P_1\sigma_2}}
+#'          \deqn{\frac{\sigma_{1}^{2}\left(\mu_2-x\right)^2-
+#'                \sigma_{2}^{2}\left(\mu_1-x\right)^2}
+#'                {\sigma_{2}^{2}\sigma_{1}^{2}}=
+#'                2\ln{\frac{P_2\sigma_1}{P_1\sigma_2}}}
+#'          \deqn{x^2\left(\sigma_{1}^{2}-\sigma_{2}^{2}\right)-
+#'                2x\left(\sigma_{1}^{2}\mu_2-\sigma_{2}^{2}\mu_1\right)+
+#'                \sigma_{1}^{2}\mu_{2}^{2}-\sigma_{2}^{2}\mu_{1}^{2}-
+#'                2\sigma_{1}^{2}\sigma_{2}^{2}
+#'                \ln{\frac{P_2\sigma_1}{P_1\sigma_2}}=0}
+#'          \deqn{x_{1,2}=\frac{-B/2\ \pm\ \sqrt{\left(B/2\right)^2-AC}}{A}}
+#'          \deqn{\left\{
+#'                  \begin{aligned}
+#'                    A    &= \sigma_{1}^{2}-\sigma_{2}^{2} \\
+#'                    -B/2 &= \sigma_{1}^{2}\mu_2-\sigma_{2}^{2}\mu_1 \\
+#'                    C    &= \sigma_{1}^{2}\mu_{2}^{2}-
+#'                            \sigma_{2}^{2}\mu_{1}^{2}-
+#'                            2\sigma_{1}^{2}\sigma_{2}^{2}
+#'                            \ln{\frac{P_2\sigma_1}{P_1\sigma_2}}
+#'                  \end{aligned}
+#'                \right.}
+#'          The last equations show that it is possible to have one single root
+#'          (i.e., one intersection point) only when
+#'          \eqn{\sigma_{1}=\sigma_{2}} (but \eqn{\mu_1\neq\mu_2}), in which
+#'          case the boundary is found at
+#'          \deqn{x=\frac{\mu_1+\mu_2}{2}+
+#'                \frac{\sigma^2}{\mu_1-\mu_2}\ln\frac{P_2}{P_1}}
+#'          On the contrary, whenever \eqn{\sigma_{1}\neq\sigma_{2}}, solutions
+#'          are always two (although they can be real-valued, complex conjugates,
+#'          or a double root).
+#'          Provided that the solutions are real-valued, `GMM` function returns
+#'          *the highest intersection point* as the decision boundary, namely
+#'          \deqn{\begin{aligned}
+#'                  \argmax_{x\in\left\{x_{1},x_{2}\right\}}
+#'                  \frac{P_i}{\sqrt{2\pi}\sigma_i}
+#'                  e^{-\left(\mu_i-x\right)^2/2\sigma_{i}^{2}\ \ \ \ \ 
+#'                  \text{with}\ \ i=1\ \vee\ i=2}
+#'                \end{aligned}}
+#' 
 #' @returns A named list with the following elements:
 #' \describe{
-#'   \item{fit}{An object of class 'Mclust' providing the GMM estimation.}
-#'   \item{x}{A 1000-point numeric vector providing the x-values used
-#'            to evaluate the components. Useful for plotting.}
-#'   \item{components}{A 1000 x `comp_num` data frame featuring the
-#'                     probability-weighted Gaussian components evaluated in x.}
-#'   \item{boundary}{The decision boundary computed as the intersection between
-#'                   the two Gaussian components specified by the `sub_pops`
-#'                   argument.}
+#'   \item{`fit`}{An object of class 'Mclust' providing the GMM estimation.}
+#'   \item{`x`}{A 1000-point numeric vector providing the x-values used
+#'              to evaluate the components. Useful for plotting.}
+#'   \item{`components`}{A 1000 x `comp_num` data frame featuring the
+#'                       probability-weighted Gaussian components evaluated in
+#'                       x.}
+#'   \item{`boundary`}{The decision boundary computed as the intersection
+#'                     between the two Gaussian components specified in the
+#'                     `sub_pops` argument.}
 #' }
 #' 
 #' @examples
 #' log_expression <- DEGs_expr$`Anti-TNFa_4`
 #' plot(density(DEGs_expr$`Anti-TNFa_4`), main = "Kernel Density Plot")
 #' 
-#' gmm <- seq_GMM(log_expression, comp_num = 3, sub_pops = c(1,2))
+#' gmm <- GMM(log_expression, comp_num = 3, sub_pops = c(1,2))
 #' 
 #' for (i in 1:gmm$fit$G) {
 #'   lines(gmm$x, gmm$components[,i], col = "blue")
@@ -1073,31 +1129,34 @@ missing_report <- function(dataFrame, naSymb = "")
 #' lines(gmm$x, rowSums(gmm$components), col = "red", lty = 2)
 #' lines(c(gmm$boundary, gmm$boundary), c(0, 1), lty = 2)
 #' @author FeA.R
-seq_GMM <- function(count_data, comp_num = 2, sub_pops = c(1, comp_num)) {
+GMM <- function(vec, comp_num = 2, sub_pops = c(1, comp_num)) {
   
-  # To fix the mclust package issue <<could not find function "mclustBIC">>
+  # To fix mclust package issue 'could not find function "mclustBIC"'
   mclustBIC <- mclust::mclustBIC
   
   # Mclust V (univariate, unequal variance) model with G components
-  fit <- mclust::Mclust(count_data, G = comp_num, modelNames = "V")
+  fit <- mclust::Mclust(vec, G = comp_num, modelNames = "V")
   print(summary(fit))
   
-  x_lim <- ceiling(max(count_data))
-  x <- seq(-1, x_lim, length.out = 1e3)
+  # Prepare the domain
+  x_high <- ceiling(max(vec))
+  x_low <- floor(min(vec)) - 1
+  x <- seq(x_low, x_high, length.out = 1e3)
   
-  components <- data.frame(x) # Just to set row dimension
+  # GMM components
+  components <- data.frame(x) # Just to set the right row dimension
+  p <- fit$parameters$pro
+  mu <- fit$parameters$mean
+  s2 <- fit$parameters$variance$sigmasq
   for (i in 1:fit$G) {
-    components[,i] <-
-      fit$parameters$pro[i] * dnorm(x,
-                                    fit$parameters$mean[i],
-                                    sqrt(fit$parameters$variance$sigmasq[i]))
+    components[,i] <- p[i] * dnorm(x, mu[i], sqrt(s2[i]))
     colnames(components)[i] <- paste0("comp_", i)
   }
   
-  # Coefficient computation
-  p <- fit$parameters$pro[sub_pops]
-  mu <- fit$parameters$mean[sub_pops]
-  s2 <- fit$parameters$variance$sigmasq[sub_pops]
+  # Subset parameters for boundary computation
+  p <- p[sub_pops]
+  mu <- mu[sub_pops]
+  s2 <- s2[sub_pops]
   
   A <- s2[1] - s2[2]
   B <- 2*(s2[2]*mu[1] - s2[1]*mu[2])
@@ -1106,13 +1165,14 @@ seq_GMM <- function(count_data, comp_num = 2, sub_pops = c(1, comp_num)) {
   
   delta <- sqrt((B/2)^2 - A*C) # ...actually the square root of a quarter delta
   roots <- c((-B/2 - delta)/A, (-B/2 + delta)/A)
-  index <- which.max(dnorm(roots, mu[1], s2[1]))
+  index <- which.max(dnorm(roots, mu[1], sqrt(s2[1])))
   boundary <- roots[index]
   
   return(list(fit = fit, x = x, components = components, boundary = boundary))
 }
-  
-  
-  
-  
-  
+
+
+
+
+
+

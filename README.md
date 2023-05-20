@@ -42,12 +42,16 @@ or `@import`, respectively. When building the package, the corresponding
 1. Add example data sets to the package running `usethis::use_data(<my_pkg_data>)`
 from the project directory. This command will save the data contained in the R
 variable `<my_pkg_data>` to the folder `.../cmatools/data/` as a binary (.rda)
-representation (Store one R object in each .rda file). Finally, also remind to
-document the data by editing the file `.../cmatools/R/data.R`
+representation (storing one R object in each .rda file).
+
+1. Remember to provide a complete documentation for both functions (by roxigen2
+heading) and data (by editing the file `.../cmatools/R/data.R`), otherwise you
+will get a warning when building the package.
 
 1. From the project directory, run `devtools::document()` to convert roxygen
 comments into proper R documentation and (re)generate `NAMESPACE` (based on
-`@export` tags).
+`@export` tags). Then you can use `pkgload::dev_help('<function_name>')` to have
+a quick preview of the `<function_name>.Rd` file.
 
 1. Possibly update tests in `.../cmatools/tests/testthat/test-data_exploration.R`.
 
