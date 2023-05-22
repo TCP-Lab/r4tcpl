@@ -9,13 +9,13 @@
 
 A named list containing 5 character vectors:
 \describe{
-\item{pseudo}{All human ICTs, including pseudogenes}
-\item{whole}{All human ICTs, without pseudogenes (a subset of \code{pseudo})}
-\item{ICs}{All human Ion Channels (a subset of \code{whole})}
-\item{Ca_ICs}{All human Calcium-Permeable Ion Channels (a subset of \code{ICs})}
-\item{trans}{All human transporters, including solute carriers (SLCs), ABC
-transporters, and ATPase pumps (a subset of \code{whole} with null
-overlap with \code{ICs}).}
+\item{\code{pseudo}}{All human ICTs, including pseudogenes}
+\item{\code{whole}}{All human ICTs, without pseudogenes (a subset of \code{pseudo})}
+\item{\code{ICs}}{All human Ion Channels (a subset of \code{whole})}
+\item{\code{Ca_ICs}}{All human Calcium-Permeable Ion Channels (a subset of \code{ICs})}
+\item{\code{trans}}{All human transporters, including solute carriers (SLCs),
+ABC transporters, and ATPase pumps (a subset of \code{whole} with
+null overlap with \code{ICs}).}
 }
 }
 }

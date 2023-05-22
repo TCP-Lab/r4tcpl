@@ -22,11 +22,12 @@ features as selected by the user.
 This function retrieves gene annotation for a given microarray
 platform and returns them as a data frame. As input, it requires
 a database name as returned by \code{array_platform_selector()}.
-This function uses \code{svDialogs} package to implement a minimal
-graphical interface allowing the user to select the number and
-the type of features to be used as annotation. GPL-based
-annotation are retrieved from GEO using \code{GEOquery::getGEO()}
-function that needs a working FTP connection.
+This function uses \pkg{svDialogs} package to implement a
+minimal graphical interface allowing the user to select the
+number and the type of features to be used as annotation.
+GPL-based annotation are retrieved from GEO using
+\code{GEOquery::getGEO()} function that needs a working FTP
+connection.
 }
 \examples{
 \dontrun{

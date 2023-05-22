@@ -9,18 +9,18 @@
 
 A named list containing 12 objects of different types:
 \describe{
-\item{warrior}{Character vector with no duplicated entries}
-\item{hair_color}{Character vector with duplicated entries}
-\item{named_warrior}{Named character vector (with duplicated names)}
-\item{power}{Numeric (float) vector with no duplicated entries}
-\item{w_age}{Numeric (integer) vector with duplicated entries and NAs}
-\item{named_pwr}{Named numeric vector}
-\item{killed_by_Ken}{Logical vector}
-\item{sex}{A factor with 3 levels}
-\item{whos}{Character matrix}
-\item{scores}{Numeric matrix}
-\item{named_scores}{Numeric matrix with row and column names}
-\item{all_data}{A data frame containing all the previous objects}
+\item{\code{warrior}}{Character vector with no duplicated entries}
+\item{\code{hair_color}}{Character vector with duplicated entries}
+\item{\code{named_warrior}}{Named character vector (with duplicated names)}
+\item{\code{power}}{Numeric (float) vector with no duplicated entries}
+\item{\code{w_age}}{Numeric (integer) vector with duplicated entries and NAs}
+\item{\code{named_pwr}}{Named numeric vector}
+\item{\code{killed_by_Ken}}{Logical vector}
+\item{\code{sex}}{A factor with 3 levels}
+\item{\code{whos}}{Character matrix}
+\item{\code{scores}}{Numeric matrix}
+\item{\code{named_scores}}{Numeric matrix with row and column names}
+\item{\code{all_data}}{A data frame containing all the previous objects}
 }
 }
 }

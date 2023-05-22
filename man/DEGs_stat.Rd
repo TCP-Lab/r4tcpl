@@ -9,12 +9,12 @@
 
 A data frame with 436 rows and 5 columns:
 \describe{
-\item{GENE_SYMBOL}{HGNC Official Gene Symbol}
-\item{GENE_NAME}{Official Gene Name}
-\item{logFC}{log_2 Fold Changes of gene expression in anti-TNFalpha
+\item{\code{GENE_SYMBOL}}{HGNC Official Gene Symbol}
+\item{\code{GENE_NAME}}{Official Gene Name}
+\item{\code{logFC}}{log_2 Fold Changes of gene expression in anti-TNFalpha
 compared to MTX-treated patients}
-\item{p_value}{RankProduct-based (unadjusted) \emph{p}-values}
-\item{adj.p_value}{Benjamini-Hochberg adjusted \emph{p}-values}
+\item{\code{p_value}}{RankProduct-based (unadjusted) \emph{p}-values}
+\item{\code{adj.p_value}}{Benjamini-Hochberg adjusted \emph{p}-values}
 }
 }
 }

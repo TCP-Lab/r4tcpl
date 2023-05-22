@@ -852,11 +852,12 @@ array_platform_selector <- function(filt = ".*")
 #' @description This function retrieves gene annotation for a given microarray
 #'              platform and returns them as a data frame. As input, it requires
 #'              a database name as returned by `array_platform_selector()`.
-#'              This function uses `svDialogs` package to implement a minimal
-#'              graphical interface allowing the user to select the number and
-#'              the type of features to be used as annotation. GPL-based
-#'              annotation are retrieved from GEO using `GEOquery::getGEO()`
-#'              function that needs a working FTP connection.
+#'              This function uses \pkg{svDialogs} package to implement a
+#'              minimal graphical interface allowing the user to select the
+#'              number and the type of features to be used as annotation.
+#'              GPL-based annotation are retrieved from GEO using
+#'              `GEOquery::getGEO()` function that needs a working FTP
+#'              connection.
 #' 
 #' @param platform Affymetrix/Agilent platform annotation database as returned
 #'                 by the `array_platform_selector()` function.
@@ -1041,33 +1042,24 @@ missing_report <- function(dataFrame, naSymb = "")
 #'              \pkg{mclust} package) which uses Gaussian Mixture Models (GMMs)
 #'              to fit the data distribution. GMMs represent a general approach
 #'              to data clustering and subpopulations detection. If applied to
-#'              expression data (from either microarray or RNA-Seq experiments),
-#'              GMMs can be used to separate expressed from unexpressed genes.
-#'              To this aim, the `GMM_divide` function returns the values of the
-#'              individual probability-weighted Gaussian components of the
-#'              mixture and the boundary points suitable for subpopulation
-#'              separation. Expected input data are **unbinned** expression
-#'              values (not their probability density function), usually
-#'              log2-transformed. **NOTE:** when analyzing counts, it is better
-#'              to remove 0s first.
+#'              gene expression data (from either microarray or RNA-Seq
+#'              experiments), GMMs can be used to separate expressed from
+#'              unexpressed genes. To this aim, the `GMM_divide` function
+#'              returns the values of the individual probability-weighted
+#'              Gaussian components of the mixture and the boundary points
+#'              suitable for subpopulation separation. Expected input data are
+#'              **unbinned** expression values (not their probability density
+#'              function), usually log2-transformed. **NOTE:** when analyzing
+#'              counts, it is better to remove 0s first.
 #' 
 #' @param vec One-dimensional numeric vector or data frame.
 #' @param G Integer number of Gaussian components to be used in the mixture.
 #'
 #' @details The decision boundaries are computed from the intersection of two
-#'          GMM components at a time. The number of *combinations* of two
-#'          elements from a given set of `G` elements is
-#'          \deqn{
-#'            \begin{aligned}
-#'              \binom{G}{2}=\frac{G!}{2!(G-2)!}=\frac{G\left(G-1\right)}{2}
-#'                =\sum_{k=1}^{G-1}k=T_{G-1}
-#'            \end{aligned}
-#'          }
-#'          where \eqn{T_{n}} denotes the n-th
-#'          \href{https://en.wikipedia.org/wiki/Triangular_number}{triangular
-#'          number}. To find such points, two probability-weighted Gaussian
-#'          functions with unequal variances need to be equated for each
-#'          combination \eqn{\left(i,j\right)}, namely
+#'          GMM components at a time, meaning that two probability-weighted
+#'          Gaussian functions with unequal variances need to be equated for
+#'          each possible combination \eqn{\left(i,j\right)} of two components
+#'          of the mixture, namely
 #'          \deqn{
 #'            \begin{gathered}
 #'              \frac{P_i}{\sqrt{2\pi}\sigma_i}
@@ -1091,12 +1083,12 @@ missing_report <- function(dataFrame, naSymb = "")
 #'                {A},\ \ \ \text{with}\\[20pt]
 #'              \left\{
 #'                \begin{aligned}
-#'                  A    & = \sigma_{i}^{2}-\sigma_{2}^{2}\\
-#'                  -B/2 & = \sigma_{i}^{2}\mu_2-\sigma_{2}^{2}\mu_i\\
-#'                  C    & = \sigma_{i}^{2}\mu_{2}^{2}-
-#'                           \sigma_{2}^{2}\mu_{i}^{2}-
-#'                           2\sigma_{i}^{2}\sigma_{2}^{2}
-#'                           \ln{\frac{P_2\sigma_i}{P_i\sigma_2}}
+#'                  A    & = \sigma_{i}^{2}-\sigma_{j}^{2}\\
+#'                  -B/2 & = \sigma_{i}^{2}\mu_j-\sigma_{j}^{2}\mu_i\\
+#'                  C    & = \sigma_{i}^{2}\mu_{j}^{2}-
+#'                           \sigma_{j}^{2}\mu_{i}^{2}-
+#'                           2\sigma_{i}^{2}\sigma_{j}^{2}
+#'                           \ln{\frac{P_j\sigma_i}{P_i\sigma_j}}
 #'                \end{aligned}
 #'              \right.
 #'            \end{gathered}
@@ -1111,12 +1103,12 @@ missing_report <- function(dataFrame, naSymb = "")
 #'                \frac{\sigma^2}{\mu_i-\mu_j}\ln\frac{P_j}{P_i}
 #'            \end{gathered}
 #'          }
-#'          On the contrary, if \eqn{\sigma_{i}\neq\sigma_{j}}, solutions are
+#'          On the contrary, if \eqn{\sigma_{i}\neq\sigma_{j}} solutions are
 #'          always two (although, in principle, they can be real-valued, complex
 #'          conjugates, or a double root).
 #'          Provided that the solutions are real-valued, `GMM_divide` function
-#'          returns *the highest intersection point* as the decision boundary,
-#'          namely
+#'          returns *the highest intersection point* as single decision
+#'          boundary, namely
 #'          \deqn{
 #'            \begin{aligned}
 #'              \argmax_{x\in\left\{x_{1},x_{2}\right\}}
@@ -1125,19 +1117,31 @@ missing_report <- function(dataFrame, naSymb = "")
 #'                \text{with}\ \ k=i\ \vee\ k=j
 #'            \end{aligned}
 #'          }
+#'          In general, the number of *combinations* of two
+#'          elements from a given set of `G` elements (i.e., the length of
+#'          `boundary` output vector) is
+#'          \deqn{
+#'            \begin{aligned}
+#'              \binom{G}{2}=\frac{G!}{2!(G-2)!}=\frac{G\left(G-1\right)}{2}
+#'                =\sum_{k=1}^{G-1}k=T_{G-1}
+#'            \end{aligned}
+#'          }
+#'          where \eqn{T_{n}} denotes the n-th
+#'          \href{https://en.wikipedia.org/wiki/Triangular_number}{triangular
+#'          number}.
 #'          
 #' @returns A named list with the following elements:
 #' \describe{
 #'   \item{`fit`}{An object of class 'Mclust' providing the GMM estimation.}
 #'   \item{`x`}{A 1000-point numeric vector providing the x-values used
-#'              to evaluate the components. Useful for plotting.}
-#'   \item{`components`}{A 1000-by-`comp_num` data frame featuring the single
+#'              to evaluate the GMM components. Useful for plotting.}
+#'   \item{`components`}{A 1000-by-`G` data frame featuring the single
 #'                       probability-weighted Gaussian components evaluated in
-#'                       x. Useful for plotting.}
+#'                       `x`. Useful for plotting.}
 #'   \item{`boundary`}{A named numeric vector containing the \eqn{T_{G-1}}
-#'                     decision boundaries computed as the intersection between
-#'                     all the possible combination of Gaussian components in
-#'                     the mixture.}
+#'                     decision boundaries computed as intersection between the
+#'                     elements of all the possible *2*-combinations of Gaussian
+#'                     components.}
 #' }
 #' 
 #' @examples
@@ -1159,6 +1163,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #'     lines(c(gmm$boundary[i], gmm$boundary[i]), c(0, 1), lty = 2)
 #'   }
 #' }
+#' @references \url{https://cran.r-project.org/web/packages/mclust/vignettes/mclust.html}
 #' @author FeA.R
 GMM_divide <- function(vec, G = 2)
 {
@@ -1203,9 +1208,5 @@ GMM_divide <- function(vec, G = 2)
   
   return(list(fit = fit, x = x, components = components, boundary = boundary))
 }
-
-
-
-
 
 

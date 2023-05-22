@@ -9,18 +9,18 @@
 #' @format ## `nanto`
 #' A named list containing 12 objects of different types:
 #' \describe{
-#'   \item{warrior}{Character vector with no duplicated entries}
-#'   \item{hair_color}{Character vector with duplicated entries}
-#'   \item{named_warrior}{Named character vector (with duplicated names)}
-#'   \item{power}{Numeric (float) vector with no duplicated entries}
-#'   \item{w_age}{Numeric (integer) vector with duplicated entries and NAs}
-#'   \item{named_pwr}{Named numeric vector}
-#'   \item{killed_by_Ken}{Logical vector}
-#'   \item{sex}{A factor with 3 levels}
-#'   \item{whos}{Character matrix}
-#'   \item{scores}{Numeric matrix}
-#'   \item{named_scores}{Numeric matrix with row and column names}
-#'   \item{all_data}{A data frame containing all the previous objects}
+#'   \item{`warrior`}{Character vector with no duplicated entries}
+#'   \item{`hair_color`}{Character vector with duplicated entries}
+#'   \item{`named_warrior`}{Named character vector (with duplicated names)}
+#'   \item{`power`}{Numeric (float) vector with no duplicated entries}
+#'   \item{`w_age`}{Numeric (integer) vector with duplicated entries and NAs}
+#'   \item{`named_pwr`}{Named numeric vector}
+#'   \item{`killed_by_Ken`}{Logical vector}
+#'   \item{`sex`}{A factor with 3 levels}
+#'   \item{`whos`}{Character matrix}
+#'   \item{`scores`}{Numeric matrix}
+#'   \item{`named_scores`}{Numeric matrix with row and column names}
+#'   \item{`all_data`}{A data frame containing all the previous objects}
 #' }
 #' @author FeA.R
 #' @source <https://en.wikipedia.org/wiki/List_of_Fist_of_the_North_Star_characters>
@@ -81,13 +81,13 @@
 #' @format ## `DEGs_expr`
 #' A data frame with 436 rows and 14 columns:
 #' \describe{
-#'   \item{GeneSymbol}{HGNC Official Gene Symbol}
-#'   \item{GeneName}{Official Gene Name}
-#'   \item{Category}{Manual curated membership to one of the following
-#'    categories: NA, "Inflammation", "Immune Response", and
-#'    (Matrix)"Metallopeptidase"}
-#'   \item{Anti-TNFa_1 : Anti-TNFa_5}{anti-TNFalpha-treated patients}
-#'   \item{MTX_1 : MTX_6}{Methotrexate-treated patients}
+#'   \item{`GeneSymbol`}{HGNC Official Gene Symbol}
+#'   \item{`GeneName`}{Official Gene Name}
+#'   \item{`Category`}{Manual curated membership to one of the following
+#'                     categories: NA, "Inflammation", "Immune Response", and
+#'                     (Matrix)"Metallopeptidase"}
+#'   \item{`Anti-TNFa_1 : Anti-TNFa_5`}{anti-TNFalpha-treated patients}
+#'   \item{`MTX_1 : MTX_6`}{Methotrexate-treated patients}
 #' }
 #' @author FeA.R
 #' @source PMID: 36877690, DOI: 10.1371/journal.pone.0282564,
@@ -122,12 +122,12 @@
 #' @format ## `DEGs_stat`
 #' A data frame with 436 rows and 5 columns:
 #' \describe{
-#'   \item{GENE_SYMBOL}{HGNC Official Gene Symbol}
-#'   \item{GENE_NAME}{Official Gene Name}
-#'   \item{logFC}{log_2 Fold Changes of gene expression in anti-TNFalpha
-#'                compared to MTX-treated patients}
-#'   \item{p_value}{RankProduct-based (unadjusted) *p*-values}
-#'   \item{adj.p_value}{Benjamini-Hochberg adjusted *p*-values}
+#'   \item{`GENE_SYMBOL`}{HGNC Official Gene Symbol}
+#'   \item{`GENE_NAME`}{Official Gene Name}
+#'   \item{`logFC`}{log_2 Fold Changes of gene expression in anti-TNFalpha
+#'                  compared to MTX-treated patients}
+#'   \item{`p_value`}{RankProduct-based (unadjusted) *p*-values}
+#'   \item{`adj.p_value`}{Benjamini-Hochberg adjusted *p*-values}
 #' }
 #' @author FeA.R
 #' @source PMID: 36877690, DOI: 10.1371/journal.pone.0282564,
@@ -148,17 +148,17 @@
 #' @format ## `ISO`
 #' A data frame with 8 rows and 11 columns:
 #' \describe{
-#'   \item{Sa}{Arithmetical mean height of the surface}
-#'   \item{Sku}{Kurtosis of height distribution}
-#'   \item{Sp}{Maximum height of peaks}
-#'   \item{Sq}{Root mean square height of the surface}
-#'   \item{Ssk}{Skewness of height distribution}
-#'   \item{Sv}{Maximum height of valleys}
-#'   \item{Sz}{	Maximum height of the surface}
-#'   \item{Sdq}{Root mean square gradient of the surface}
-#'   \item{Sdr}{Developed area ratio}
-#'   \item{Sal}{Fastest decay auto-correlation rate}
-#'   \item{Str}{Texture aspect ratio of the surface}
+#'   \item{`Sa`}{Arithmetical mean height of the surface}
+#'   \item{`Sku`}{Kurtosis of height distribution}
+#'   \item{`Sp`}{Maximum height of peaks}
+#'   \item{`Sq`}{Root mean square height of the surface}
+#'   \item{`Ssk`}{Skewness of height distribution}
+#'   \item{`Sv`}{Maximum height of valleys}
+#'   \item{`Sz`}{	Maximum height of the surface}
+#'   \item{`Sdq`}{Root mean square gradient of the surface}
+#'   \item{`Sdr`}{Developed area ratio}
+#'   \item{`Sal`}{Fastest decay auto-correlation rate}
+#'   \item{`Str`}{Texture aspect ratio of the surface}
 #' }
 #' @author FeA.R
 #' @source PMID: ..., DOI: ..., <https://en.wikipedia.org/wiki/ISO_25178>
@@ -176,17 +176,15 @@
 #' @format ## `TGS`
 #' A named list containing 5 character vectors:
 #' \describe{
-#'   \item{pseudo}{All human ICTs, including pseudogenes}
-#'   \item{whole}{All human ICTs, without pseudogenes (a subset of `pseudo`)}
-#'   \item{ICs}{All human Ion Channels (a subset of `whole`)}
-#'   \item{Ca_ICs}{All human Calcium-Permeable Ion Channels (a subset of `ICs`)}
-#'   \item{trans}{All human transporters, including solute carriers (SLCs), ABC
-#'                transporters, and ATPase pumps (a subset of `whole` with null
-#'                overlap with `ICs`).}
+#'   \item{`pseudo`}{All human ICTs, including pseudogenes}
+#'   \item{`whole`}{All human ICTs, without pseudogenes (a subset of `pseudo`)}
+#'   \item{`ICs`}{All human Ion Channels (a subset of `whole`)}
+#'   \item{`Ca_ICs`}{All human Calcium-Permeable Ion Channels (a subset of `ICs`)}
+#'   \item{`trans`}{All human transporters, including solute carriers (SLCs),
+#'                  ABC transporters, and ATPase pumps (a subset of `whole` with
+#'                  null overlap with `ICs`).}
 #' }
 #' @author FeA.R
 #' @source HGNC DB at <https://www.genenames.org/> and
 #'         IUPHAR/BPS DB at <https://www.guidetopharmacology.org/>
 "TGS"
-
-

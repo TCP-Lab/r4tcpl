@@ -9,13 +9,13 @@
 
 A data frame with 436 rows and 14 columns:
 \describe{
-\item{GeneSymbol}{HGNC Official Gene Symbol}
-\item{GeneName}{Official Gene Name}
-\item{Category}{Manual curated membership to one of the following
+\item{\code{GeneSymbol}}{HGNC Official Gene Symbol}
+\item{\code{GeneName}}{Official Gene Name}
+\item{\code{Category}}{Manual curated membership to one of the following
 categories: NA, "Inflammation", "Immune Response", and
 (Matrix)"Metallopeptidase"}
-\item{Anti-TNFa_1 : Anti-TNFa_5}{anti-TNFalpha-treated patients}
-\item{MTX_1 : MTX_6}{Methotrexate-treated patients}
+\item{\code{Anti-TNFa_1 : Anti-TNFa_5}}{anti-TNFalpha-treated patients}
+\item{\code{MTX_1 : MTX_6}}{Methotrexate-treated patients}
 }
 }
 }

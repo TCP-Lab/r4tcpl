@@ -9,17 +9,17 @@
 
 A data frame with 8 rows and 11 columns:
 \describe{
-\item{Sa}{Arithmetical mean height of the surface}
-\item{Sku}{Kurtosis of height distribution}
-\item{Sp}{Maximum height of peaks}
-\item{Sq}{Root mean square height of the surface}
-\item{Ssk}{Skewness of height distribution}
-\item{Sv}{Maximum height of valleys}
-\item{Sz}{	Maximum height of the surface}
-\item{Sdq}{Root mean square gradient of the surface}
-\item{Sdr}{Developed area ratio}
-\item{Sal}{Fastest decay auto-correlation rate}
-\item{Str}{Texture aspect ratio of the surface}
+\item{\code{Sa}}{Arithmetical mean height of the surface}
+\item{\code{Sku}}{Kurtosis of height distribution}
+\item{\code{Sp}}{Maximum height of peaks}
+\item{\code{Sq}}{Root mean square height of the surface}
+\item{\code{Ssk}}{Skewness of height distribution}
+\item{\code{Sv}}{Maximum height of valleys}
+\item{\code{Sz}}{	Maximum height of the surface}
+\item{\code{Sdq}}{Root mean square gradient of the surface}
+\item{\code{Sdr}}{Developed area ratio}
+\item{\code{Sal}}{Fastest decay auto-correlation rate}
+\item{\code{Str}}{Texture aspect ratio of the surface}
 }
 }
 }
