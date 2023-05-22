@@ -355,8 +355,8 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #' @examples
 #' # Print Nanto warriors' hair color
 #' for (warrior in nanto$warrior) {
-#' cat(" -", tab(warrior), ":: has",
-#'     tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
+#'   cat(" -", tab(warrior), ":: has",
+#'       tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
 #' }
 #' @author FeA.R
 tab <- function(word = "", sp = 7)
@@ -454,8 +454,8 @@ hgt <- function(k, n, K, N = 2e4)
 #' @param venn Boolean. Set it to `FALSE` to suppress Venn plotting.
 #' @param lab Labels for the Venn. A character vector of two elements, that
 #'            defaults to variable names.
-#' @param titles Titles and subtitles for the Venn diagram. A character vector
-#'               of two elements. 
+#' @param titles custom titles and subtitles for the Venn diagram. A character
+#'               vector of two elements. 
 #'
 #' @returns A list made up of a data frame named `ORA` (containing the results
 #'          of the OverRepresentation Analysis), and three vectors named
@@ -660,12 +660,11 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 #'                   (Violin Plot), "BC" (Bar Chart), or "MS" (Mean & SEM).
 #' 
 #' @examples
-#' \dontrun{
 #' # Get a graphical representation of gene differential expression
 #' gene <- DEGs_expr["A_33_P3307955", -c(1:3)]
 #' dsgn <- c(rep("Anti-TNFa",5), rep("MTX",6))
 #' for (type in c("BP", "VP", "BC", "MS")) {
-#'   quick_chart(gene, dsgn, type)}
+#'   quick_chart(gene, dsgn, type)
 #' }
 #' @author FeA.R
 quick_chart <- function(vals, design, chart_type = "BP")
@@ -1174,7 +1173,7 @@ GMM_divide <- function(vec, G = 2)
   fit <- mclust::Mclust(vec, G = G, modelNames = "V")
   print(summary(fit))
   
-  # Prepare the domain
+  # Prepare x-domain
   x_high <- ceiling(max(vec))
   x_low <- floor(min(vec)) - 1
   x <- seq(x_low, x_high, length.out = 1e3)
@@ -1189,7 +1188,7 @@ GMM_divide <- function(vec, G = 2)
     colnames(components)[i] <- paste0("comp_", i)
   }
   
-  # Subset parameters for boundary computation
+  # Subset parameters for boundary computation (do all the combinations)
   boundary <- vector(mode = "numeric")
   for (i in 1:(G-1)) {
     for (j in (i+1):G) {
@@ -1207,6 +1206,81 @@ GMM_divide <- function(vec, G = 2)
   }
   
   return(list(fit = fit, x = x, components = components, boundary = boundary))
+}
+
+
+
+#' FPKM to TPM
+#' @export
+#' 
+#' @description A function to convert normalized RNA-Seq counts from FPKM (or
+#'              RPKM) to TPM scale. **NOTE:** to be properly converted, the
+#'              input FPKM counts need to be linearly scaled
+#'              (**NOT log-transformed!**)
+#' 
+#' @param fpkm A data frame containing unlogged normalized counts in FPKM units.
+#'             Only numeric columns are allowed.
+#'
+#' @returns A data frame containing unlogged normalized counts in TPM units.
+#'
+#' @author FeA.R
+fpkm2tpm <- function(fpkm) {
+  tpm <-
+    apply(fpkm, 2, function(x){x/sum(as.numeric(x))*(10^6)}) |> as.data.frame()
+  
+  return(tpm)
+}
+
+
+
+#' Kernel Density Plot for RNA-Seq Counts
+#' @export
+#' @import stats graphics
+#' 
+#' @description Make a Kernel Density Plot from RNA-Seq data counts.
+#'              `count_density()` iterates `stats::density()` function over all
+#'              the columns of the `count_table` input data and produce a plot
+#'              with many density curves superimposed. In addition, it
+#'              implements a switch to remove zero counts (that usually prevent
+#'              a clear inspection of the data) and the possibility to set the 
+#'              lower and upper bounds for both x- and y-axes (which is useful
+#'              for zooming in the region of interest).
+#' 
+#' @param count_table A data frame containing gene expression counts. Only
+#'                    numeric columns are allowed.
+#' @param remove_zeros A Boolean flag. If set to `TRUE` (the default) zeros
+#'                     are removed from count table beforehand.
+#' @param xlim A two-element numeric vector specifying the visualization limits
+#'             for the x-axis. If set to `NULL` (the default), `plot()` default
+#'             values are used.
+#' @param ylim A two-element numeric vector specifying the visualization limits
+#'             for the y-axis. If set to `NULL` (the default), `plot()` default
+#'             values are used.
+#' @param titles Custom titles and subtitles for the Density Plot. A character
+#'               vector of two elements. 
+#' 
+#' @author FeA.R
+count_density <- function(count_table, remove_zeros = TRUE,
+                          xlim = NULL, ylim = NULL,
+                          titles = c("Kernel Density Plot",
+                                     deparse(substitute(count_table)))) {
+  if (remove_zeros) {
+    cutoff <- 0
+  } else {
+    cutoff <- -1
+  }
+  
+  count_table <- as.data.frame(count_table)
+  d <- density(count_table[count_table[,1] > cutoff, 1])
+  plot(d, xlim = xlim, ylim = ylim, main = titles[1], sub = titles[2])
+  
+  m <- dim(count_table)[2]
+  if (m > 1) {
+    for (i in 2:m) {
+      d <- density(count_table[count_table[, i] > cutoff, i])
+      lines(d$x, d$y) 
+    }
+  }
 }
 
 

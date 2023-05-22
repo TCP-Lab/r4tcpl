@@ -25,8 +25,8 @@ venny(
 \item{lab}{Labels for the Venn. A character vector of two elements, that
 defaults to variable names.}
 
-\item{titles}{Titles and subtitles for the Venn diagram. A character vector
-of two elements.}
+\item{titles}{custom titles and subtitles for the Venn diagram. A character
+vector of two elements.}
 }
 \value{
 A list made up of a data frame named \code{ORA} (containing the results
