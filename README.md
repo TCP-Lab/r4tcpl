@@ -44,7 +44,7 @@ from the project directory. This command will save the data contained in the R
 variable `<my_pkg_data>` to the folder `.../cmatools/data/` as a binary (.rda)
 representation (storing one R object in each .rda file).
 
-1. Remember to provide a complete documentation for both functions (by roxigen2
+1. Remember to provide a complete documentation for both functions (by roxygen2
 heading) and data (by editing the file `.../cmatools/R/data.R`), otherwise you
 will get a warning when building the package.
 
