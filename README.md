@@ -9,7 +9,7 @@ You can find a thorough discussion of this topic in:
 https://r-pkgs.org/
 
 
-## Basic workflow:
+## Basic workflow to add new functions and data
 
 1. Make sure `devtools`, `roxygen2`, `testthat`, and `knitr` packages are
 already installed, otherwise install them running:
@@ -26,22 +26,23 @@ automatically generated inside `NAMESPACE` file.
 package. Use instead the `::` notation to explicitly refer specific namespaces.
 
 1. For each dependency (i.e., wherever you used the syntax
-`<package_name>::<object>`) remember to add `package_name` to `Imports` field in
-`DESCRIPTION` by typing `usethis::use_package("package_name", min_version=TRUE)`
-from the project directory `.../r4tcpl/` (i.e., set it as the working
-directory in RStudio).
+`<package_name>::<object>`) remember to add `package_name` to `Imports` field
+within the `DESCRIPTION` file by typing
+`usethis::use_package("package_name", min_version=TRUE)` from the project
+directory `.../r4tcpl/` (set it as the working directory in RStudio).
 
 1. Unlike *User Libraries*, *System Libraries* don't need to be declared as
 dependencies (since they are expected to be always installed by default in every
-R distribution). However, whenever some function from a System Library other than
-*The R Base Package* (`base`) is used it is recommended to import it or the
-entire library in the package namespace by adding the `roxygen` tags `@importFrom`
-or `@import`, respectively. When building the package, the corresponding
-`import()` statement will be automatically generated inside `NAMESPACE` file.
+R distribution). However, whenever some function from a System Library other
+than *The R Base Package* (`base`) is used it is recommended to import it or the
+entire library in the package namespace by adding the `roxygen` tags
+`@importFrom` or `@import`, respectively. When building the package, the
+corresponding `import()` statement will be automatically generated inside
+`NAMESPACE` file.
 
 1. Add example data sets to the package running `usethis::use_data(<my_pkg_data>)`
 from the project directory. This command will save the data contained in the R
-variable `<my_pkg_data>` to the folder `.../r4tcpl/data/` as a binary (.rda)
+variable `<my_pkg_data>` to the folder `.../r4tcpl/data/` as a binary `.rda`
 representation (storing one R object in each .rda file).
 
 1. Remember to provide a complete documentation for both functions (by roxygen2
@@ -68,3 +69,24 @@ some of them from being run put them inside a `\dontrun{}` section).
 1. Regardless of your wd, use `devtools::install_github("TCP-Lab/r4tcpl")` to
 install (or update) the package from GitHub, and load it as usual through
 `library(r4tcpl)`.
+
+
+## How to rename the package
+
+1. Update the package name field in the `DESCRIPTION` file.
+1. Update all package names in the `README` file.
+1. Update the `.RProj` name.
+1. Update the `.Rbuildignore` file.
+1. Within the folders `.../r4tcpl/R/` and `.../r4tcpl/tests/` look for mentions
+of the old package name within all .R files and update them.
+1. `git add`, `commit`, and `push` these changes to the old repository.
+1. Delete the local repository folder.
+1. Go to GitHub and use the repository _Settings_ to rename it.
+1. `git clone` locally the renamed repository.
+1. From RStudio, run `devtools::document()` to update documentation (i.e., Rd
+files).
+1. Run `devtools::check()` to build the renamed package.
+1. If everything went fine, `git add`, `commit`, and `push` some changes to the
+new repository as a final test.
+1. Finally, remove your old package from R by `remove.packages("oldName")`...
+1. ...and install the new one `devtools::install_github("TCP-Lab/newName")`
