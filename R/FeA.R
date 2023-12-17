@@ -86,6 +86,29 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 
 
 
+#' Get filename without extension.
+#' @export
+#' @import tools
+#' 
+#' @description Just like `basename()`, this wrapper of
+#'              `tools::file_path_sans_ext()` removes the path leading to the
+#'              file. However, unlike the native `basename()`, any file
+#'              extension is also removed.
+#'              
+#' @param file_name A string containing the file name to be basenamed.
+#' 
+#' @returns A string containing the pure file name, without trailing path nor
+#'          extension.
+#'
+#' @examples
+#' # Comparison with the native 'basename'
+#' basename("/path/to/the/file.ext")
+#' basename2("/path/to/the/file.ext")
+#' @author FeA.R
+basename2 <- function(file_name){file_path_sans_ext(basename(file_name))}
+
+
+
 #' Duplication Report
 #' @export
 #' @import stats
@@ -1225,9 +1248,7 @@ GMM_divide <- function(vec, G = 2)
 #'
 #' @author FeA.R
 fpkm2tpm <- function(fpkm) {
-  tpm <-
-    apply(fpkm, 2, function(x){x/sum(as.numeric(x))*(10^6)}) |> as.data.frame()
-  
+  tpm <- apply(fpkm, 2, \(x){x/sum(as.numeric(x))*(10^6)}) |> as.data.frame()
   return(tpm)
 }
 
