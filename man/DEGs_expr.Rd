@@ -39,8 +39,8 @@ stored in this R variable is a subset of the original one, in that it only
 contains the expression values of the statistically significant genes
 resulting from the sole comparison of Etanercept (anti-TNFalpha) with MTX-
 treated patients (RankProduct-based differential expression analysis; see
-\code{cmatools::DEGs_stat} data set). Accordingly, only samples taking part in
-such a contrast (n = 5 for Etanercept and n = 6 for MTX) have been included.
+\code{r4tcpl::DEGs_stat} data set). Accordingly, only samples taking part in such
+a contrast (n = 5 for Etanercept and n = 6 for MTX) have been included.
 Additional columns from 1 to 3 contain some gene annotation, namely:
 GeneSymbol, GeneName, and Category membership. Row names are Agilent
 probe_IDs.

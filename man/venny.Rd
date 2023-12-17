@@ -10,7 +10,7 @@ venny(
   N = 20000,
   venn = TRUE,
   lab = c(deparse(substitute(set_A)), deparse(substitute(set_B))),
-  titles = c("Venn diagram", "by cmatools")
+  titles = c("Venn diagram", "by r4tcpl")
 )
 }
 \arguments{
