@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/reference/test_package.html#special-files
 
 library(testthat)
-library(cmatools)
+library(r4tcpl)
 
-test_check("cmatools")
+test_check("r4tcpl")

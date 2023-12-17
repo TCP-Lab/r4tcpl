@@ -1,6 +1,6 @@
 # Header Info ------------------------------------------------------------------
 #
-# cmatools - A collection of utility functions used in our R projects
+# r4tcpl - A collection of utility functions used in our R projects
 #
 # by //--Luca "Hedmad" Visentin--//
 #

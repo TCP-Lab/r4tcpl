@@ -1,6 +1,6 @@
 # Header Info ------------------------------------------------------------------
 # 
-# cmatools - A collection of utility functions used in our R projects
+# r4tcpl - A collection of utility functions used in our R projects
 #
 # by //--FeA.R--//
 #
@@ -486,7 +486,7 @@ venny <- function(set_A, set_B, N = 2e4,
                   venn = TRUE,
                   lab = c(deparse(substitute(set_A)),
                           deparse(substitute(set_B))),
-                  titles = c("Venn diagram", "by cmatools"))
+                  titles = c("Venn diagram", "by r4tcpl"))
 {
   # Check arguments
   if (!is.vector(set_A) | !is.vector(set_B)) {
@@ -911,7 +911,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
     annot_db <- paste0(platform, ".db")
     if(!requireNamespace(annot_db, quietly = TRUE)) {
       # Don't want to make all annotation packages mandatory dependencies for
-      # cmatools package!
+      # r4tcpl package!
       stop(paste0(annot_db," package is not installed.",
                   "\nRun `BiocManager::install(\"", annot_db,
                   "\")` to proceed."))
