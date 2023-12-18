@@ -2,7 +2,7 @@
 % Please edit documentation in R/FeA.R
 \name{basename2}
 \alias{basename2}
-\title{Get filename without extension.}
+\title{Get filename without extension}
 \usage{
 basename2(file_name)
 }

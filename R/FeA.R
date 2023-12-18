@@ -86,7 +86,7 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 
 
 
-#' Get filename without extension.
+#' Get filename without extension
 #' @export
 #' @import tools
 #' 
@@ -106,6 +106,24 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 #' basename2("/path/to/the/file.ext")
 #' @author FeA.R
 basename2 <- function(file_name){file_path_sans_ext(basename(file_name))}
+
+
+
+#' Remove substring
+#' @export
+#' 
+#' @description A simple wrapper for `gsub()` to remove **all** the substrings
+#'              that match a given regex pattern. Notably, `rmv()` is compliant
+#'              with the native pipe operator.
+#'              
+#' @param x The input string.
+#' @param rgx The regex pattern to be found and removed.
+#' 
+#' @examples
+#' # Make them singular
+#' "children, cars, and watches" |> rmv("e?s|ren")
+#' @author FeA.R
+rmv <- function(x, rgx){gsub(rgx, "", x)}
 
 
 
