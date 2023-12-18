@@ -7,7 +7,7 @@
 basename2(file_name)
 }
 \arguments{
-\item{file_name}{A string containing the file name to be basenamed.}
+\item{file_name}{A string containing the file name to be \emph{basenamed}.}
 }
 \value{
 A string containing the pure file name, without trailing path nor

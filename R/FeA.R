@@ -276,20 +276,40 @@ repmat <- function(X, m, n)
 
 
 
-#' Clockwise rotate a matrix or dataframe
+#' Rotate a matrix or data frame
 #' @export
 #' 
-#' @description
+#' @description This function takes in a matrix or a data frame and rotates it
+#'              a user-defined number of times.
 #' 
-#' @param mat A matrix, or data frame.
+#' @param mat A matrix, or data frame. Row- and column-names are handled.
+#' @param turns Number of 90° clockwise rotations. Use negative integers for
+#'              counterclockwise rotations.
 #' 
-#' @returns A rotated matrix
+#' @details R modulus definition is consistent with a "floored division"
+#'          approach, so that `((a %/% b)*b + a %% b) == a`. For this reason,
+#'          taking the modulus 4 directly implements a counterclockwise rotation
+#'          when the operand is negative!
+#'          
+#' @returns A rotated matrix. If `mat` is a data frame, it will be converted to
+#'          matrix during transposition.
 #' 
 #' @examples
-#' # Example here
-#' 
+#' # Clockwise rotation
+#' rotate(nanto$scores)
+#' # Counterclockwise rotation
+#' rotate(nanto$scores, -3)
 #' @author FeA.R
-rotate <- function(mat){t(apply(mat, 2, rev))}
+rotate <- function(mat, turns = 1)
+{
+  turns <- turns %% 4 # Take modulus 4
+  if (turns) {
+    for (i in 1:turns) {
+      mat <- t(apply(mat, 2, rev))
+    }
+  }
+  return(mat)
+}
 
 
 
