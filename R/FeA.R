@@ -95,7 +95,7 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 #'              file. However, unlike the native `basename()`, any file
 #'              extension is also removed.
 #'              
-#' @param file_name A string containing the file name to be basenamed.
+#' @param file_name A string containing the file name to be *basenamed*.
 #' 
 #' @returns A string containing the pure file name, without trailing path nor
 #'          extension.
@@ -273,6 +273,23 @@ repmat <- function(X, m, n)
   
   return(mat)
 }
+
+
+
+#' Clockwise rotate a matrix or dataframe
+#' @export
+#' 
+#' @description
+#' 
+#' @param mat A matrix, or data frame.
+#' 
+#' @returns A rotated matrix
+#' 
+#' @examples
+#' # Example here
+#' 
+#' @author FeA.R
+rotate <- function(mat){t(apply(mat, 2, rev))}
 
 
 
