@@ -12,7 +12,7 @@
 #' @export
 #' @import graphics stats
 #' 
-#' @description A multi-trace viewer for single channel ion current. Starting
+#' @description A multi-trace viewer for single-channel ion currents. Starting
 #'              from a data set containing many current traces, `iTrace()` makes
 #'              a composite plot showing the first three single-channel traces
 #'              and a fourth subplot with the total current. This is meant to

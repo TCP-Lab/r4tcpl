@@ -11,7 +11,7 @@ iTrace(dataset)
 current trace \strong{per row}.}
 }
 \description{
-A multi-trace viewer for single channel ion current. Starting
+A multi-trace viewer for single-channel ion currents. Starting
 from a data set containing many current traces, \code{iTrace()} makes
 a composite plot showing the first three single-channel traces
 and a fourth subplot with the total current. This is meant to
