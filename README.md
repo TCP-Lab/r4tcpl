@@ -73,6 +73,8 @@ install (or update) the package from GitHub, and load it as usual through
 
 ## Dependencies
 
+The following packages need to be preinstalled before running
+`devtools::install_github("TCP-Lab/r4tcpl")`.
 - GEOquery
 - ggplot2
 - svDialogs
