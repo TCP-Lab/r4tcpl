@@ -71,6 +71,21 @@ install (or update) the package from GitHub, and load it as usual through
 `library(r4tcpl)`.
 
 
+## Dependencies
+
+- GEOquery
+- ggplot2
+- svDialogs
+- tools
+- dplyr
+- stringr
+- AnnotationDbi
+- VennDiagram
+- futile.logger
+- org.Hs.eg.db
+- mclust
+
+
 ## How to rename the package
 
 1. Update the package name field in the `DESCRIPTION` file.
