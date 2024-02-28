@@ -1,20 +1,28 @@
 # r4tcpl
 
 ###### A collection of utility functions used in our R projects
-
-Packages are the fundamental units of reproducible R code. They include reusable
-R functions, the documentation that describes how to use them, and sample data.
-You can find a thorough discussion of this topic in:
+Packages are the fundamental units of reproducible __R__ code. They include
+reusable __R__ functions, the documentation that describes how to use them, and
+sample data. You can find a thorough discussion of this topic in:
 **R packages (2e)** by *Hadley Wickham* and *Jenny Bryan*, available online at:
 https://r-pkgs.org/
 
 
-## Basic workflow to add new functions and data
+## Building dependencies
+This is what you need to _build_ the package, not the packages that __r4tcpl__
+will need to run properly. Those are listed further down (see __Package
+dependencies__ section).
+
+1. If you are working on __Windows__, install the
+[__RTools__](https://cran.r-project.org/bin/windows/Rtools/) version appropriate
+for the __R__ release you are using.
 
 1. Make sure `devtools`, `roxygen2`, `testthat`, and `knitr` packages are
 already installed, otherwise install them running:
 `install.packages(c("devtools", "roxygen2", "testthat", "knitr"))`.
 
+
+## Basic workflow to add new functions and data
 1. Write/copy your function(s) into a .R file within `.../r4tcpl/R/`.
 
 1. Remember to include the `@export` tag in the `roxygen` comments of all the
@@ -29,11 +37,11 @@ package. Use instead the `::` notation to explicitly refer specific namespaces.
 `<package_name>::<object>`) remember to add `package_name` to `Imports` field
 within the `DESCRIPTION` file by typing
 `usethis::use_package("package_name", min_version=TRUE)` from the project
-directory `.../r4tcpl/` (set it as the working directory in RStudio).
+directory `.../r4tcpl/` (set it as the working directory in __RStudio__).
 
 1. Unlike *User Libraries*, *System Libraries* don't need to be declared as
 dependencies (since they are expected to be always installed by default in every
-R distribution). However, whenever some function from a System Library other
+__R__ distribution). However, whenever some function from a System Library other
 than *The R Base Package* (`base`) is used it is recommended to import it or the
 entire library in the package namespace by adding the `roxygen` tags
 `@importFrom` or `@import`, respectively. When building the package, the
@@ -50,7 +58,7 @@ heading) and data (by editing the file `.../r4tcpl/R/data.R`), otherwise you
 will get a warning when building the package.
 
 1. From the project directory, run `devtools::document()` to convert roxygen
-comments into proper R documentation and (re)generate `NAMESPACE` (based on
+comments into proper __R__ documentation and (re)generate `NAMESPACE` (based on
 `@export` tags). Then you can use `pkgload::dev_help('<function_name>')` to have
 a quick preview of the `<function_name>.Rd` file.
 
@@ -62,17 +70,17 @@ a quick preview of the `<function_name>.Rd` file.
 (remember that all `@examples` will be used as tests in this phase; to prevent
 some of them from being run put them inside a `\dontrun{}` section).
 
-1. Now you can `git add`, `commit`, and `push`.
+1. Use `devtools::load_all()` to load the package from the local directory and
+possibly test the new features.
 
-1. Use `devtools::load_all()` to load the package from the local directory.
+1. When you are happy, you can `git add`, `commit`, and `push`.
 
 1. Regardless of your wd, use `devtools::install_github("TCP-Lab/r4tcpl")` to
-install (or update) the package from GitHub, and load it as usual through
+install (or update) the package from __GitHub__, and load it as usual through
 `library(r4tcpl)`.
 
 
-## Dependencies
-
+## Package dependencies
 The following packages need to be preinstalled before running
 `devtools::install_github("TCP-Lab/r4tcpl")`.
 - GEOquery
@@ -89,7 +97,6 @@ The following packages need to be preinstalled before running
 
 
 ## How to rename the package
-
 1. Update the package name field in the `DESCRIPTION` file.
 1. Update all package names in the `README` file.
 1. Update the `.RProj` name.
@@ -105,5 +112,5 @@ files).
 1. Run `devtools::check()` to build the renamed package.
 1. If everything went fine, `git add`, `commit`, and `push` some changes to the
 new repository as a final test.
-1. Finally, remove your old package from R by `remove.packages("oldName")`...
+1. Finally, remove your old package from __R__ by `remove.packages("oldName")`...
 1. ...and install the new one `devtools::install_github("TCP-Lab/newName")`
