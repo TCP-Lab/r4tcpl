@@ -29,17 +29,18 @@ components.}
 \description{
 This is a wrapper for the \code{Mclust} function (from the
 \pkg{mclust} package) which uses Gaussian Mixture Models (GMMs)
-to fit the data distribution. GMMs represent a general approach
-to data clustering and subpopulations detection. If applied to
-gene expression data (from either microarray or RNA-Seq
-experiments), GMMs can be used to separate expressed from
-unexpressed genes. To this aim, the \code{GMM_divide} function
-returns the values of the individual probability-weighted
-Gaussian components of the mixture and the boundary points
-suitable for subpopulation separation. Expected input data are
-\strong{unbinned} expression values (not their probability density
-function), usually log2-transformed. \strong{NOTE:} when analyzing
-counts, it is better to remove 0s first.
+to fit data distribution. GMMs represent a general approach to
+data clustering and subpopulations detection. If applied to gene
+expression data (from either microarray or RNA-Seq experiments),
+GMMs can be used to separate expressed from unexpressed genes.
+To this aim, the \code{GMM_divide} function returns the values of the
+individual probability-weighted Gaussian components of the
+mixture and the boundary points suitable for subpopulation
+separation. Expected input data are \strong{unbinned} expression
+values (not their probability density function), usually
+log2-transformed. \strong{NOTE:} when analyzing RNA-Seq \emph{\strong{counts}},
+it is always better to remove 0s first (e.g.,
+\code{GMM_divide(counts[counts != 0], G = 3)}).
 }
 \details{
 The decision boundaries are computed from the intersection of two

@@ -9,7 +9,8 @@ count_density(
   remove_zeros = TRUE,
   xlim = NULL,
   ylim = NULL,
-  titles = c("Kernel Density Plot", deparse(substitute(count_table)))
+  titles = c("Kernel Density Plot", ""),
+  col = "black"
 )
 }
 \arguments{
@@ -29,6 +30,8 @@ values are used.}
 
 \item{titles}{Custom titles and subtitles for the Density Plot. A character
 vector of two elements.}
+
+\item{col}{Custom color for density curves.}
 }
 \description{
 Make a Kernel Density Plot from RNA-Seq data counts.

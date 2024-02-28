@@ -1,6 +1,6 @@
 Package: r4tcpl
 Title: A collection of utility functions used in our R projects
-Version: 1.4.1
+Version: 1.4.2
 Authors@R: c(
     person("Federico Alessandro", "Ruffinatti", ,
         "federicoalessandro.ruffinatti@unito.it", role = c("aut", "cre"),
@@ -13,7 +13,7 @@ Description: A collection of utility functions used in our R projects.
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.2.3
+RoxygenNote: 7.3.1
 Suggests: 
     testthat (>= 3.0.0)
 Config/testthat/edition: 3

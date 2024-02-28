@@ -1117,17 +1117,18 @@ missing_report <- function(dataFrame, naSymb = "")
 #' 
 #' @description This is a wrapper for the `Mclust` function (from the
 #'              \pkg{mclust} package) which uses Gaussian Mixture Models (GMMs)
-#'              to fit the data distribution. GMMs represent a general approach
-#'              to data clustering and subpopulations detection. If applied to
-#'              gene expression data (from either microarray or RNA-Seq
-#'              experiments), GMMs can be used to separate expressed from
-#'              unexpressed genes. To this aim, the `GMM_divide` function
-#'              returns the values of the individual probability-weighted
-#'              Gaussian components of the mixture and the boundary points
-#'              suitable for subpopulation separation. Expected input data are
-#'              **unbinned** expression values (not their probability density
-#'              function), usually log2-transformed. **NOTE:** when analyzing
-#'              counts, it is better to remove 0s first.
+#'              to fit data distribution. GMMs represent a general approach to
+#'              data clustering and subpopulations detection. If applied to gene
+#'              expression data (from either microarray or RNA-Seq experiments),
+#'              GMMs can be used to separate expressed from unexpressed genes.
+#'              To this aim, the `GMM_divide` function returns the values of the
+#'              individual probability-weighted Gaussian components of the
+#'              mixture and the boundary points suitable for subpopulation
+#'              separation. Expected input data are **unbinned** expression
+#'              values (not their probability density function), usually
+#'              log2-transformed. **NOTE:** when analyzing RNA-Seq ***counts***,
+#'              it is always better to remove 0s first (e.g.,
+#'              `GMM_divide(counts[counts != 0], G = 3)`).
 #' 
 #' @param vec One-dimensional numeric vector or data frame.
 #' @param G Integer number of Gaussian components to be used in the mixture.
@@ -1333,13 +1334,14 @@ fpkm2tpm <- function(fpkm) {
 #'             for the y-axis. If set to `NULL` (the default), `plot()` default
 #'             values are used.
 #' @param titles Custom titles and subtitles for the Density Plot. A character
-#'               vector of two elements. 
+#'               vector of two elements.
+#' @param col Custom color for density curves.
 #' 
 #' @author FeA.R
 count_density <- function(count_table, remove_zeros = TRUE,
                           xlim = NULL, ylim = NULL,
-                          titles = c("Kernel Density Plot",
-                                     deparse(substitute(count_table)))) {
+                          titles = c("Kernel Density Plot", ""),
+                          col = "black") {
   if (remove_zeros) {
     cutoff <- 0
   } else {
@@ -1348,13 +1350,14 @@ count_density <- function(count_table, remove_zeros = TRUE,
   
   count_table <- as.data.frame(count_table)
   d <- density(count_table[count_table[,1] > cutoff, 1])
-  plot(d, xlim = xlim, ylim = ylim, main = titles[1], sub = titles[2])
+  plot(d, xlim = xlim, ylim = ylim,
+       main = titles[1], sub = titles[2], col = col)
   
   m <- dim(count_table)[2]
   if (m > 1) {
     for (i in 2:m) {
       d <- density(count_table[count_table[, i] > cutoff, i])
-      lines(d$x, d$y) 
+      lines(d$x, d$y, col = col)
     }
   }
 }
