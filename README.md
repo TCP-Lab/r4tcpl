@@ -19,7 +19,7 @@ for the __R__ release you are using.
 
 1. Make sure `devtools`, `roxygen2`, `testthat`, and `knitr` packages are
 already installed, otherwise install them running:
-`install.packages(c("devtools", "roxygen2", "testthat", "knitr"))`.
+`install.packages(c("roxygen2", "testthat", "knitr", "devtools"))`.
 
 
 ## Basic workflow to add new functions and data
