@@ -6,6 +6,7 @@
 \usage{
 savePlots(
   plotfun,
+  width_px = 1024,
   ratio = 16/9,
   figure_Name,
   figure_Folder,
@@ -15,6 +16,10 @@ savePlots(
 }
 \arguments{
 \item{plotfun}{A callback function that prints a plot to an open device.}
+
+\item{width_px}{An integer specifying the width in pixels of the raster image
+(scaled to inches for the vectorial image, assuming a 72ppi
+resolution).}
 
 \item{ratio}{The plot aspect ratio, as a single numeric input.}
 
