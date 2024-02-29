@@ -846,6 +846,9 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #'              Automatically makes the output folder if not already there.
 #'
 #' @param plotfun A callback function that prints a plot to an open device.
+#' @param width_px An integer specifying the width in pixels of the raster image
+#'                 (scaled to inches for the vectorial image, assuming a 72ppi
+#'                 resolution).
 #' @param ratio The plot aspect ratio, as a single numeric input.
 #' @param figure_Name Name of the output file (without extension).
 #' @param figure_Folder Name of the saving (sub)folder.
@@ -880,7 +883,8 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #'   figure_Folder = ".")
 #' }
 #' @author FeA.R, Hedmad
-savePlots <- function(plotfun, ratio = 16/9, figure_Name, figure_Folder,
+savePlots <- function(plotfun, width_px = 1024, ratio = 16/9,
+                      figure_Name, figure_Folder,
                       png_out = TRUE, pdf_out = TRUE)
 {
   if (png_out || pdf_out) {
@@ -894,14 +898,14 @@ savePlots <- function(plotfun, ratio = 16/9, figure_Name, figure_Folder,
   
   if (png_out) {
     # Width and height are in pixels.
-    w_px <- 1024
+    w_px <- width_px
     png(filename = paste0(fullName, ".png"), width = w_px, height = w_px/ratio)
     plotfun()
     invisible(capture.output(dev.off())) # Suppress automatic output to console.
   }
   if (pdf_out) {
     # Width and height are in inches.
-    w_in <- 14
+    w_in <- width_px/72 # (72ppi resolution)
     pdf(file = paste0(fullName, ".pdf"), width = w_in, height = w_in/ratio)
     plotfun()
     invisible(capture.output(dev.off()))
