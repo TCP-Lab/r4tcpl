@@ -837,6 +837,79 @@ quick_chart <- function(vals, design, chart_type = "BP")
 
 
 
+#' Save plot to a file in multiple formats 
+#' @export
+#' @import grDevices utils
+#' 
+#' @description This function saves a graphical output to `figure_Folder`
+#'              sub-directory in both raster (PNG) and vectorial (PDF) formats.
+#'              Automatically makes the output folder if not already there.
+#'
+#' @param plotfun A callback function that prints a plot to an open device.
+#' @param ratio The plot aspect ratio, as a single numeric input.
+#' @param figure_Name Name of the output file (without extension).
+#' @param figure_Folder Name of the saving (sub)folder.
+#' @param png_out Boolean. Set it to `FALSE` to suppress PNG graphics device.
+#' @param pdf_out Boolean. Set it to `FALSE` to suppress PDF graphics device.
+#' 
+#' @details This implementation of `savePlots()` takes a _function_ as its first
+#'          argument, and not a plot object (i.e., a device number) as some
+#'          plotting facilities (notably the default one, `savePlot()`) that
+#'          cannot print plot objects conveniently.
+#'          
+#' @examples
+#' \dontrun{
+#' # Get a numeric-only expression matrix (as a data frame)
+#' numeric_df <- DEGs_expr[,4:14]
+#'
+#' # Save box plots of per-sample distributions of expression levels
+#' savePlots(
+#'   \(){boxplot(numeric_df)},
+#'   figure_Name = "Boxplot",
+#'   figure_Folder = ".")
+#' 
+#' # Calculate PCA on samples
+#' metadata <- data.frame(row.names = colnames(numeric_df))
+#' metadata$Group <- c(rep("AntiTNF",5), rep("MTX",6))
+#' pcaOut <- PCAtools::pca(numeric_df, metadata = metadata)
+#' 
+#' # Print the biplot
+#' savePlots(
+#'   \(){print(PCAtools::biplot(pcaOut, colby = "Group"))},
+#'   figure_Name = "BiPlot",
+#'   figure_Folder = ".")
+#' }
+#' @author FeA.R, Hedmad
+savePlots <- function(plotfun, ratio = 16/9, figure_Name, figure_Folder,
+                      png_out = TRUE, pdf_out = TRUE)
+{
+  if (png_out || pdf_out) {
+    fullName <- file.path(figure_Folder, figure_Name)
+    if (!file.exists(figure_Folder)) {
+      dir.create(figure_Folder, recursive = TRUE)
+    }
+  } else {
+    stop("No graphics device selected!")
+  }
+  
+  if (png_out) {
+    # Width and height are in pixels.
+    w_px <- 1024
+    png(filename = paste0(fullName, ".png"), width = w_px, height = w_px/ratio)
+    plotfun()
+    invisible(capture.output(dev.off())) # Suppress automatic output to console.
+  }
+  if (pdf_out) {
+    # Width and height are in inches.
+    w_in <- 14
+    pdf(file = paste0(fullName, ".pdf"), width = w_in, height = w_in/ratio)
+    plotfun()
+    invisible(capture.output(dev.off()))
+  }
+}
+
+
+
 #' Microarray Platform Selector
 #' @export
 #' 
