@@ -86,6 +86,44 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 
 
 
+#' Colored echo for on-screen log in Bash CLI
+#' @export
+#'
+#' @description A wrapper for easy managing color output in Linux terminal.
+#'
+#' @param text A string containing the text to be printed in console.
+#' @param color One of the following strings: "white" (the default), "red",
+#'              "green", "yellow", "blue", "magenta", "cyan".
+#'
+#' @examples
+#' \dontrun{
+#' # From Bash CLI
+#' Rscript -e 'r4tcpl::echo("GOOD STUFF", "green")'
+#' }
+#' @author FeA.R
+echo <- function(text, color = "white") {
+  # Check the operating system
+  os_type <- Sys.info()["sysname"]
+  if (os_type == "Windows") {
+    warning("Colored echo is just for Bash!")
+    cat(text, "\n")
+  } else if (os_type == "Linux") {
+    if      (color == "red")     {col <- "\\e[1;31m"}
+    else if (color == "green")   {col <- "\\e[1;32m"}
+    else if (color == "yellow")  {col <- "\\e[1;33m"}
+    else if (color == "blue")    {col <- "\\e[1;34m"}
+    else if (color == "magenta") {col <- "\\e[1;35m"}
+    else if (color == "cyan")    {col <- "\\e[1;36m"}
+    else if (color == "white")   {col <- "\\e[1;37m"}
+    end <- "\\e[0m"
+    system2("echo", args = c("-e", paste0("\"", col, text, end, "\"")))
+  } else {
+    stop("Running on an unknown OS\n")
+  }
+}
+
+
+
 #' Get filename without extension
 #' @export
 #' @import tools

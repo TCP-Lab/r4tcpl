@@ -1,6 +1,6 @@
 Package: r4tcpl
 Title: A collection of utility functions used in our R projects
-Version: 1.5.2
+Version: 1.6.0
 Authors@R: c(
     person("Federico Alessandro", "Ruffinatti", ,
         "federicoalessandro.ruffinatti@unito.it", role = c("aut", "cre"),
