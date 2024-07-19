@@ -929,7 +929,7 @@ savePlots <- function(plotfun, width_px = 1024, ratio = 16/9,
 {
   if (png_out || pdf_out) {
     fullName <- file.path(figure_Folder, figure_Name)
-    if (!file.exists(figure_Folder)) {
+    if (! dir.exists(figure_Folder)) {
       dir.create(figure_Folder, recursive = TRUE)
     }
   } else {
