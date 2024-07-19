@@ -1406,6 +1406,34 @@ GMM_divide <- function(vec, G = 2)
 
 
 
+#' Pseudocounted log function for RNA-Seq data
+#' @export
+#'
+#' @description Takes the base-2 logarithm with a pseudo count of 1.
+#'
+#' @param x A numeric (usually integer) single value, matrix, or data frame.
+#'
+#' @returns The log counts.
+#'
+#' @author FeA.R
+relog <- function(x){log2(x+1)}
+
+
+
+#' Pseudocounted log^(-1) function for RNA-Seq data
+#' @export
+#'
+#' @description Takes back to linear scale, accounting for a pseudo count of 1.
+#'
+#' @param x A numeric single value, matrix, or data frame.
+#'
+#' @returns The unlogged counts.
+#'
+#' @author FeA.R
+unlog <- function(x){round((2^x)-1)}
+
+
+
 #' FPKM to TPM
 #' @export
 #'
