@@ -1,5 +1,5 @@
 # Header Info ------------------------------------------------------------------
-# 
+#
 # r4tcpl - A collection of utility functions used in our R projects
 #
 # by //--FeA.R--//
@@ -9,7 +9,7 @@
 
 #' Let Me See (Data as Matrix)
 #' @export
-#' 
+#'
 #' @description A custom version of the classical `head()` that prints the upper
 #'              leftmost corner of a data set, also showing row names and
 #'              controlling for possible out-of-bounds exceptions. Compared to
@@ -18,19 +18,19 @@
 #'              dimensions and the type (`class()`) of the data set, along with
 #'              a custom heading label. In addition, `lms()` features a better
 #'              list management.
-#' 
+#'
 #' @param data2see Data frame, matrix, factor, or vector to print.
 #' @param rows Maximum number of rows to display.
 #' @param cols Maximum number of columns to display.
 #' @param name Explanatory name to print in the heading (useful when logging).
-#' 
+#'
 #' @examples
 #' # Let me see The Nanto Warriors Data Set
 #' lms(nanto)
-#' 
+#'
 #' # Compare `head()` behavior when applied to a list of objects
 #' head(nanto)
-#' 
+#'
 #' # Compare `lms()` and `head()` behavior when applied to different data types
 #' for (i in 1:length(nanto)) {
 #'   cat("\nhead()\n")
@@ -43,7 +43,7 @@
 lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 {
   stored_class <- class(data2see)
-  
+
   # NOTE 1: is.list() would have been TRUE also for data.frames!
   # NOTE 2: deparse(substitute()) is used to get the variable name as a string
   if (stored_class[1] == "list") {
@@ -65,7 +65,7 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
     } else { # it is a matrix or a data frame
       suffix_class <- NULL
     }
-    
+
     d <- dim(data2see)
     if (is.null(name)) {
       cat("\nObject dimensions:", d[1], "x", d[2])
@@ -73,10 +73,10 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
       cat(paste0("\n\'", name, "\' dimensions: ", d[1], " x ", d[2]))
     }
     cat("\nObject class:", stored_class, suffix_class, "\n\n")
-    
+
     rows <- min(d[1], rows)
     cols <- min(d[2], cols)
-    
+
     # 'print' because automatic printing is turned off in loops (and functions)
     # NOTE: if you only return a data frame subset of one column, R will drop
     #       names by default. To avoid this behavior use the option drop=FALSE.
@@ -89,14 +89,14 @@ lms <- function(data2see, rows = 10, cols = 5, name = NULL)
 #' Get filename without extension
 #' @export
 #' @import tools
-#' 
+#'
 #' @description Just like `basename()`, this wrapper of
 #'              `tools::file_path_sans_ext()` removes the path leading to the
 #'              file. However, unlike the native `basename()`, any file
 #'              extension is also removed.
-#'              
+#'
 #' @param file_name A string containing the file name to be *basenamed*.
-#' 
+#'
 #' @returns A string containing the pure file name, without trailing path nor
 #'          extension.
 #'
@@ -111,17 +111,21 @@ basename2 <- function(file_name){file_path_sans_ext(basename(file_name))}
 
 #' Remove substring
 #' @export
-#' 
+#'
 #' @description A simple wrapper for `gsub()` to remove **all** the substrings
 #'              that match a given regex pattern. Notably, `rmv()` is compliant
 #'              with the native pipe operator.
-#'              
+#'
 #' @param x The input string.
 #' @param rgx The regex pattern to be found and removed.
-#' 
+#'
 #' @examples
 #' # Make them singular
-#' "children, cars, and watches" |> rmv("e?s|ren")
+#' "children, cars, and witches" |> rmv("e?s|ren")
+#' # Remove leading and trailing spaces
+#' "   Let's clean this !   " |> rmv("^( +)") |> rmv("( +)$")
+#' # Convert an array from Bash to an R character vector
+#' "(foo bar this that)" |> rmv("\\(|\\)") |> strsplit(" +") |> unlist()
 #' @author FeA.R
 rmv <- function(x, rgx){gsub(rgx, "", x)}
 
@@ -130,7 +134,7 @@ rmv <- function(x, rgx){gsub(rgx, "", x)}
 #' Duplication Report
 #' @export
 #' @import stats
-#' 
+#'
 #' @description This function searches the vector passed as input for duplicated
 #'              entries and the positions they fill in the vector. Unlike
 #'              `base::duplicated()` that only detects duplicated entries
@@ -138,12 +142,12 @@ rmv <- function(x, rgx){gsub(rgx, "", x)}
 #'              non-unique values. `NA`s are ignored by default.
 #'
 #' @param vec A vector to be scanned for duplicates.
-#' 
+#'
 #' @returns A list of the duplicated elements found in `vec`. Each element of
 #'          this list is in turn a list of two elements: an integer indicating
 #'          the times the element is repeated and a vector of integers
 #'          representing its positions within `vec`.
-#' 
+#'
 #' @examples
 #' # Locate duplicated entries within the `Category` column of `DEGs_expr` dataset
 #' dup_report(DEGs_expr$Category)
@@ -153,7 +157,7 @@ dup_report <- function(vec)
   if(!is.vector(vec)) {
     stop("The input argument is not a vector")
   }
-  
+
   dups_indx <- which(duplicated(vec))
   dups <- unique(vec[dups_indx])
   dups <- as.vector(na.omit(dups))
@@ -162,7 +166,7 @@ dup_report <- function(vec)
     list(repetitions = sum(na.omit(srch)), found_in = which(srch))
   }) -> report
   names(report) <- dups
-  
+
   return(report)
 }
 
@@ -171,21 +175,21 @@ dup_report <- function(vec)
 #' Different Non-Unique Elements
 #' @export
 #' @import stats
-#' 
+#'
 #' @description A function that tells how many *different non-unique* elements
 #'              there are in a given vector. Unlike `base::duplicated()` that
 #'              detects duplicated entries *after* their first occurrence, this
 #'              function looks at *all* non-unique values. `NA`s are ignored by
 #'              default.
-#'              
+#'
 #' @param vec A vector to be scanned for duplicates.
-#' 
+#'
 #' @returns A numeric vector of two elements, namely the number of different
 #'          non-unique elements, and the global number of non-unique entries in
 #'          `vec`.
-#' 
+#'
 #' @examples
-#' # How many different non-unique Gene Symbols are there in DEGs_expr data set? 
+#' # How many different non-unique Gene Symbols are there in DEGs_expr data set?
 #' dnues(DEGs_expr$GeneSymbol)
 #' @author FeA.R
 dnues <- function(vec)
@@ -194,7 +198,7 @@ dnues <- function(vec)
     stop("The input argument is not a vector")
   }
   vec <- as.vector(na.omit(vec))
-  
+
   report <- dup_report(vec)
   a <- length(report)
   if (a > 0) {
@@ -202,7 +206,7 @@ dnues <- function(vec)
   } else {
     b <- 0
   }
-  
+
   return(c(a,b))
   # Interpretation:
   # `a` different entries are found to be repeated over `b` slots of the input
@@ -215,22 +219,22 @@ dnues <- function(vec)
 #' Different Non-Unique Elements (Alternative)
 #' @export
 #' @import stats
-#' 
+#'
 #' @description An alternative and faster implementation of `dnues()`,
 #'              independent of `dup_report()` function. A function that tells
 #'              how many *different non-unique* elements there are in a given
 #'              vector. Unlike `base::duplicated()` that detects duplicated
 #'              entries *after* their first occurrence, this function looks at
 #'              *all* non-unique values. `NA`s are ignored by default.
-#'              
+#'
 #' @param vec A vector to be scanned for duplicates.
-#' 
+#'
 #' @returns A numeric vector of two elements, namely the number of different
 #'          non-unique elements, and the global number of non-unique entries in
 #'          `vec`.
-#' 
+#'
 #' @examples
-#' # How many different non-unique Gene Symbols are there in DEGs_expr data set? 
+#' # How many different non-unique Gene Symbols are there in DEGs_expr data set?
 #' dnues2(DEGs_expr$GeneSymbol)
 #' @author FeA.R
 dnues2 <- function(vec)
@@ -239,10 +243,10 @@ dnues2 <- function(vec)
     stop("The input argument is not a vector")
   }
   vec <- na.omit(vec)
-  
+
   idx <- duplicated(vec) | duplicated(vec, fromLast = TRUE)
   dup <- unique(vec[idx])
-  
+
   return(c(length(dup), sum(idx)))
   # Interpretation:
   # 'length(dup)' different entries are found to be repeated over 'sum(idx)'
@@ -254,15 +258,15 @@ dnues2 <- function(vec)
 
 #' Replicate Matrix-like Objects
 #' @export
-#' 
+#'
 #' @description R-equivalent to the MATLAB `repmat()` function. Just specify the
 #'              matrix X and how many times you want it replicated row- (m) and
 #'              column- (n) wise.
-#'              
+#'
 #' @param X A vector, matrix, or data frame with source array data.
 #' @param m An integer specifying the number of row-wise repetitions.
 #' @param n An integer specifying the number of column-wise repetitions.
-#' 
+#'
 #' @returns A new matrix resulting from the m-by-n juxtaposition of the starting
 #'          matrix `X`.
 #'
@@ -277,10 +281,10 @@ repmat <- function(X, m, n)
   X <- as.matrix(X)
   cName_save <- colnames(X)
   rName_save <- rownames(X)
-  
+
   mx <- dim(X)[1]
   nx <- dim(X)[2]
-  
+
   # Reminder:
   # `matrix(x,y,z)` means: fill by columns (or by row if specified) a y-by-z
   # matrix using numbers from x interpreted as a vector (always the sequence of
@@ -288,7 +292,7 @@ repmat <- function(X, m, n)
   mat <- matrix(t(matrix(X, mx, nx*n)), mx*m, nx*n, byrow = TRUE)
   colnames(mat) <- rep(cName_save, n)
   rownames(mat) <- rep(rName_save, m)
-  
+
   return(mat)
 }
 
@@ -296,22 +300,22 @@ repmat <- function(X, m, n)
 
 #' Rotate a matrix or data frame
 #' @export
-#' 
+#'
 #' @description This function takes in a matrix or a data frame and rotates it
 #'              a user-defined number of times.
-#' 
+#'
 #' @param mat A matrix, or data frame. Row- and column-names are handled.
 #' @param turns Number of 90° clockwise rotations. Use negative integers for
 #'              counterclockwise rotations.
-#' 
+#'
 #' @details R modulus definition is consistent with a "floored division"
 #'          approach, so that `((a %/% b)*b + a %% b) == a`. For this reason,
 #'          taking the modulus 4 directly implements a counterclockwise rotation
 #'          when the operand is negative!
-#'          
+#'
 #' @returns A rotated matrix. If `mat` is a data frame, it will be converted to
 #'          matrix during transposition.
-#' 
+#'
 #' @examples
 #' # Clockwise rotation
 #' rotate(nanto$scores)
@@ -334,21 +338,21 @@ rotate <- function(mat, turns = 1)
 #' Help Pages as Text
 #' @export
 #' @import utils
-#' 
+#'
 #' @description A function that extracts the text from the help pages of a R
 #'              package or function. Adapted from MrFlick's `help_text()`
 #'              function, originally posted on stackoverflow (13 Jul 2018; see
 #'              References section).
-#'              
+#'
 #' @param meth_or_pkg The *quoted* name of the method or package of interest.
 #' @param pkg Name of the package to look into for documentation.
-#' 
+#'
 #' @returns A character vector containing the rows from the help page.
-#' 
+#'
 #' @examples
 #' # Print `seq()` help to console
 #' help_as_text("seq") |> cat(sep = "\n")
-#' 
+#'
 #' # Get author's name:
 #' hh <- help_as_text("lms")
 #' gsub("\\s{2,}", "", hh[grep("^Author", hh) + 2])
@@ -362,22 +366,22 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
   # to define the %notin% operator used therein.
   # This function is used to replace the `fetchRdDB()` unexported function from
   # `tools` package and avoid annoying warnings when running `devtools::check()`.
-  tools_fetchRdDB <- function (filebase, key = NULL) 
+  tools_fetchRdDB <- function (filebase, key = NULL)
   {
     fun <- function(db) {
-      
+
       `%notin%` <- Negate(`%in%`)
-      
+
       vals <- db$vals
       vars <- db$vars
       datafile <- db$datafile
       compressed <- db$compressed
       envhook <- db$envhook
-      fetch <- function(key) lazyLoadDBfetch(vals[key][[1L]], 
+      fetch <- function(key) lazyLoadDBfetch(vals[key][[1L]],
                                              datafile, compressed, envhook)
       if (length(key)) {
-        if (key %notin% vars) 
-          stop(gettextf("No help on %s found in RdDB %s", 
+        if (key %notin% vars)
+          stop(gettextf("No help on %s found in RdDB %s",
                         sQuote(key), sQuote(filebase)), domain = NA)
         fetch(key)
       }
@@ -388,26 +392,26 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
       }
     }
     res <- lazyLoadDBexec(filebase, fun)
-    if (length(key)) 
+    if (length(key))
       res
     else invisible(res)
   }
-  
+
   # Here it starts the actual `help_as_text()` function...
   file <- help(meth_or_pkg, package = (pkg))
-  
+
   if (length(file) > 1) {
     warning("\nMore than one ", meth_or_pkg, " method or package exist.\n",
         "The first one of the alphabetically ordered list will be selected.\n",
         "However, you can disambiguate using the `pkg` parameter.")
     file <- file[1]
   }
-  
+
   path <- dirname(file)
   dirpath <- dirname(path)
   pkgname <- basename(dirpath)
   RdDB <- file.path(path, pkgname)
-  
+
   #rd <- tools:::fetchRdDB(RdDB, basename(file)) # Replaced by tools_fetchRdDB()
   rd <- tools_fetchRdDB(RdDB, basename(file))
   capture.output(tools::Rd2txt(rd, out = "",
@@ -418,18 +422,18 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 
 #' Tab Stop
 #' @export
-#' 
+#'
 #' @description To align strings in console as if using MS-Word tab stops
 #'              It allows to control tab stop positions padding the given
 #'              string with white spaces to reach a fixed width.
-#' 
+#'
 #' @param word The string to be included in the tabular space.
 #' @param sp Spacing parameter indicating tab stop position (i.e., the total
 #'           width of the final string returned by the function).
 #'
 #' @returns A string consisting of the `word` followed by a variable number of
 #'          white spaces.
-#' 
+#'
 #' @examples
 #' # Print Nanto warriors' hair color
 #' for (warrior in nanto$warrior) {
@@ -437,16 +441,14 @@ help_as_text <- function(meth_or_pkg, pkg = NULL)
 #'       tab(nanto$all_data[warrior, "hair_color"], 8), "hair\n")
 #' }
 #' @author FeA.R
-tab <- function(word = "", sp = 7)
-{
+tab <- function (word = "", sp = 7) {
+  word <- toString(word)
   if (sp < nchar(word)) {
     warning("The word to include exceeds tab stop... can't align properly!")
-    entry <- word
   } else {
-    entry <- paste0(word,
-                    paste(rep(" ", sp-nchar(word)), collapse = ""))
+    word <- paste0(word, paste(rep(" ", sp - nchar(word)), collapse = ""))
   }
-  return(entry)
+  return(word)
 }
 
 
@@ -454,16 +456,16 @@ tab <- function(word = "", sp = 7)
 #' Hypergeometric Test
 #' @export
 #' @import stats
-#' 
+#'
 #' @description A wrapper for the Hypergeometric test function. Beside
 #'              *p*-values, `hgt()` also computes and returns other enrichment
 #'              statistics like the expected value and fold enrichment.
-#' 
+#'
 #' @param k Number of hits in the experimental set.  --OR--> Intersection
 #' @param n Size of the experimental set.            --OR--> Set A
 #' @param K Number of possible hits in the universe. --OR--> Set B
 #' @param N Size of the universe.                    --OR--> Background
-#' 
+#'
 #' @details The default value for the size of the universe (or background) set
 #'          is `N=2e4`, very close to the current estimate of the number of
 #'          human protein-coding genes, as annotated in `org.Hs.eg.db` (see
@@ -471,12 +473,12 @@ tab <- function(word = "", sp = 7)
 #'
 #' @returns A 1-by-5 data frame containing enrichment statistics. Many
 #'          single-row data frames can be easily stacked using `rbind()`.
-#'          
+#'
 #' @examples
 #' # Annotation packages
 #' library(AnnotationDbi)
 #' library(org.Hs.eg.db) # Human
-#' 
+#'
 #' # Make a genome-wide data frame that associates the gene-type to each Entrez
 #' # ID, then count only the "protein-coding" entries
 #' x <- select(org.Hs.eg.db,
@@ -484,19 +486,19 @@ tab <- function(word = "", sp = 7)
 #'             columns = c("ENTREZID", "GENETYPE"),
 #'             keytype = "ENTREZID")
 #' N <- sum(x$GENETYPE == "protein-coding") # 20,598 - EGSOURCEDATE: 2022-Sep12
-#' 
+#'
 #' # Matrix MetalloPeptidases (MMPs) in a DEG list
 #' k <- sum(na.omit(DEGs_expr$Category) == "Metallopeptidase")
-#' 
+#'
 #' # Number of DEGs
 #' n <- dim(DEGs_expr)[1]
-#' 
+#'
 #' # Total number of MMPs in Humans
 #' K <- 24 # source https://en.wikipedia.org/wiki/Matrix_metalloproteinase
-#' 
+#'
 #' # Hypergeometric Test with the `N=2e4` conventional background
 #' hgt(k, n, K)
-#' 
+#'
 #' # Hypergeometric Test with the actual background for human
 #' hgt(k, n, K, N)
 #' @author FeA.R
@@ -506,7 +508,7 @@ hgt <- function(k, n, K, N = 2e4)
   expect <- n*(K/N) # Expected value
   stdev <- sqrt(n*(K/N)*((N-K)/N)*((N-n)/(N-1))) # Standard Deviation
   FE <- k/(n*(K/N)) # Fold Enrichment
-  
+
   stats <- data.frame(Hits = k,
                       Expected_Value = expect,
                       SD = stdev,
@@ -520,12 +522,12 @@ hgt <- function(k, n, K, N = 2e4)
 #' Overlap Analysis
 #' @export
 #' @import grid
-#' 
+#'
 #' @description Given **two** vectors of symbols, this function finds the
 #'              elements that exist in both sets and computes the statistical
 #'              significance of the overlap between them. Optionally, it plots
 #'              a Venn diagram representation.
-#' 
+#'
 #' @param set_A A character or numeric (1D) vector.
 #' @param set_B Another character or numeric (1D) vector.
 #' @param N Size of the universe (or background set). see `hgt()` function.
@@ -533,7 +535,7 @@ hgt <- function(k, n, K, N = 2e4)
 #' @param lab Labels for the Venn. A character vector of two elements, that
 #'            defaults to variable names.
 #' @param titles custom titles and subtitles for the Venn diagram. A character
-#'               vector of two elements. 
+#'               vector of two elements.
 #'
 #' @returns A list made up of a data frame named `ORA` (containing the results
 #'          of the OverRepresentation Analysis), and three vectors named
@@ -547,16 +549,16 @@ hgt <- function(k, n, K, N = 2e4)
 #' x <- venny(TGS$ICs, DEGs_stat$GENE_SYMBOL,
 #'            lab = c("Ion Channels", "DEGs"),
 #'            titles = c("Transportome Analysis", "Ion Channels"))
-#' 
+#'
 #' # Have an overview of the results
 #' lms(x)
-#' 
+#'
 #' # ICs within DEG list
 #' x$intersection
-#' 
+#'
 #' # Is the gene set of ion channels enriched?
 #' x$ORA$p.value # Nope
-#' 
+#'
 #' # Show all DEGs except ion channels
 #' x$diff_BA
 #' @author FeA.R
@@ -570,22 +572,22 @@ venny <- function(set_A, set_B, N = 2e4,
   if (!is.vector(set_A) | !is.vector(set_B)) {
     stop("At least one input set is not a vector")
   }
-  
+
   # Set operations
   intersection <- intersect(set_A, set_B)
   diff_AB <- setdiff(set_A, set_B)
   diff_BA <- setdiff(set_B, set_A)
-  
+
   # Compute p-values through hypergeometric distribution
   ORA <- hgt(length(intersection),
              length(set_A), length(set_B), N)
-  
+
   # Output list
   set_stat <- list(ORA = ORA,
                    intersection = intersection,
                    diff_AB = diff_AB,
                    diff_BA = diff_BA)
-  
+
   if (venn) {
     # To suppress 'venn.diagram()' log messages with priority lower than "ERROR"
     futile.logger::flog.threshold(futile.logger::ERROR,
@@ -595,19 +597,19 @@ venny <- function(set_A, set_B, N = 2e4,
       x = list(set_A, set_B),
       force.unique = TRUE,   # Remove duplicates
       na = "remove",         # Remove NAs
-      
+
       # Output features
       filename = NULL,        # Print plot just on screen
       disable.logging = TRUE, # Disable log file output and print to console
-      
+
       # Title and Subtitle
-      main = titles[1], 
+      main = titles[1],
       main.cex = 2,
       main.fontface = "bold",
       main.fontfamily = "sans",
       sub = titles[2],
       sub.fontfamily = "sans",
-      
+
       # Circles
       lwd = 2,
       lty = 1, # Set lty="blank" to remove borders
@@ -616,12 +618,12 @@ venny <- function(set_A, set_B, N = 2e4,
       #col = c("#401050ff", "#353560ff"),
       rotation.degree = 30,
       scaled = FALSE,
-      
+
       # Numbers
       cex = 2,
       fontface = "bold",
       fontfamily = "sans",
-      
+
       # Set names (labels)
       category.names = lab,
       cat.cex = 2,
@@ -630,7 +632,7 @@ venny <- function(set_A, set_B, N = 2e4,
       cat.pos = c(-20, -20),
       cat.dist = c(0.05, 0.05),
       cat.fontfamily = "sans")
-    
+
     # Create a new canvas and draw the Venn
     grid::grid.newpage()
     grid::grid.draw(venn.plot)
@@ -644,13 +646,13 @@ venny <- function(set_A, set_B, N = 2e4,
 #' Basic Descriptive Statistics
 #' @export
 #' @import stats
-#' 
+#'
 #' @description Use this function to get basic descriptive statistics of many
 #'              experimental groups from a single one-dimensional numeric vector
 #'              according to a user-defined experimental design. This function
 #'              is a generalization of the legacy `descStat1G()` function
 #'              implemented in GATTACA for single-gene inspection.
-#' 
+#'
 #' @param vals One-dimensional numeric vector or data frame.
 #' @param design Experimental design: a numeric or character vector that
 #'               associates each element of `vals` to a symbol, based on the
@@ -660,7 +662,7 @@ venny <- function(set_A, set_B, N = 2e4,
 #' @returns A data frame containing the statistics of interest (i.e., sample
 #'          size, arithmetic mean, median, IQR, variance, standard deviation,
 #'          and SEM) for each group defined in `design`.
-#' 
+#'
 #' @examples
 #' # Get descriptive statistics of gene expression
 #' gene <- DEGs_expr["A_33_P3307955", -c(1:3)]
@@ -677,11 +679,11 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
   if (is.numeric(design)) {
     design <- paste0("Group_", design)
   }
-  
+
   # Experimental groups
   grps <- unique(design)
   m <- length(grps)
-  
+
   # Prepare a new empty data frame
   stat_frame <- data.frame(Group = grps,
                            n = integer(m),
@@ -693,9 +695,9 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
                            SEM = double(m),
                            stringsAsFactors = FALSE)
   row.names(stat_frame) <- grps
-  
+
   # Fill the data frame with the stats of interest
-  # 
+  #
   # You can alternatively use by() for a non-loopy implementation:
   # dim(vals) <- c(length(vals),1) # Force `vals` to column shape
   # vals_grps <- data.frame(vals, design)
@@ -722,21 +724,21 @@ descriptives <- function(vals, design = rep(1,length(vals)), prec = 3)
 
 #' Standard Plots for Categorical Data
 #' @export
-#' 
+#'
 #' @description Use this function to plot a continuous response variable as a
 #'              function of a categorical explanatory one. Data need to be
 #'              passed as a single one-dimensional numeric vector together with
 #'              a user-defined experimental design. This function is a
 #'              generalization of the legacy `singleGeneView()` function
 #'              implemented in GATTACA for single-gene inspection.
-#' 
+#'
 #' @param vals One-dimensional numeric vector or data frame.
 #' @param design Experimental design: a numeric or character vector that
 #'               associates each element of `vals` to a symbol, based on the
 #'               experimental group the element belongs to.
 #' @param chart_type A string among the following: "BP" (Box Plot), "VP"
 #'                   (Violin Plot), "BC" (Bar Chart), or "MS" (Mean & SEM).
-#' 
+#'
 #' @examples
 #' # Get a graphical representation of gene differential expression
 #' gene <- DEGs_expr["A_33_P3307955", -c(1:3)]
@@ -751,21 +753,21 @@ quick_chart <- function(vals, design, chart_type = "BP")
   if (length(design) != length(vals)) {
     stop("Bad design size!")
   }
-  
+
   # Colors
   line_color <- "gray17"
   point_color <- "steelblue4"
   fill_col <- "slategray4"
   err_color <- "gray17"
-  
+
   # Values-group association
   if (is.numeric(design)) {
     design <- paste0("Group_", design)
   }
-  
+
   # Descriptive statistics
   desc <- descriptives(vals = vals, design = design)
-  
+
   # Common ggplot terms
   gg_base <- ggplot2::ggplot(data = data.frame(vals = as.numeric(vals), design),
                              mapping = ggplot2::aes(x = design, y = vals)) +
@@ -786,7 +788,7 @@ quick_chart <- function(vals, design, chart_type = "BP")
                                       linewidth = 1.1, width = 0.2,
                                       color = err_color)
   # Now plot!
-  # NOTE: ggplot objects Within a for loop need to be printed explicitly 
+  # NOTE: ggplot objects Within a for loop need to be printed explicitly
   if (chart_type == "BP") {
     print(
       gg_base +
@@ -837,10 +839,10 @@ quick_chart <- function(vals, design, chart_type = "BP")
 
 
 
-#' Save plot to a file in multiple formats 
+#' Save plot to a file in multiple formats
 #' @export
 #' @import grDevices utils
-#' 
+#'
 #' @description This function saves a graphical output to `figure_Folder`
 #'              sub-directory in both raster (PNG) and vectorial (PDF) formats.
 #'              Automatically makes the output folder if not already there.
@@ -854,12 +856,12 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #' @param figure_Folder Name of the saving (sub)folder.
 #' @param png_out Boolean. Set it to `FALSE` to suppress PNG graphics device.
 #' @param pdf_out Boolean. Set it to `FALSE` to suppress PDF graphics device.
-#' 
+#'
 #' @details This implementation of `savePlots()` takes a _function_ as its first
 #'          argument, and not a plot object (i.e., a device number) as some
 #'          plotting facilities (notably the default one, `savePlot()`) that
 #'          cannot print plot objects conveniently.
-#'          
+#'
 #' @examples
 #' \dontrun{
 #' # Get a numeric-only expression matrix (as a data frame)
@@ -870,12 +872,12 @@ quick_chart <- function(vals, design, chart_type = "BP")
 #'   \(){boxplot(numeric_df)},
 #'   figure_Name = "Boxplot",
 #'   figure_Folder = ".")
-#' 
+#'
 #' # Calculate PCA on samples
 #' metadata <- data.frame(row.names = colnames(numeric_df))
 #' metadata$Group <- c(rep("AntiTNF",5), rep("MTX",6))
 #' pcaOut <- PCAtools::pca(numeric_df, metadata = metadata)
-#' 
+#'
 #' # Print the biplot
 #' savePlots(
 #'   \(){print(PCAtools::biplot(pcaOut, colby = "Group"))},
@@ -895,7 +897,7 @@ savePlots <- function(plotfun, width_px = 1024, ratio = 16/9,
   } else {
     stop("No graphics device selected!")
   }
-  
+
   if (png_out) {
     # Width and height are in pixels.
     w_px <- width_px
@@ -916,7 +918,7 @@ savePlots <- function(plotfun, width_px = 1024, ratio = 16/9,
 
 #' Microarray Platform Selector
 #' @export
-#' 
+#'
 #' @description A minimal graphical interface to retrieve the name of a suitable
 #'              annotation database (a `.db` R-package or a `GPL` GEO platform
 #'              record) starting from the selection of the name of a microarray
@@ -929,7 +931,7 @@ savePlots <- function(plotfun, width_px = 1024, ratio = 16/9,
 #'
 #' @returns The name of the database corresponding to the platform chosen by the
 #'          user (to be used with `array_create_annot()` function).
-#' 
+#'
 #' @examples
 #' \dontrun{
 #' array_platform_selector() |> array_create_annot() |> lms(10,10)
@@ -952,11 +954,11 @@ array_platform_selector <- function(filt = ".*")
                   "GPL19072",
                   "GPL21185",
                   "GPL10787")
-  
+
   # Array full-length name or `title` value from @header slot of a GPL object
   # NOTE_1: GEOquery::getGEO() function needs a working FTP connection.
   # NOTE_2: Only Agilent 'Probe Name Versions' (NO 'Gene Symbol Versions') GPLs
-  #         have been included in this list. 
+  #         have been included in this list.
   long_names <- c("Affymetrix Human Genome U133 A Set - from Bioconductor",
                   "Affymetrix Human Genome U133 B Set - from Bioconductor",
                   "Affymetrix Human Genome U133 Plus 2.0 Array - from Bioconductor",
@@ -971,28 +973,28 @@ array_platform_selector <- function(filt = ".*")
                   "Agilent-052909 CBC_lncRNAmRNA_V3 - from GPL19072",
                   "Agilent-072363 SurePrint G3 Human GE v3 8x60K Microarray 039494 - from GPL21185",
                   "Agilent-028005 SurePrint G3 Mouse GE 8x60K Microarray G4852A - from GPL10787")
-  
+
   # Filter according to `filt` argument (regex ".*" stand for "take all")
   filt_index <- grep(filt, long_names, ignore.case = TRUE)
   long_names_sub <- long_names[filt_index]
   db_BCorGPL_sub <- db_BCorGPL[filt_index]
-  
+
   platform_index <- utils::menu(long_names_sub,
                                 title = "Choose platform annotation",
                                 graphics = TRUE)
-  
+
   if (platform_index == 0) {
     selected_db <- ""
   } else {
     selected_long <- long_names_sub[platform_index]
     selected_db <- db_BCorGPL_sub[platform_index]
   }
-  
+
   if (selected_db == "") {
     cat("\nNo platform selected!\n\n")
   } else {
     cat(paste("\nSelected platform:\n", selected_long, "\n\n"))
-    
+
     return(selected_db)
   }
 }
@@ -1002,7 +1004,7 @@ array_platform_selector <- function(filt = ".*")
 #' Microarray Annotation Retriever
 #' @export
 #' @import utils
-#' 
+#'
 #' @description This function retrieves gene annotation for a given microarray
 #'              platform and returns them as a data frame. As input, it requires
 #'              a database name as returned by `array_platform_selector()`.
@@ -1012,13 +1014,13 @@ array_platform_selector <- function(filt = ".*")
 #'              GPL-based annotation are retrieved from GEO using
 #'              `GEOquery::getGEO()` function that needs a working FTP
 #'              connection.
-#' 
+#'
 #' @param platform Affymetrix/Agilent platform annotation database as returned
 #'                 by the `array_platform_selector()` function.
 #' @param collapsing Boolean flag to choose whether to collapse by unique Probe
 #'                   ID in the case of annotation packages from Bioconductor
 #'                   (GPL records from GEO are already collapsed).
-#' 
+#'
 #' @returns A data frame containing for each probe of the platform a number of
 #'          features as selected by the user.
 #'
@@ -1031,15 +1033,15 @@ array_platform_selector <- function(filt = ".*")
 #' @author FeA.R
 array_create_annot <- function(platform, collapsing = FALSE)
 {
-  # Download the annotation matrix from GEO and subset by columns of interest  
+  # Download the annotation matrix from GEO and subset by columns of interest
   if (grepl("GPL", platform)) {
-    
+
     # Download annotation, extract the `dataTable`, print some information
     GEO_GPL <- GEOquery::getGEO(platform)
     annot_full <- GEOquery::Table(GEO_GPL)
     cat("\nLoaded annotation: ", platform,
         " (Last Update: ", GEO_GPL@header$last_update_date, ")", sep = "")
-    
+
     # Retrieve all the columns of the database for subsequent feature selection
     cols <- colnames(annot_full)
     feats <- svDialogs::dlg_list(choice = cols,
@@ -1049,19 +1051,19 @@ array_create_annot <- function(platform, collapsing = FALSE)
                                                "GENE_NAME"),  # Gene Name
                                  multiple = TRUE,
                                  title = "Select multiple features")$res
-    
+
     # Always use Probe IDs as keys (GPL matrices are already collapsed by unique
     # Probe IDs)
     ids <- annot_full[,1] # "Probe ID" feature should always be the first column
     cat("\n", length(ids), " unique Probe_IDs retrieved from ",
         platform," GEO platform record\n\n", sep = "")
-    
+
     # Subset (including Probe IDs) and return
     annot <- annot_full[,c(cols[1],feats)]
     return(annot)
-    
+
   } else {
-    
+
     # Load Annotation db from Bioconductor and retrieve the columns of interest
     annot_db <- paste0(platform, ".db")
     if(!requireNamespace(annot_db, quietly = TRUE)) {
@@ -1071,21 +1073,21 @@ array_create_annot <- function(platform, collapsing = FALSE)
                   "\nRun `BiocManager::install(\"", annot_db,
                   "\")` to proceed."))
     }
-    
+
     # Print some information
     cat("\nLoaded annotation: ", annot_db,
         " (ver.: ", toString(packageVersion(annot_db)), ")",
         " [date: ", toString(packageDate(annot_db)), "]", sep = "")
-    
+
     # The evaluated expression of the (unquoted) annot_db
     # e.g., hgu133a.db::hgu133a.db
     evaluating_db <- eval(parse(text = paste0(annot_db, "::", annot_db)))
-    
+
     # Retrieve all the columns of the data base, except "PROBEID" that will be
     # included by default as key
     cols <- AnnotationDbi::columns(evaluating_db)
     cols <- cols[! cols %in% "PROBEID"]
-    
+
     # Feature selection
     feats <- svDialogs::dlg_list(choice = cols,
                                  preselect = c("ENSEMBL",
@@ -1094,7 +1096,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
                                                "GENENAME"),
                                  multiple = TRUE,
                                  title = "Select multiple features")$res
-    
+
     # Always use Probe IDs as keys (although they cannot be used as row names
     # since, in general, they will not be unique after feature retrieval)
     ids <- AnnotationDbi::keys(evaluating_db, keytype = "PROBEID")
@@ -1107,7 +1109,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
     cat("1:many mapping resulted in a ",
         dim(annot_long)[1], " x ", dim(annot_long)[2],
         " annotation data frame", sep = "")
-    
+
     if (collapsing) {
       del = " /// " # Affymetrix-style delimiter
       # Always use Probe IDs as keys
@@ -1123,7 +1125,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
       cat("\n...now reduced to ", dim(annot_collapse)[1], " x ",
           dim(annot_collapse)[2], " after collapsing on Probe_IDs\n\n", sep = "")
       return(annot_collapse)
-      
+
     } else {
       cat("\n\n")
       return(annot_long)
@@ -1147,7 +1149,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
 
 #' Count Missing Values in a Matrix-like Object
 #' @export
-#' 
+#'
 #' @description This function takes a data frame, searches its columns for many
 #'              common missing-value placeholders, and finally prints a report
 #'              of the absolute number and the relative amount of missing values
@@ -1155,7 +1157,7 @@ array_create_annot <- function(platform, collapsing = FALSE)
 #'              `"NA"`, and patterns of whitespaces (`\s`), hyphens (`-`),
 #'              slashes (`/`), including empty fields and a possible
 #'              user-defined sequence.
-#' 
+#'
 #' @param dataFrame Data frame or matrix to be scanned for NAs.
 #' @param naSymb A string containing the user-defined sequence for NAs.
 #'
@@ -1169,7 +1171,7 @@ missing_report <- function(dataFrame, naSymb = "")
   cols <- colnames(dataFrame)
   missing_data <- matrix(0, nrow = 2, ncol = length(cols),
                          dimnames = list(c("Not Mapped", "%"), cols))
-  
+
   # Search for NAs, "NA"s and patterns of whitespaces (\s), hyphens (-),
   # slashes (/), including empty fields (*) and a user-defined sequence
   for (feat in cols) {
@@ -1191,7 +1193,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #' GMM-based subpopulation separation
 #' @export
 #' @import stats
-#' 
+#'
 #' @description This is a wrapper for the `Mclust` function (from the
 #'              \pkg{mclust} package) which uses Gaussian Mixture Models (GMMs)
 #'              to fit data distribution. GMMs represent a general approach to
@@ -1206,7 +1208,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #'              log2-transformed. **NOTE:** when analyzing RNA-Seq ***counts***,
 #'              it is always better to remove 0s first (e.g.,
 #'              `GMM_divide(counts[counts != 0], G = 3)`).
-#' 
+#'
 #' @param vec One-dimensional numeric vector or data frame.
 #' @param G Integer number of Gaussian components to be used in the mixture.
 #'
@@ -1268,7 +1270,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #'            \begin{aligned}
 #'              \argmax_{x\in\left\{x_{1},x_{2}\right\}}
 #'                \frac{P_k}{\sqrt{2\pi}\sigma_k}
-#'                e^{-\left(\mu_k-x\right)^2/2\sigma_{k}^{2}}\ \ \ \ \ 
+#'                e^{-\left(\mu_k-x\right)^2/2\sigma_{k}^{2}}\ \ \ \ \
 #'                \text{with}\ \ k=i\ \vee\ k=j
 #'            \end{aligned}
 #'          }
@@ -1284,7 +1286,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #'          where \eqn{T_{n}} denotes the n-th
 #'          \href{https://en.wikipedia.org/wiki/Triangular_number}{triangular
 #'          number}.
-#'          
+#'
 #' @returns A named list with the following elements:
 #' \describe{
 #'   \item{`fit`}{An object of class 'Mclust' providing the GMM estimation.}
@@ -1298,14 +1300,14 @@ missing_report <- function(dataFrame, naSymb = "")
 #'                     elements of all the possible *2*-combinations of Gaussian
 #'                     components.}
 #' }
-#' 
+#'
 #' @examples
 #' # Single sample and group analysis
-#' 
+#'
 #' log_expression <- as.data.frame(DEGs_expr$`Anti-TNFa_4`)
 #' log_expression[,2] <- rowMeans(DEGs_expr[,grep("MTX", colnames(DEGs_expr))])
 #' colnames(log_expression) <- c("Single_Sample", "Whole_Group")
-#' 
+#'
 #' for (condition in colnames(log_expression)) {
 #'   plot(density(log_expression[,condition]),
 #'        main = paste0(condition, " - Kernel Density Plot"))
@@ -1324,16 +1326,16 @@ GMM_divide <- function(vec, G = 2)
 {
   # To fix mclust package issue 'could not find function "mclustBIC"'
   mclustBIC <- mclust::mclustBIC
-  
+
   # Mclust V (univariate, unequal variance) model with G components
   fit <- mclust::Mclust(vec, G = G, modelNames = "V")
   print(summary(fit))
-  
+
   # Prepare x-domain
   x_high <- ceiling(max(vec))
   x_low <- floor(min(vec)) - 1
   x <- seq(x_low, x_high, length.out = 1e3)
-  
+
   # GMM components
   components <- data.frame(x) # Just to set the right row dimension
   p <- fit$parameters$pro
@@ -1343,7 +1345,7 @@ GMM_divide <- function(vec, G = 2)
     components[,i] <- p[i] * dnorm(x, mu[i], sqrt(s2[i]))
     colnames(components)[i] <- paste0("comp_", i)
   }
-  
+
   # Subset parameters for boundary computation (do all the combinations)
   boundary <- vector(mode = "numeric")
   for (i in 1:(G-1)) {
@@ -1352,7 +1354,7 @@ GMM_divide <- function(vec, G = 2)
       B <- 2*(s2[j]*mu[i] - s2[i]*mu[j])
       C <- s2[i]*mu[j]^2 - s2[j]*mu[i]^2 -
         2*s2[i]*s2[j]*log((p[j]*sqrt(s2[i]))/(p[i]*sqrt(s2[j])))
-      
+
       delta <- sqrt((B/2)^2 - A*C) # actually the square root of a quarter delta
       roots <- c((-B/2 - delta)/A, (-B/2 + delta)/A)
       index <- which.max(dnorm(roots, mu[i], sqrt(s2[i])))
@@ -1360,7 +1362,7 @@ GMM_divide <- function(vec, G = 2)
       names(boundary)[length(boundary)] <- paste(i, j, sep = "_")
     }
   }
-  
+
   return(list(fit = fit, x = x, components = components, boundary = boundary))
 }
 
@@ -1368,12 +1370,12 @@ GMM_divide <- function(vec, G = 2)
 
 #' FPKM to TPM
 #' @export
-#' 
+#'
 #' @description A function to convert normalized RNA-Seq counts from FPKM (or
 #'              RPKM) to TPM scale. **NOTE:** to be properly converted, the
 #'              input FPKM counts need to be linearly scaled
 #'              (**NOT log-transformed!**)
-#' 
+#'
 #' @param fpkm A data frame containing unlogged normalized counts in FPKM units.
 #'             Only numeric columns are allowed.
 #'
@@ -1390,16 +1392,16 @@ fpkm2tpm <- function(fpkm) {
 #' Kernel Density Plot for RNA-Seq Counts
 #' @export
 #' @import stats graphics
-#' 
+#'
 #' @description Make a Kernel Density Plot from RNA-Seq data counts.
 #'              `count_density()` iterates `stats::density()` function over all
 #'              the columns of the `count_table` input data and produce a plot
 #'              with many density curves superimposed. In addition, it
 #'              implements a switch to remove zero counts (that usually prevent
-#'              a clear inspection of the data) and the possibility to set the 
+#'              a clear inspection of the data) and the possibility to set the
 #'              lower and upper bounds for both x- and y-axes (which is useful
 #'              for zooming in the region of interest).
-#' 
+#'
 #' @param count_table A data frame containing gene expression counts. Only
 #'                    numeric columns are allowed.
 #' @param remove_zeros A Boolean flag. If set to `TRUE` (the default) zeros
@@ -1413,7 +1415,7 @@ fpkm2tpm <- function(fpkm) {
 #' @param titles Custom titles and subtitles for the Density Plot. A character
 #'               vector of two elements.
 #' @param col Custom color for density curves.
-#' 
+#'
 #' @author FeA.R
 count_density <- function(count_table, remove_zeros = TRUE,
                           xlim = NULL, ylim = NULL,
@@ -1424,12 +1426,12 @@ count_density <- function(count_table, remove_zeros = TRUE,
   } else {
     cutoff <- -1
   }
-  
+
   count_table <- as.data.frame(count_table)
   d <- density(count_table[count_table[,1] > cutoff, 1])
   plot(d, xlim = xlim, ylim = ylim,
        main = titles[1], sub = titles[2], col = col)
-  
+
   m <- dim(count_table)[2]
   if (m > 1) {
     for (i in 2:m) {

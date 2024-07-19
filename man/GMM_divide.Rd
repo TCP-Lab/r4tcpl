@@ -101,7 +101,7 @@ boundary, namely
            \begin{aligned}
              \argmax_{x\in\left\{x_{1},x_{2}\right\}}
                \frac{P_k}{\sqrt{2\pi}\sigma_k}
-               e^{-\left(\mu_k-x\right)^2/2\sigma_{k}^{2}}\ \ \ \ \ 
+               e^{-\left(\mu_k-x\right)^2/2\sigma_{k}^{2}}\ \ \ \ \
                \text{with}\ \ k=i\ \vee\ k=j
            \end{aligned}
          }

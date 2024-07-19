@@ -22,7 +22,7 @@ function looks at \emph{all} non-unique values. \code{NA}s are ignored by
 default.
 }
 \examples{
-# How many different non-unique Gene Symbols are there in DEGs_expr data set? 
+# How many different non-unique Gene Symbols are there in DEGs_expr data set?
 dnues(DEGs_expr$GeneSymbol)
 }
 \author{

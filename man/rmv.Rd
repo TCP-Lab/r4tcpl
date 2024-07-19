@@ -18,7 +18,11 @@ with the native pipe operator.
 }
 \examples{
 # Make them singular
-"children, cars, and watches" |> rmv("e?s|ren")
+"children, cars, and witches" |> rmv("e?s|ren")
+# Remove leading and trailing spaces
+"   Let's clean this !   " |> rmv("^( +)") |> rmv("( +)$")
+# Convert an array from Bash to an R character vector
+"(foo bar this that)" |> rmv("\\\\(|\\\\)") |> strsplit(" +") |> unlist()
 }
 \author{
 FeA.R
