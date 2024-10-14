@@ -4,12 +4,14 @@
 \alias{GMM_divide}
 \title{GMM-based subpopulation separation}
 \usage{
-GMM_divide(vec, G = 2)
+GMM_divide(vec, G = 2, seed = NULL)
 }
 \arguments{
 \item{vec}{One-dimensional numeric vector or data frame.}
 
 \item{G}{Integer number of Gaussian components to be used in the mixture.}
+
+\item{seed}{Integer to set the (inner) seed and ensure reproducibility.}
 }
 \value{
 A named list with the following elements:

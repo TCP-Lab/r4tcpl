@@ -10,7 +10,8 @@ count_density(
   xlim = NULL,
   ylim = NULL,
   titles = c("Kernel Density Plot", ""),
-  col = "black"
+  col = "black",
+  ...
 )
 }
 \arguments{
@@ -32,6 +33,9 @@ values are used.}
 vector of two elements.}
 
 \item{col}{Custom color for density curves.}
+
+\item{...}{further (named) arguments to pass to \code{stats::density()} function
+(e.g., \code{kernel = "rectangular"}, \code{width = 0.5}, ...).}
 }
 \description{
 Make a Kernel Density Plot from RNA-Seq data counts.
