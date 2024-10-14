@@ -1249,6 +1249,7 @@ missing_report <- function(dataFrame, naSymb = "")
 #'
 #' @param vec One-dimensional numeric vector or data frame.
 #' @param G Integer number of Gaussian components to be used in the mixture.
+#' @param seed Integer to set the (inner) seed and ensure reproducibility.
 #'
 #' @details The decision boundaries are computed from the intersection of two
 #'          GMM components at a time, meaning that two probability-weighted
@@ -1360,8 +1361,13 @@ missing_report <- function(dataFrame, naSymb = "")
 #' }
 #' @references \url{https://cran.r-project.org/web/packages/mclust/vignettes/mclust.html}
 #' @author FeA.R
-GMM_divide <- function(vec, G = 2)
+GMM_divide <- function(vec, G = 2, seed = NULL)
 {
+  # Set the seed for reproducibility! (random initialization?)
+  if (!is.null(seed)) {
+    set.seed(seed)
+  }
+
   # To fix mclust package issue 'could not find function "mclustBIC"'
   mclustBIC <- mclust::mclustBIC
 
