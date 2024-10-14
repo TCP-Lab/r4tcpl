@@ -1481,12 +1481,14 @@ fpkm2tpm <- function(fpkm) {
 #' @param titles Custom titles and subtitles for the Density Plot. A character
 #'               vector of two elements.
 #' @param col Custom color for density curves.
+#' @param ... further (named) arguments to pass to `stats::density()` function
+#'            (e.g., `kernel = "rectangular"`, `width = 0.5`, ...).
 #'
 #' @author FeA.R
 count_density <- function(count_table, remove_zeros = TRUE,
                           xlim = NULL, ylim = NULL,
                           titles = c("Kernel Density Plot", ""),
-                          col = "black") {
+                          col = "black", ...) {
   if (remove_zeros) {
     cutoff <- 0
   } else {
@@ -1494,14 +1496,14 @@ count_density <- function(count_table, remove_zeros = TRUE,
   }
 
   count_table <- as.data.frame(count_table)
-  d <- density(count_table[count_table[,1] > cutoff, 1])
+  d <- density(count_table[count_table[,1] > cutoff, 1], ...)
   plot(d, xlim = xlim, ylim = ylim,
        main = titles[1], sub = titles[2], col = col)
 
   m <- dim(count_table)[2]
   if (m > 1) {
     for (i in 2:m) {
-      d <- density(count_table[count_table[, i] > cutoff, i])
+      d <- density(count_table[count_table[, i] > cutoff, i], ...)
       lines(d$x, d$y, col = col)
     }
   }
