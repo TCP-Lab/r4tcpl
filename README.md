@@ -114,3 +114,23 @@ files).
 new repository as a final test.
 1. Finally, remove your old package from __R__ by `remove.packages("oldName")`...
 1. ...and install the new one `devtools::install_github("TCP-Lab/newName")`
+
+## Troubleshooting
+If after `devtools::install_github("TCP-Lab/r4tcpl")` you get this error
+```
+Using GitHub PAT from the git credential store.
+Error: Failed to install 'r4tcpl' from GitHub:
+  HTTP error 401.
+  Bad credentials
+```
+you've got to find where the token is stored by running
+```
+Sys.getenv("GITHUB_TOKEN")
+Sys.getenv("GITHUB_PAT")
+gitcreds::gitcreds_get()
+gitcreds::gitcreds_get()$password
+```
+and then remove it through, e.g., `gitcreds::gitcreds_delete()`, as per
+[this thread](https://github.com/r-lib/remotes/issues/797).
+
+
